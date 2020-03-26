@@ -16,22 +16,29 @@ public class MusicPlayerService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
+    int notificationId = 0;
+    Notification.Builder builder = null;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             MyNotificationManager.initNotificationChannel(this);
-            int notificationId = 0x1234;
-            Notification.Builder builder = new Notification.Builder(this,"1");
+            notificationId = 0x1234;
+            builder = new Notification.Builder(this,"1");
 
             builder.setSmallIcon(android.R.drawable.stat_notify_chat)
                     .setContentText("xxx");
 
             NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            startForeground(notificationId, builder.build());
         }
+        startForeground(notificationId, builder.build());
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        startForeground(notificationId, builder.build());
     }
 }

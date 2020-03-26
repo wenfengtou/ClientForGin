@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopService(new Intent(MainActivity.this, MusicPlayerService.class));
        // mHandler.removeCallbacksAndMessages(null);
     }
 }
