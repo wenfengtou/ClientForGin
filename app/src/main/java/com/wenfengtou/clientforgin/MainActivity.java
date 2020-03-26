@@ -3,6 +3,7 @@ package com.wenfengtou.clientforgin;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,24 +45,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        b2tv = findViewById(R.id.b2);
-        b1tv = findViewById(R.id.b1);
+        b2tv = findViewById(R.id.textView2);
         b2tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (toggle) {
-                    toggle = false;
-                    b1tv.setVisibility(View.VISIBLE);
-                } else {
-                    toggle = true;
-                    b1tv.setVisibility(View.GONE);
-                }
-
+                startActivity(new Intent(MainActivity.this, Main2Activity.class));
             }
         });
-
-
         try {
             //serializeStudent();
             deserializeStudent();
