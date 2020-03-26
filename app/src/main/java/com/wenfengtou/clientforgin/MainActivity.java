@@ -1,9 +1,11 @@
 package com.wenfengtou.clientforgin;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         b2tv = findViewById(R.id.textView2);
         b2tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,23 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i("wenfengtou", "onSaveInstanceState");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("wenfengtou", "onRestoreInstanceState");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(MainActivity.this, MusicPlayerService.class));
+    }
 
     private static void serializeStudent() throws IOException {
         Student student = new Student("ze",15 ,"zq");
