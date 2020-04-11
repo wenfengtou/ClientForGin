@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
@@ -26,6 +29,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Main2Activity.class));
             }
         });
+        int a = b2tv.getVisibility();
+
         try {
             //serializeStudent();
             deserializeStudent();
@@ -62,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        int id = new Random().nextInt(100);
+        MyApplication.getInstance().getDaoSession().getNoteDao().insert(new Note(id, "wf-comment" + id));
 
+        List<Note> notes = MyApplication.getInstance().getDaoSession().getNoteDao().loadAll();
+        for (Note note : notes) {
+            Log.i("wenfengtou", "get note" + note.getComment());
+        }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求
@@ -85,6 +97,19 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+
+
+    ObjectAnimator mAlphaAnimation;
+    private void startAlphaAnimator(View view) { // ImageView的alpha渐变后再变回来
+        mAlphaAnimation = ObjectAnimator.ofFloat(view, "alpha", 1f, 1f);
+        mAlphaAnimation.setDuration(0);
+        mAlphaAnimation.setRepeatCount(0);
+        mAlphaAnimation.setRepeatMode(ValueAnimator.RESTART);
+        mAlphaAnimation.setStartDelay(0);
+        mAlphaAnimation.setInterpolator(new LinearInterpolator());
+        mAlphaAnimation.start();
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -100,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(MainActivity.this, MusicPlayerService.class));
+        //startService(new Intent(MainActivity.this, MusicPlayerService.class));
     }
 
     private static void serializeStudent() throws IOException {
@@ -126,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(new Intent(MainActivity.this, MusicPlayerService.class));
+        //stopService(new Intent(MainActivity.this, MusicPlayerService.class));
        // mHandler.removeCallbacksAndMessages(null);
     }
 }
