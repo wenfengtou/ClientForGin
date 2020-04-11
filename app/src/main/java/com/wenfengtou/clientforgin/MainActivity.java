@@ -68,12 +68,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        int id = new Random().nextInt(100);
-        MyApplication.getInstance().getDaoSession().getNoteDao().insert(new Note(id, "wf-comment" + id));
+        int random = new Random().nextInt(100);
+        Note insertnote = new Note();
+        insertnote.setComment("hehe " + random);
+        insertnote.setData("hahahah " + random);
+        MyApplication.getInstance().getDaoSession().getNoteDao().insert(insertnote);
 
         List<Note> notes = MyApplication.getInstance().getDaoSession().getNoteDao().loadAll();
         for (Note note : notes) {
-            Log.i("wenfengtou", "get note" + note.getComment());
+            Log.i("wenfengtou", "get note comment = " + note.getComment()
+            + " data=" + note.getData() + " id=" + note.getId());
         }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
