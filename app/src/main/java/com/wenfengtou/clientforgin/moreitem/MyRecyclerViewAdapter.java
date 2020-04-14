@@ -100,11 +100,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     class TwoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView ivIcon;
-        private TextView tvUsername;
+        private RecyclerView mRvPhoto;
         public TwoViewHolder(View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.iv_icon);
-            tvUsername = itemView.findViewById(R.id.tv_username);
+            mRvPhoto = itemView.findViewById(R.id.rv_photo);
             // 为item添加点击事件
             itemView.setOnClickListener(this);
         }
