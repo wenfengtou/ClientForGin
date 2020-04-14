@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Main2Activity.class));
             }
         });
-        int a = b2tv.getVisibility();
+        //int a = b2tv.getVisibility();
 
         try {
             //serializeStudent();
