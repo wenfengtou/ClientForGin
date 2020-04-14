@@ -31,7 +31,13 @@ public class Main2Activity extends Activity implements View.OnClickListener {
             case R.id.tv_tail:
                 //mNestedScrollView.smoothScrollTo(0, 500);
                 //mNestedScrollView.scrollTo(0, 500);
-                mNestedScrollView.smoothScrollBy(0, -200);
+                mNestedScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mNestedScrollView.smoothScrollTo(0, 0);
+                    }
+                });
+
                 break;
         }
     }
