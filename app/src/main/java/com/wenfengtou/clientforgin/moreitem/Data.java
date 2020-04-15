@@ -1,8 +1,8 @@
 package com.wenfengtou.clientforgin.moreitem;
 
 public class Data {
-    public static final int TYPE_ONE = 1;//类型1
-    public static final int TYPE_TWO = 2;//类型2
+    public static final int TYPE_ONE = 0;//类型1
+    public static final int TYPE_TWO = 1;//类型2
 
     public int type;//item内容 类型
 

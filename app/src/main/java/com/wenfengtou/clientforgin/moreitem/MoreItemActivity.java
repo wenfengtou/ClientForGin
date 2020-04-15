@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.wenfengtou.clientforgin.R;
@@ -17,7 +18,9 @@ public class MoreItemActivity extends AppCompatActivity {
 
 
     private RecyclerView rvRecyclerView;
+    private ListView mLvMoreItem;
     private MyRecyclerViewAdapter adapter;
+    private MyListViewAdapter mMyListViewAdapter;
     private List<Data> list;
 
     @Override
@@ -27,39 +30,44 @@ public class MoreItemActivity extends AppCompatActivity {
         initView();
         initData();
 
+        /*
         rvRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));//控制布局为LinearLayout或者是GridView或者是瀑布流布局
         adapter = new MyRecyclerViewAdapter(list,this);
         rvRecyclerView.setAdapter(adapter);
         // 设置item及item中控件的点击事件
         adapter.setOnItemClickListener(MyItemClickListener);
+         */
+        mMyListViewAdapter = new MyListViewAdapter(list, this);
+        mLvMoreItem.setAdapter(mMyListViewAdapter);
     }
 
     private void initView() {
-        rvRecyclerView = (RecyclerView) findViewById(R.id.rv_recyclerView);
+        //rvRecyclerView = (RecyclerView) findViewById(R.id.rv_recyclerView);
+        mLvMoreItem = findViewById(R.id.lv_more_item);
     }
     private void initData() {
         list = new ArrayList<>();
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(2,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
-        list.add(new Data(1,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_TWO,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
+        list.add(new Data(Data.TYPE_ONE,R.mipmap.ic_launcher, "username", "让我们成为好友吧！"));
     }
 
     /**

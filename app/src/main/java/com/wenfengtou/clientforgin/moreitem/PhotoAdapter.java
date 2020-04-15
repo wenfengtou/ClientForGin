@@ -31,8 +31,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoAdapter
 
     @Override
     public void onBindViewHolder(@NonNull PhotoAdapterViewHolder holder, int position) {
-        TextView tv_name = holder.itemView.findViewById(R.id.tv_name);
-        tv_name.setText(" " + mData.get(position));
+        holder.mTvName.setText(" " + mData.get(position));
     }
 
     @Override

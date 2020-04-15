@@ -33,10 +33,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType){
             case Data.TYPE_ONE:
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemone,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemone,null,false);
                 return new OneViewHolder(view);
             case Data.TYPE_TWO:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemtwo,parent,false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemtwo,null,false);
                 return new TwoViewHolder(view);
         }
         return null;
@@ -45,6 +45,24 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     //绑定
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case Data.TYPE_TWO:
+                final RecyclerView rv_photo = ((TwoViewHolder)holder).mRvPhoto;
+                rv_photo.setVisibility(View.GONE);
+                ((TwoViewHolder)holder).ivIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (rv_photo.getVisibility() == View.GONE) {
+                            rv_photo.setVisibility(View.VISIBLE);
+                        } else {
+                            rv_photo.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                break;
+            case Data.TYPE_ONE:
+                break;
+        }
 
     }
 
@@ -92,6 +110,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             btnAgree.setOnClickListener(this);
             btnRefuse.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View v) {
             if (mOnItemClickListener != null) {
@@ -101,8 +120,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     class TwoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView ivIcon;
-        private RecyclerView mRvPhoto;
+        public ImageView ivIcon;
+        public RecyclerView mRvPhoto;
         public TwoViewHolder(View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.iv_icon);
