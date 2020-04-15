@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wenfengtou.clientforgin.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -106,6 +108,29 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ivIcon = itemView.findViewById(R.id.iv_icon);
             mRvPhoto = itemView.findViewById(R.id.rv_photo);
             // 为item添加点击事件
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.VERTICAL, false);
+            PhotoAdapter photoAdapter = new PhotoAdapter();
+            mRvPhoto.setLayoutManager(layoutManager);
+            mRvPhoto.setAdapter(photoAdapter);
+            ArrayList<String> data = new ArrayList<String>();
+            data.add("1");
+            data.add("2");
+            data.add("3");
+            data.add("4");
+            data.add("5");
+            data.add("6");
+            data.add("7");
+            data.add("8");
+            data.add("9");
+            data.add("10");
+            data.add("11");
+            data.add("12");
+            data.add("13");
+            data.add("14");
+            data.add("15");
+            data.add("16");
+            data.add("17");
+            photoAdapter.setData(data);
             itemView.setOnClickListener(this);
         }
         @Override
