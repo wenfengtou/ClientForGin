@@ -18,7 +18,7 @@ import com.wenfengtou.clientforgin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Data> list;//数据源
     private Context context;//上下文

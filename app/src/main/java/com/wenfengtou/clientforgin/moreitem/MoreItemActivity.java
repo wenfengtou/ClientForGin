@@ -30,20 +30,20 @@ public class MoreItemActivity extends AppCompatActivity {
         initView();
         initData();
 
-        /*
+
         rvRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));//控制布局为LinearLayout或者是GridView或者是瀑布流布局
         adapter = new MyRecyclerViewAdapter(list,this);
         rvRecyclerView.setAdapter(adapter);
         // 设置item及item中控件的点击事件
         adapter.setOnItemClickListener(MyItemClickListener);
-         */
-        mMyListViewAdapter = new MyListViewAdapter(list, this);
-        mLvMoreItem.setAdapter(mMyListViewAdapter);
+
+        //mMyListViewAdapter = new MyListViewAdapter(list, this);
+        //mLvMoreItem.setAdapter(mMyListViewAdapter);
     }
 
     private void initView() {
-        //rvRecyclerView = (RecyclerView) findViewById(R.id.rv_recyclerView);
-        mLvMoreItem = findViewById(R.id.lv_more_item);
+        rvRecyclerView = (RecyclerView) findViewById(R.id.rv_recyclerView);
+        //mLvMoreItem = findViewById(R.id.lv_more_item);
     }
     private void initData() {
         list = new ArrayList<>();
