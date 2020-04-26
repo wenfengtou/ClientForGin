@@ -3,6 +3,8 @@ package com.wenfengtou.clientforgin;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wenfengtou.clientforgin.crash.CrashHander;
+
 public class MyApplication extends Application {
 
     private DaoMaster.DevOpenHelper mHelper;
@@ -19,6 +21,7 @@ public class MyApplication extends Application {
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHander());
     }
 
     public DaoSession getDaoSession() {
