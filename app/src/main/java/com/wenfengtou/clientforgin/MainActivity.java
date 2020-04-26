@@ -21,6 +21,7 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
+import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         b2tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MoreItemActivity.class));
+                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
             }
         });
         //int a = b2tv.getVisibility();
