@@ -2,6 +2,7 @@ package com.wenfengtou.clientforgin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
@@ -20,6 +21,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
 import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
 
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //HookUtil.hookWindowManagerGlobal();
         setContentView(R.layout.activity_main);
 
         b2tv = findViewById(R.id.textView2);
@@ -59,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //b1tv.setVisibility(View.GONE);
-                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+                //startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+                showDialog();
             }
         });
         //int a = b2tv.getVisibility();
@@ -105,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("wenfengDialog");
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     ObjectAnimator mAlphaAnimation;
     private void startAlphaAnimator(View view) { // ImageView的alpha渐变后再变回来

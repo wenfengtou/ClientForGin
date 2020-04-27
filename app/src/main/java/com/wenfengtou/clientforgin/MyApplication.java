@@ -1,8 +1,10 @@
 package com.wenfengtou.clientforgin;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.crash.CrashHander;
 
 public class MyApplication extends Application {
@@ -22,6 +24,7 @@ public class MyApplication extends Application {
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
         Thread.setDefaultUncaughtExceptionHandler(new CrashHander());
+        HookUtil.hookWindowManagerGlobal();
     }
 
     public DaoSession getDaoSession() {
