@@ -31,6 +31,9 @@ import com.lzy.okgo.model.Response;
 import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
 import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -111,6 +114,24 @@ public class MainActivity extends AppCompatActivity {
             Log.i("wenfengtou", "get note comment = " + note.getComment()
             + " data=" + note.getData() + " id=" + note.getId());
         }
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.READ_EXTERNAL_STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> strings) {
+
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> strings) {
+
+                    }
+                })
+                .start();
+
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求
@@ -132,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 });
          */
     }
+
 
 
     private void showDialog() {
@@ -167,6 +189,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MainActivity.this, Main2Activity.class));
+
+            }
+        }, 3000);
         //startService(new Intent(MainActivity.this, MusicPlayerService.class));
     }
 

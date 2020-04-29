@@ -5,8 +5,15 @@ import androidx.core.widget.NestedScrollView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
+
+import java.util.List;
 
 public class Main2Activity extends Activity implements View.OnClickListener {
 
@@ -21,6 +28,22 @@ public class Main2Activity extends Activity implements View.OnClickListener {
         mTailTv = findViewById(R.id.tv_tail);
         mNestedScrollView = findViewById(R.id.main_nest_view);
         mTailTv.setOnClickListener(this);
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.CAMERA)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> strings) {
+
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> strings) {
+
+                    }
+                })
+                .start();
     }
 
     @Override
@@ -40,5 +63,11 @@ public class Main2Activity extends Activity implements View.OnClickListener {
 
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }

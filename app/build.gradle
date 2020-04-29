@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.yanzhenjie:permission:2.0.3'
 }
