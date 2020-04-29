@@ -4,17 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzy.okgo.OkGo;
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler;
     private TextView b1tv;
     private TextView b2tv;
+    private WindowManager mWindowManager;
     class OkHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -56,18 +64,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //HookUtil.hookWindowManagerGlobal();
         setContentView(R.layout.activity_main);
-
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         b2tv = findViewById(R.id.textView2);
         b2tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //b1tv.setVisibility(View.GONE);
-                //startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
-                showDialog();
+                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+                //showDialog();
             }
         });
         //int a = b2tv.getVisibility();
+        WindowManager localWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
+        LinearLayout mNightView = new LinearLayout(this);
+        //不让悬浮窗获取焦点
 
+        mNightView.setBackgroundColor(Color.argb(153, 0, 8, 13));
+        //localLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        //localLayoutParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        //支持透明度
+        localLayoutParams.flags =  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+        localLayoutParams.format = PixelFormat.RGBA_8888;
+        localLayoutParams.gravity = Gravity.CENTER;
+        localLayoutParams.x = 0;
+        localLayoutParams.y = 0;
+        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        localLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        localWindowManager.addView(mNightView, localLayoutParams);
         try {
             //serializeStudent();
             deserializeStudent();

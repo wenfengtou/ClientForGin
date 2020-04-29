@@ -23,8 +23,8 @@ public class MyApplication extends Application {
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
-        Thread.setDefaultUncaughtExceptionHandler(new CrashHander());
-        HookUtil.hookWindowManagerGlobal();
+        //Thread.setDefaultUncaughtExceptionHandler(new CrashHander());
+        //HookUtil.hookWindowManagerGlobal();
     }
 
     public DaoSession getDaoSession() {
