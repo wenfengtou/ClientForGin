@@ -31,6 +31,7 @@ import com.lzy.okgo.model.Response;
 import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
 import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
+import com.wenfengtou.whiteboard.WhiteBoardActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
 
             }
         }, 3000);
