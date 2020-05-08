@@ -1,2 +1,2 @@
-include ':app', ':whiteboard'
+include ':app', ':whiteboard', ':commonutil'
 rootProject.name='ClientForGin'
