@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.wenfengtou.commonutil.FileUtil;
+import com.wenfengtou.whiteboard.view.NormalSketchView;
 import com.wenfengtou.whiteboard.view.SketchView;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private String mSavePath;
     private Button mCancelWriteBt;
     private Button mResumeWriteBt;
-    private SketchView mSketchView;
+    private NormalSketchView mSketchView;
     private MediaCodec mMediaCodec;
     private Surface mSurface;
     private MediaFormat mMediaFormat = MediaFormat.createVideoFormat("video/avc", 1080, 1920);
@@ -44,6 +45,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mSavePath = getExternalCacheDir() + File.separator + "record.h264";
         mSurface = MediaCodec.createPersistentInputSurface();
         createMediaCodec(mSurface);
+        /*
         mSketchView.setSurface(mSurface);
         mSketchView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -67,16 +69,18 @@ public class WhiteBoardActivity extends AppCompatActivity {
             }
         });
 
+         */
+
         mCancelWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSketchView.revoke();
+              //  mSketchView.revoke();
             }
         });
         mResumeWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSketchView.resume();
+               // mSketchView.resume();
             }
         });
     }

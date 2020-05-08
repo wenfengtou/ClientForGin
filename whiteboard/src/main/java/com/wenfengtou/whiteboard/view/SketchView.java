@@ -87,8 +87,6 @@ public class SketchView extends SurfaceView implements View.OnTouchListener {
         drawCanvas(canvas);
         //绘制结束后要解锁画布
         getHolder().unlockCanvasAndPost(canvas);
-
-
     }
 
     public void startDecoreThread() {
