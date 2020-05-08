@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WhiteBoard</string>
+    <string name="cancel_write">撤销</string>
 </resources>
