@@ -29,6 +29,7 @@ public class SketchView extends SurfaceView implements SurfaceHolder.Callback, V
     private Bitmap mBackGroupBitmap;
 
     private ArrayList<Pair<Path, Paint>> mShowingList = new ArrayList();
+    private ArrayList<Pair<Path, Paint>> mResumeList = new ArrayList();
 
     public SketchView(Context context) {
         super(context);
@@ -81,12 +82,23 @@ public class SketchView extends SurfaceView implements SurfaceHolder.Callback, V
         getHolder().unlockCanvasAndPost(canvas);
     }
 
+    //撤销
     public void revoke() {
         Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
         if (mShowingList.size() > 0) {
-            mShowingList.remove(mShowingList.size() -1);
+            Pair removePair = mShowingList.remove(mShowingList.size() -1);
+            mResumeList.add(removePair);
+            updateSketch();
         }
-        updateSketch();
+    }
+
+    //恢复
+    public void resume() {
+        if (mResumeList.size() > 0) {
+            Pair resumePair = mResumeList.remove(mResumeList.size() -1);
+            mShowingList.add(resumePair);
+            updateSketch();
+        }
     }
 
     @Override
@@ -112,6 +124,7 @@ public class SketchView extends SurfaceView implements SurfaceHolder.Callback, V
                 //按下的时候通过moveTo()绘制按下的这个点,获取按下点的X和Y坐标
                 //mPath.moveTo(motionEvent.getX(), motionEvent.getY());
                 mPath = new Path();
+                mResumeList.clear();
                 mPath.moveTo(motionEvent.getX(), motionEvent.getY());
                 mShowingList.add(new Pair(mPath, mPaint));
                 //获取之后调用draw()方法进行绘制

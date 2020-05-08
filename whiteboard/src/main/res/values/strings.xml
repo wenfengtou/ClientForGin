@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WhiteBoard</string>
     <string name="cancel_write">撤销</string>
+    <string name="resume_write">恢复</string>
 </resources>

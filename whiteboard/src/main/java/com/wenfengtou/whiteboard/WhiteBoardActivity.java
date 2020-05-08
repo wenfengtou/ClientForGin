@@ -11,17 +11,25 @@ import com.wenfengtou.whiteboard.view.SketchView;
 public class WhiteBoardActivity extends AppCompatActivity {
 
     Button mCancelWriteBt;
+    Button mResumeWriteBt;
     SketchView mSketchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_white_board);
         mCancelWriteBt = findViewById(R.id.bt_cancel_write);
+        mResumeWriteBt = findViewById(R.id.bt_resume_write);
         mSketchView = findViewById(R.id.board_view);
         mCancelWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mSketchView.revoke();
+            }
+        });
+        mResumeWriteBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSketchView.resume();
             }
         });
     }
