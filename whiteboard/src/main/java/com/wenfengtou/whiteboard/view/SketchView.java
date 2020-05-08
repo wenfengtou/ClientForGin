@@ -88,10 +88,22 @@ public class SketchView extends SurfaceView implements View.OnTouchListener {
         //绘制结束后要解锁画布
         getHolder().unlockCanvasAndPost(canvas);
 
-        //流绘制
-        Canvas h264Canvas = mSurface.lockCanvas(null);
-        drawCanvas(h264Canvas);
-        mSurface.unlockCanvasAndPost(h264Canvas);
+
+    }
+
+    public void startDecoreThread() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //流绘制
+                while (true) {
+                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    drawCanvas(h264Canvas);
+                    mSurface.unlockCanvasAndPost(h264Canvas);
+                }
+            }
+        });
+        thread.start();
     }
 
     private void drawCanvas(Canvas canvas) {

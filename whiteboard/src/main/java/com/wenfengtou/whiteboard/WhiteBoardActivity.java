@@ -53,6 +53,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
                     new File(mSavePath).delete();
                 }
                 startEncode();
+                mSketchView.startDecoreThread();
             }
 
             @Override
