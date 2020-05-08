@@ -58,6 +58,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
         if (mShowingList.size() > 0) {
             Pair removePair = mShowingList.remove(mShowingList.size() -1);
+            thread.updataPathList(mShowingList);
+            thread.pause(false);
             //mResumeList.add(removePair);
             //updateSketch();
         }
@@ -121,7 +123,6 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 mPath.lineTo(motionEvent.getX(),motionEvent.getY());
                 //thread.updataPath(mPath);
                 thread.updataPathList(mShowingList);
-                invalidate();
                 //updateSketch();
                 break;
             //在移动的时候进行绘制
@@ -140,6 +141,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         private volatile Path mPath = null;
         private volatile boolean isRunning = true;
         private volatile boolean isPaused = false;
+        private volatile boolean isHangup = true;
         private  ArrayList<Pair<Path, Paint>> mShowingList;
         public MyThread(int w, int h , Paint paint) {
             mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
@@ -154,6 +156,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
         public void updataPathList(ArrayList<Pair<Path, Paint>> showingList) {
             mShowingList = showingList;
+            isHangup = false;
         }
 
         public void updataPath(Path path) {
@@ -190,6 +193,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                     Pair pair = (Pair) it.next();
                     mCanvas.drawPath((Path) pair.first, (Paint) pair.second);
                 }
+                postInvalidate();
             }
         }
     }
