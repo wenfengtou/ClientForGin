@@ -10,10 +10,12 @@ import android.media.MediaFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 
 import com.wenfengtou.commonutil.FileUtil;
@@ -35,6 +37,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private MediaCodec mMediaCodec;
     private Surface mSurface;
     private MediaFormat mMediaFormat = MediaFormat.createVideoFormat("video/avc", 1080, 1920);
+
+    private boolean mEncodeStarted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,29 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mSavePath = getExternalCacheDir() + File.separator + "record.h264";
         mSurface = MediaCodec.createPersistentInputSurface();
         createMediaCodec(mSurface);
+        mSketchView.setSurface(mSurface);
+
+
+        mSketchView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                //mSketchView.initSketch(); //清空画布
+                if (new File(mSavePath).exists()) {
+                    new File(mSavePath).delete();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mEncodeStarted) {
+                            mEncodeStarted = true;
+                            startEncode();
+                        }
+                    }
+                },1000);
+
+            }
+        });
         /*
         mSketchView.setSurface(mSurface);
         mSketchView.getHolder().addCallback(new SurfaceHolder.Callback() {

@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     MyThread thread;
     private Path mPath = new Path();
     private Paint mPaint;
-
+    private Surface mSurface;
 
     private ArrayList<Pair<Path, Paint>> mShowingList = new ArrayList();
 
@@ -37,6 +38,10 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     public NormalSketchView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
+    }
+
+    public void setSurface(Surface surface) {
+        mSurface = surface;
     }
 
     public NormalSketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -68,9 +73,27 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        /*
         Bitmap bitmap = thread == null ? null : thread.getBitmap();
         if (bitmap != null && !bitmap.isRecycled()) {
             canvas.drawBitmap(bitmap , 0 , 0 , null);
+        }
+         */
+        drawCanvas(canvas);
+
+        Canvas h264Canvas = mSurface.lockCanvas(null);
+        drawCanvas(h264Canvas);
+        mSurface.unlockCanvasAndPost(h264Canvas);
+    }
+
+    private void drawCanvas(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        canvas.drawColor(Color.WHITE);
+        //用drawPath进行绘制
+        Iterator it = mShowingList.iterator();
+        while (it != null && it.hasNext()) {
+            Pair pair = (Pair) it.next();
+            canvas.drawPath((Path) pair.first, (Paint) pair.second);
         }
     }
 
@@ -105,7 +128,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 //mResumeList.clear();
                 mPath.moveTo(motionEvent.getX(), motionEvent.getY());
                 mShowingList.add(new Pair(mPath, mPaint));
-                thread.pause(false);
+                //thread.pause(false);
                 //按下的时候通过moveTo()绘制按下的这个点,获取按下点的X和Y坐标
                 //mPath.moveTo(motionEvent.getX(), motionEvent.getY());
                 /*
@@ -122,12 +145,13 @@ public class NormalSketchView extends View implements View.OnTouchListener {
             case MotionEvent.ACTION_MOVE:
                 mPath.lineTo(motionEvent.getX(),motionEvent.getY());
                 //thread.updataPath(mPath);
-                thread.updataPathList(mShowingList);
+                //thread.updataPathList(mShowingList);
                 //updateSketch();
+                invalidate();
                 break;
             //在移动的时候进行绘制
             case MotionEvent.ACTION_UP:
-                thread.pause(true);
+                //thread.pause(true);
                 break;
         }
         return true;
