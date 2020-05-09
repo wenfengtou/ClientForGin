@@ -20,17 +20,17 @@ import com.wenfengtou.whiteboard.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NormalSketchView extends View implements View.OnTouchListener {
     private int mWidth;
     private int mHeight;
-    MyThread thread;
+    //MyThread thread;
     private Path mPath = new Path();
     private Paint mPaint;
     private Surface mSurface;
 
-    private ArrayList<Pair<Path, Paint>> mShowingList = new ArrayList();
-
+    private CopyOnWriteArrayList<Pair<Path, Paint>> mShowingList = new CopyOnWriteArrayList();
 
     public NormalSketchView(Context context) {
         this(context, null);
@@ -63,8 +63,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
         if (mShowingList.size() > 0) {
             Pair removePair = mShowingList.remove(mShowingList.size() -1);
-            thread.updataPathList(mShowingList);
-            thread.pause(false);
+           // thread.updataPathList(mShowingList);
+            invalidate();
             //mResumeList.add(removePair);
             //updateSketch();
         }
@@ -81,9 +81,21 @@ public class NormalSketchView extends View implements View.OnTouchListener {
          */
         drawCanvas(canvas);
 
-        Canvas h264Canvas = mSurface.lockCanvas(null);
-        drawCanvas(h264Canvas);
-        mSurface.unlockCanvasAndPost(h264Canvas);
+    }
+
+    public void startDecoreThread() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //流绘制
+                while (true) {
+                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    drawCanvas(h264Canvas);
+                    mSurface.unlockCanvasAndPost(h264Canvas);
+                }
+            }
+        });
+        thread.start();
     }
 
     private void drawCanvas(Canvas canvas) {
@@ -105,17 +117,20 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if(mWidth != width || mHeight != height) {
             mWidth = width;
             mHeight = height;
-            thread = new MyThread(mWidth , mHeight, mPaint);
-            thread.start();
+          //  thread = new MyThread(mWidth , mHeight, mPaint);
+          //  thread.start();
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        /*
         if(thread != null) {
             thread.release();
         }
+
+         */
     }
 
     @Override
@@ -157,6 +172,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         return true;
     }
 
+    /*
     private class MyThread extends Thread {
 
         private Bitmap mBitmap;
@@ -221,4 +237,6 @@ public class NormalSketchView extends View implements View.OnTouchListener {
             }
         }
     }
+
+     */
 }

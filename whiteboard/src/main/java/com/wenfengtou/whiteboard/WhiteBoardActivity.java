@@ -57,21 +57,16 @@ public class WhiteBoardActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 // TODO Auto-generated method stub
                 //mSketchView.initSketch(); //清空画布
-                if (new File(mSavePath).exists()) {
-                    new File(mSavePath).delete();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!mEncodeStarted) {
-                            mEncodeStarted = true;
-                            startEncode();
-                        }
-                    }
-                },1000);
+
 
             }
         });
+        if (new File(mSavePath).exists()) {
+            new File(mSavePath).delete();
+        }
+        startEncode();
+        mSketchView.startDecoreThread();
+
         /*
         mSketchView.setSurface(mSurface);
         mSketchView.getHolder().addCallback(new SurfaceHolder.Callback() {
