@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
-
+                finish();
             }
         }, 10);
         //startService(new Intent(MainActivity.this, MusicPlayerService.class));

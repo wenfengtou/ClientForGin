@@ -30,7 +30,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     private Paint mPaint;
     private Surface mSurface;
 
-    private CopyOnWriteArrayList<Pair<Path, Paint>> mShowingList = new CopyOnWriteArrayList();
+    private volatile CopyOnWriteArrayList<Pair<Path, Paint>> mShowingList = new CopyOnWriteArrayList();
 
     public NormalSketchView(Context context) {
         this(context, null);
@@ -81,6 +81,12 @@ public class NormalSketchView extends View implements View.OnTouchListener {
          */
         drawCanvas(canvas);
 
+        /*
+        Canvas h264Canvas = mSurface.lockCanvas(null);
+        drawCanvas(h264Canvas);
+        mSurface.unlockCanvasAndPost(h264Canvas);
+
+         */
     }
 
     public void startDecoreThread() {
