@@ -149,19 +149,30 @@ public class WhiteBoardActivity extends AppCompatActivity {
             @Override
             public void onOutputBufferAvailable(@NonNull MediaCodec mediaCodec, int i, @NonNull MediaCodec.BufferInfo bufferInfo) {
                 ByteBuffer outputBuffer = mediaCodec.getOutputBuffer(i);
-
+                Log.d(TAG, "bufferInfo offset=" + bufferInfo.offset + " size=" + bufferInfo.size);
                 //这里将编码后的流存入byte[]队列，也可以在这里将画面输出到文件或者发送到远端
                 if (outputBuffer != null && bufferInfo.size > 0) {
                     byte[] buffer = new byte[outputBuffer.remaining()];
                     int flag = buffer[4] & 0x1F;
                     outputBuffer.get(buffer);
                     FileUtil.writeH264(buffer, mSavePath);
-                    Log.i(TAG, "onOutputBufferAvailable = remain=" + buffer.length + " flag=" + flag);
+                    //Log.i(TAG, "onOutputBufferAvailable = remain=" + buffer.length + " flag=" + flag);
                 }
-                if (startEncodeTime < 0) {
-                    startEncodeTime = SystemClock.uptimeMillis();
+
+                if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
+                    // The codec config data was pulled out and fed to the muxer when we got
+                    // the INFO_OUTPUT_FORMAT_CHANGED status.  Ignore it.
+                    Log.d(TAG, "ignoring BUFFER_FLAG_CODEC_CONFIG");
+                    bufferInfo.size = 0;
                 }
-                mMediaMuxer.writeSampleData(mVideoTrackIndex, outputBuffer, bufferInfo);
+
+                if (outputBuffer != null && bufferInfo.size > 0) {
+                    if (startEncodeTime < 0) {
+                        startEncodeTime = SystemClock.uptimeMillis();
+                    }
+                    mMediaMuxer.writeSampleData(mVideoTrackIndex, outputBuffer, bufferInfo);
+                }
+
                 mediaCodec.releaseOutputBuffer(i, false);
                 if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                     mediaCodec.release();
