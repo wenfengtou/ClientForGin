@@ -128,9 +128,9 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private void createMediaCodec(Surface surface) {
         try {
             mMediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-            mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1024*1024);
+            mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1080*1920*25);
             mMediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
-            mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 35);
+            mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 25);
             mMediaCodec = MediaCodec.createEncoderByType("video/avc");
             mMediaCodec.configure(mMediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             mMediaCodec.setInputSurface(surface);
@@ -153,8 +153,9 @@ public class WhiteBoardActivity extends AppCompatActivity {
                 //这里将编码后的流存入byte[]队列，也可以在这里将画面输出到文件或者发送到远端
                 if (outputBuffer != null && bufferInfo.size > 0) {
                     byte[] buffer = new byte[outputBuffer.remaining()];
-                    int flag = buffer[4] & 0x1F;
                     outputBuffer.get(buffer);
+                    int flag = buffer[4] & 0x1F;
+                    Log.i(TAG, "onOutputBufferAvailable =" + toHex(buffer[4]) + " flag=" + flag);
                     FileUtil.writeH264(buffer, mSavePath);
                     //Log.i(TAG, "onOutputBufferAvailable = remain=" + buffer.length + " flag=" + flag);
                 }
@@ -195,6 +196,13 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mMediaCodec.start();
     }
 
+    public static String toHex(byte b) {
+        String result = Integer.toHexString(b & 0xFF);
+        if (result.length() == 1) {
+            result = '0' + result;
+        }
+        return result;
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

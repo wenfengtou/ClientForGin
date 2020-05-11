@@ -87,6 +87,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         mSurface.unlockCanvasAndPost(h264Canvas);
 
          */
+
     }
 
     public void startDecoreThread() {
