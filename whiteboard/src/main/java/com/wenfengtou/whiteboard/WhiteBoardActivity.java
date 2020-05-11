@@ -128,7 +128,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private void createMediaCodec(Surface surface) {
         try {
             mMediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-            mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1080*1920*25);
+            mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1024*1024);
             mMediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
             mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 25);
             mMediaCodec = MediaCodec.createEncoderByType("video/avc");

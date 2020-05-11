@@ -6,7 +6,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.wenfengtou.clientforgin"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -31,5 +31,6 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.yanzhenjie:permission:2.0.3'
-    compile project(path: ':whiteboard')
+    implementation project(path: ':whiteboard')
+    implementation project(path: ':camera')
 }

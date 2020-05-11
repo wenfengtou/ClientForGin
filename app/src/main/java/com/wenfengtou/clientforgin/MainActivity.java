@@ -28,6 +28,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
 import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //b1tv.setVisibility(View.GONE);
-                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+                startActivity(new Intent(MainActivity.this, CameraActivity.class));
                 //showDialog();
             }
         });
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
+                startActivity(new Intent(MainActivity.this, CameraActivity.class));
                 finish();
             }
         }, 10);
