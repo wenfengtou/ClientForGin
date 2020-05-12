@@ -53,8 +53,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mCancelWriteBt = findViewById(R.id.bt_cancel_write);
         mResumeWriteBt = findViewById(R.id.bt_resume_write);
         mSketchView = findViewById(R.id.board_view);
-        mSavePath = getExternalCacheDir() + File.separator + "record.h264";
-        mMp4Path = getExternalCacheDir() + File.separator + "record.mp4";
+        mSavePath = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
+        mMp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
         mSurface = MediaCodec.createPersistentInputSurface();
         createMediaCodec(mSurface);
         mSketchView.setSurface(mSurface);
@@ -129,8 +129,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
         try {
             mMediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
             mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1024*1024);
-            mMediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
-            mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 25);
+            mMediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
+            mMediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 30);
             mMediaCodec = MediaCodec.createEncoderByType("video/avc");
             mMediaCodec.configure(mMediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
             mMediaCodec.setInputSurface(surface);
@@ -146,9 +146,11 @@ public class WhiteBoardActivity extends AppCompatActivity {
 
             }
 
+            int count = 0;
             @Override
             public void onOutputBufferAvailable(@NonNull MediaCodec mediaCodec, int i, @NonNull MediaCodec.BufferInfo bufferInfo) {
                 ByteBuffer outputBuffer = mediaCodec.getOutputBuffer(i);
+                Log.d("fengfeng", "count = " + (count++));
                 Log.d(TAG, "bufferInfo offset=" + bufferInfo.offset + " size=" + bufferInfo.size);
                 //这里将编码后的流存入byte[]队列，也可以在这里将画面输出到文件或者发送到远端
                 if (outputBuffer != null && bufferInfo.size > 0) {
@@ -177,6 +179,11 @@ public class WhiteBoardActivity extends AppCompatActivity {
                 mediaCodec.releaseOutputBuffer(i, false);
                 if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                     mediaCodec.release();
+                }
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
 

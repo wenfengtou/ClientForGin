@@ -12,9 +12,14 @@ public class WfCamera implements Camera.PreviewCallback {
 
     private Camera mCamera;
     private SurfaceHolder mSurfaceHolder;
-    int mWidth = 640;
-    int mHeight = 480;
+    int mWidth;
+    int mHeight;
     LinkedList<FrameCallBack> mFrameCallBacks = new LinkedList<>();
+
+    public WfCamera(int width, int height) {
+        mWidth = width;
+        mHeight = height;
+    }
 
     interface FrameCallBack {
         void onNewFrame(byte[] bytes, Camera camera);

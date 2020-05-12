@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -91,14 +92,25 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     }
 
     public void startDecoreThread() {
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 //流绘制
+                int i = 0;
                 while (true) {
+                    i++;
+                    Log.i("wenfengwenfeng","i=" + i);
                     Canvas h264Canvas = mSurface.lockCanvas(null);
                     drawCanvas(h264Canvas);
                     mSurface.unlockCanvasAndPost(h264Canvas);
+                    /*
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                     */
                 }
             }
         });
