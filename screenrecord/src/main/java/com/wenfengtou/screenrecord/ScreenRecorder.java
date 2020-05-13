@@ -12,7 +12,6 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.Surface;
-import android.view.SurfaceHolder;
 
 import com.wenfengtou.commonutil.FileUtil;
 
