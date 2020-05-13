@@ -1,2 +1,2 @@
-include ':app', ':whiteboard', ':commonutil', ':camera'
+include ':app', ':whiteboard', ':commonutil', ':camera', ':screenrecord'
 rootProject.name='ClientForGin'

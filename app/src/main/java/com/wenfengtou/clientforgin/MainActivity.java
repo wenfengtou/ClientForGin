@@ -33,6 +33,7 @@ import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.clientforgin.Util.HookUtil;
 import com.wenfengtou.clientforgin.moreitem.MoreItemActivity;
 import com.wenfengtou.clientforgin.scroll.ScrollViewActivity;
+import com.wenfengtou.screenrecord.ScreenRecordActivity;
 import com.wenfengtou.whiteboard.WhiteBoardActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+                startActivity(new Intent(MainActivity.this, ScreenRecordActivity.class));
                 finish();
             }
         }, 10);
