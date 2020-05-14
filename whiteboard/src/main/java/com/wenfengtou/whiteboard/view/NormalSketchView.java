@@ -64,7 +64,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     private void initBuffer(){
         mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        mBufferBitmap.eraseColor(Color.BLUE);
+        //mBufferBitmap.eraseColor(Color.BLUE);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
 
@@ -170,6 +170,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
             public void run() {
                 //流绘制
                 int i = 0;
+                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                paint.setColor(Color.WHITE);
                 while (true) {
                     i++;
                     Log.i("wenfengwenfeng","i=" + i);
@@ -185,6 +187,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
                      */
                     h264Canvas.drawColor(Color.BLUE);
+                    h264Canvas.drawRect(0, 0 , mWidth / 2, mHeight , paint);
                     if (mBufferBitmap != null && !mBufferBitmap.isRecycled()) {
                         h264Canvas.drawBitmap(mBufferBitmap, 0, 0, null);
                     }
