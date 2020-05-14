@@ -2,4 +2,6 @@
     <string name="app_name">WhiteBoard</string>
     <string name="cancel_write">撤销</string>
     <string name="resume_write">恢复</string>
+    <string name="pen">画笔</string>
+    <string name="eraser">橡皮擦</string>
 </resources>

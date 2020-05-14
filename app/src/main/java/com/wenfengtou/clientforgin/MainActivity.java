@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.screenrecord.ScreenRecordActivity;
+import com.wenfengtou.whiteboard.WhiteBoardActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(MainActivity.this, ScreenRecordActivity.class));
+                                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
                             }
                         }, 10);
                     }

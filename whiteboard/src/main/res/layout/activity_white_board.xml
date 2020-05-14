@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FF00FF00"
     tools:context=".WhiteBoardActivity">
 
     <LinearLayout
@@ -23,6 +24,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/resume_write"/>
+
+        <Button
+            android:id="@+id/bt_pen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pen"/>
+
+        <Button
+            android:id="@+id/bt_eraser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/eraser"/>
 
     </LinearLayout>
     <com.wenfengtou.whiteboard.view.NormalSketchView

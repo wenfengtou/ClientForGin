@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import com.wenfengtou.commonutil.FileUtil;
 import com.wenfengtou.whiteboard.view.NormalSketchView;
 import com.wenfengtou.whiteboard.view.SketchView;
+import com.wenfengtou.whiteboard.view.TaletteViews;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private String mMp4Path;
     private Button mCancelWriteBt;
     private Button mResumeWriteBt;
+    private Button mPenBt;
+    private Button mEraserBt;
     private NormalSketchView mSketchView;
     private MediaCodec mMediaCodec;
     private Surface mSurface;
@@ -52,6 +56,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_white_board);
         mCancelWriteBt = findViewById(R.id.bt_cancel_write);
         mResumeWriteBt = findViewById(R.id.bt_resume_write);
+        mPenBt = findViewById(R.id.bt_pen);
+        mEraserBt = findViewById(R.id.bt_eraser);
         mSketchView = findViewById(R.id.board_view);
         mSavePath = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
         mMp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
@@ -66,6 +72,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
             new File(mMp4Path).delete();
         }
 
+        //((View)getWindow().getDecorView().getParent()).setBackgroundColor(Color.BLUE);
         try {
             mMediaMuxer = new MediaMuxer(mMp4Path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
             //mMediaMuxer.
@@ -73,15 +80,6 @@ public class WhiteBoardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mSketchView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // TODO Auto-generated method stub
-                //mSketchView.initSketch(); //清空画布
-
-
-            }
-        });
         startEncode();
         mSketchView.startDecoreThread();
 
@@ -115,12 +113,28 @@ public class WhiteBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSketchView.revoke();
+               // mSketchView.undo();
             }
         });
         mResumeWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // mSketchView.resume();
+                //mSketchView.resume();
+               // mSketchView.redo();
+            }
+        });
+        mPenBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 mSketchView.choosePaintTool(NormalSketchView.PAINT_TOOL_PEN);
+                //mSketchView.setMode(TaletteViews.Mode.DRAW);
+            }
+        });
+        mEraserBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSketchView.choosePaintTool(NormalSketchView.PAINT_TOOL_ERASER);
+                //mSketchView.setMode(TaletteViews.Mode.ERASER);
             }
         });
     }
@@ -179,11 +193,6 @@ public class WhiteBoardActivity extends AppCompatActivity {
                 mediaCodec.releaseOutputBuffer(i, false);
                 if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                     mediaCodec.release();
-                }
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
 
