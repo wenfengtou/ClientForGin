@@ -40,11 +40,9 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     private Path mPath = new Path();
     private Paint mPaint;
     private Surface mSurface;
-    public final static int PAINT_TOOL_PEN = 0;
-    public final static int PAINT_TOOL_ERASER = 1;
     private Paint mErasePaint;
     private Paint mPenPaint;
-    private int mPaintToolType = PAINT_TOOL_PEN;
+    private int mPaintToolType = PaintTool.PAINT_TOOL_PEN;
     private Bitmap mBufferBitmap;
     private Canvas mBufferCanvas;
 
@@ -83,8 +81,6 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     public NormalSketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //setBackgroundColor(Color.BLUE);
-        mPenPaint = createDefaultPenPaint();
-        mErasePaint = createDefaultErasePaint();
         mPaint = mPenPaint;
         //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
         mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
@@ -111,44 +107,25 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     private void initBuffer(){
         mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        //mBufferBitmap.eraseColor(Color.BLUE);
         mBufferCanvas = new Canvas(mBufferBitmap);
-    }
-
-    private Paint createDefaultPenPaint() {
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        //初始化画笔的大小
-        paint.setTextSize(40);
-        //给画笔清理锯齿
-        paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(50);
-        return paint;
-    }
-
-    private Paint createDefaultErasePaint() {
-
-        Paint paint = new Paint();
-        //paint.setAlpha(0);
-        //这个属性是设置paint为橡皮擦重中之重
-        //这是重点
-        //下面这句代码是橡皮擦设置的重点
-        //paint.setColor(Color.TRANSPARENT);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        paint.setColor(Color.BLUE);
-        //上面这句代码是橡皮擦设置的重点（重要的事是不是一定要说三遍）
-        //paint.setAntiAlias(true);
-        //paint.setDither(true);
-        paint.setStyle(Paint.Style.STROKE);
-       // paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(30);
-
-        return paint;
     }
 
     public void choosePaintTool(int paintToolType) {
         mPaintToolType = paintToolType;
+    }
+
+    public void setPaintToolColor(int paintToolType, int color) {
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            PenSetting.getInstance().setColor(color);
+        }
+    }
+
+    public void setPaintToolStrokeWidth(int paintToolType, int size) {
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            PenSetting.getInstance().setStrokeWidth(size);
+        } else {
+            EraserSetting.getInstance().setStrokeWidth(size);
+        }
     }
 
     //撤销
@@ -302,7 +279,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 if (mBufferBitmap == null) {
                     initBuffer();
                 }
-                if (mPaintToolType == PAINT_TOOL_PEN) {
+                if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
                     mPaintTool = new Pen(PenSetting.getInstance());
                 } else {
                     mPaintTool = new Eraser(EraserSetting.getInstance());

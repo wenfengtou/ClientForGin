@@ -10,6 +10,8 @@ import com.wenfengtou.whiteboard.shape.Shape;
 
 public abstract class PaintTool {
 
+    public final static int PAINT_TOOL_PEN = 0;
+    public final static int PAINT_TOOL_ERASER = 1;
     /**
      * 画笔
      */

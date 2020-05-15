@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 
 import com.wenfengtou.commonutil.FileUtil;
+import com.wenfengtou.whiteboard.painttool.PaintTool;
 import com.wenfengtou.whiteboard.view.NormalSketchView;
 import com.wenfengtou.whiteboard.view.SketchView;
 import com.wenfengtou.whiteboard.view.TaletteViews;
@@ -40,6 +41,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private Button mResumeWriteBt;
     private Button mPenBt;
     private Button mEraserBt;
+    private Button mColorBt;
     private NormalSketchView mSketchView;
     private MediaCodec mMediaCodec;
     private Surface mSurface;
@@ -58,6 +60,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mResumeWriteBt = findViewById(R.id.bt_resume_write);
         mPenBt = findViewById(R.id.bt_pen);
         mEraserBt = findViewById(R.id.bt_eraser);
+        mColorBt = findViewById(R.id.bt_color);
         mSketchView = findViewById(R.id.board_view);
         mSavePath = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
         mMp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
@@ -113,28 +116,31 @@ public class WhiteBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSketchView.undo();
-               // mSketchView.undo();
             }
         });
         mResumeWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mSketchView.resume();
                 mSketchView.redo();
             }
         });
         mPenBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 mSketchView.choosePaintTool(NormalSketchView.PAINT_TOOL_PEN);
-                //mSketchView.setMode(TaletteViews.Mode.DRAW);
+                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
             }
         });
         mEraserBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSketchView.choosePaintTool(NormalSketchView.PAINT_TOOL_ERASER);
-                //mSketchView.setMode(TaletteViews.Mode.ERASER);
+                mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
+            }
+        });
+
+        mColorBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSketchView.setPaintToolColor(PaintTool.PAINT_TOOL_PEN, Color.GREEN);
             }
         });
     }
