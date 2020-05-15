@@ -19,6 +19,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.wenfengtou.whiteboard.R;
+import com.wenfengtou.whiteboard.painttool.Eraser;
+import com.wenfengtou.whiteboard.painttool.PaintTool;
+import com.wenfengtou.whiteboard.painttool.Pen;
+import com.wenfengtou.whiteboard.setting.EraserSetting;
+import com.wenfengtou.whiteboard.setting.PenSetting;
+import com.wenfengtou.whiteboard.shape.CurveShape;
+import com.wenfengtou.whiteboard.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +34,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class NormalSketchView extends View implements View.OnTouchListener {
     private int mWidth;
     private int mHeight;
-    //MyThread thread;
     private Path mPath = new Path();
     private Paint mPaint;
     private Surface mSurface;
@@ -38,8 +44,25 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     private int mPaintToolType = PAINT_TOOL_PEN;
     private Bitmap mBufferBitmap;
     private Canvas mBufferCanvas;
-    private volatile CopyOnWriteArrayList<Pair<Path, Paint>> mShowingList = new CopyOnWriteArrayList();
 
+    private Bitmap mH264Bitmap;
+    private volatile CopyOnWriteArrayList<DrawInfoItem> mShowingList = new CopyOnWriteArrayList();
+    private CopyOnWriteArrayList<DrawInfoItem> mResumeList = new CopyOnWriteArrayList();
+
+    private PaintTool mPaintTool;
+    private int mShapeType = Shape.SHAPE_TYPE_CURVE;
+    private Shape mShape;
+
+    private boolean mIsReDrawShowList = false;
+
+    class DrawInfoItem {
+        public PaintTool mPaintTool;
+        public Shape mShape;
+        public DrawInfoItem(PaintTool paintTool, Shape shape) {
+            mPaintTool = paintTool;
+            mShape = shape;
+        }
+    }
 
     public NormalSketchView(Context context) {
         this(context, null);
@@ -102,41 +125,42 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     public void choosePaintTool(int paintToolType) {
         mPaintToolType = paintToolType;
-        /*
-        if (paintToolType == PAINT_TOOL_PEN) {
-            mPaint = mPenPaint;
-        } else if (paintToolType == PAINT_TOOL_ERASER) {
-            mPaint = mErasePaint;
-        }
-
-         */
     }
 
     //撤销
-    public void revoke() {
+    public void undo() {
         Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
         if (mShowingList.size() > 0) {
-            Pair removePair = mShowingList.remove(mShowingList.size() -1);
-           // thread.updataPathList(mShowingList);
-            drawList();
+            DrawInfoItem removeDrawInfoItem = mShowingList.remove(mShowingList.size() -1);
+            mResumeList.add(removeDrawInfoItem);
+            redrawShowList();
             invalidate();
-            //mResumeList.add(removePair);
-            //updateSketch();
         }
     }
 
-    private void drawList(){
+    //重做
+    public void redo() {
+        Toast.makeText(getContext(), R.string.resume_write, Toast.LENGTH_LONG).show();
+        if (mResumeList.size() > 0) {
+            DrawInfoItem resumeDrawInfoItem = mResumeList.remove(mResumeList.size() -1);
+            mShowingList.add(resumeDrawInfoItem);
+            redrawShowList();
+            invalidate();
+        }
+    }
+
+    private void redrawShowList() {
         if (mShowingList != null) {
             mBufferBitmap.eraseColor(Color.TRANSPARENT);
-            //mBufferBitmap.eraseColor(Color.BLUE);
-
-//            mBufferCanvas.drawColor(Color.BLUE);
             Iterator it = mShowingList.iterator();
             while (it != null && it.hasNext()) {
-                Pair pair = (Pair) it.next();
-                mBufferCanvas.drawPath((Path) pair.first, (Paint) pair.second);
+                DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
+                PaintTool paintTool = drawInfoItem.mPaintTool;
+                Shape shape = drawInfoItem.mShape;
+                paintTool.drawShape(mBufferCanvas, shape);
             }
         }
+        mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
     }
 
     @Override
@@ -170,12 +194,12 @@ public class NormalSketchView extends View implements View.OnTouchListener {
             public void run() {
                 //流绘制
                 int i = 0;
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(Color.WHITE);
                 while (true) {
                     i++;
                     Log.i("wenfengwenfeng","i=" + i);
-                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    paint.setColor(Color.WHITE);
+
                     //drawCanvas(h264Canvas);
                     /*
                     h264Canvas.drawColor(Color.WHITE);
@@ -184,21 +208,37 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                         Pair pair = (Pair) it.next();
                         h264Canvas.drawPath((Path) pair.first, (Paint) pair.second);
                     }
+                    */
 
-                     */
-                    h264Canvas.drawColor(Color.BLUE);
-                    h264Canvas.drawRect(0, 0 , mWidth / 2, mHeight , paint);
-                    if (mBufferBitmap != null && !mBufferBitmap.isRecycled()) {
-                        h264Canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+
+
+
+                    //for循环方式绘制，橡皮擦会黑底
+                    /*
+                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    h264Canvas.drawColor(Color.GREEN);
+                    Iterator it = mShowingList.iterator();
+
+                    while (it != null && it.hasNext()) {
+                        DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
+                        PaintTool paintTool = drawInfoItem.mPaintTool;
+                        Shape shape = drawInfoItem.mShape;
+                        paintTool.drawShape(h264Canvas, shape);
                     }
                     mSurface.unlockCanvasAndPost(h264Canvas);
-                    /*
-                    try {
-                        Thread.sleep(30);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                      */
+
+
+
+                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    h264Canvas.drawColor(Color.BLUE);
+                    h264Canvas.drawRect(0, 0 , mWidth / 2, mHeight , paint);
+                    //使用一个复制的mH264Bitmap来传输H264流，如果直接使用mBufferBitmap，屏幕会闪，可能时被改变了？
+                    if (mH264Bitmap != null && !mH264Bitmap.isRecycled()) {
+                        h264Canvas.drawBitmap(mH264Bitmap, 0, 0, null);
+                    }
+                    mSurface.unlockCanvasAndPost(h264Canvas);
+
                 }
             }
         });
@@ -224,67 +264,50 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if(mWidth != width || mHeight != height) {
             mWidth = width;
             mHeight = height;
-          //  thread = new MyThread(mWidth , mHeight, mPaint);
-          //  thread.start();
         }
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        /*
-        if(thread != null) {
-            thread.release();
-        }
-
-         */
-    }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()){
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
-                //mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                mPath = new Path();
+                if (mBufferBitmap == null) {
+                    initBuffer();
+                }
                 if (mPaintToolType == PAINT_TOOL_PEN) {
-                    mPaint = createDefaultPenPaint();
+                    mPaintTool = new Pen(PenSetting.getInstance());
                 } else {
-                    mPaint = createDefaultErasePaint();
+                    mPaintTool = new Eraser(EraserSetting.getInstance());
+                }
+
+                mShape = Shape.createShapeByType(mShapeType);
+                if (mShapeType == Shape.SHAPE_TYPE_CURVE) {
+                    mPath = new Path();
+                    ((CurveShape)mShape).setPath(mPath);
                 }
 
                 //mResumeList.clear();
-                mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                mShowingList.add(new Pair(mPath, mPaint));
-                //thread.pause(false);
-                //按下的时候通过moveTo()绘制按下的这个点,获取按下点的X和Y坐标
-                //mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                /*
-                mPath = new Path();
-                mResumeList.clear();
-                mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                mShowingList.add(new Pair(mPath, mPaint));
-                 */
-                //获取之后调用draw()方法进行绘制
-                //draw();
+                mShape.touchDown(motionEvent.getX(), motionEvent.getY());
+                mShowingList.add(new DrawInfoItem(mPaintTool, mShape));
                 break;
 
             //在移动的时候进行绘制
             case MotionEvent.ACTION_MOVE:
-                mPath.lineTo(motionEvent.getX(),motionEvent.getY());
-                if (mBufferBitmap == null) {
-                    initBuffer();
-                }
-                mBufferCanvas.drawPath(mPath, mPaint);
+                //mPath.lineTo(motionEvent.getX(),motionEvent.getY());
+                mShape.touchMove(motionEvent.getX(), motionEvent.getY());
 
-                //thread.updataPath(mPath);
-                //thread.updataPathList(mShowingList);
-                //updateSketch();
+                //使用画笔将形状绘制到画布上面
+                //mPaintTool.drawShape(mBufferCanvas, mShape);
+                redrawShowList();
                 invalidate();
                 break;
             //在移动的时候进行绘制
             case MotionEvent.ACTION_UP:
-                //thread.pause(true);
+                mShape.touchUp(motionEvent.getX(), motionEvent.getY());
+                //mPaintTool.drawShape(mBufferCanvas, mShape);
+                invalidate();
                 break;
         }
         return true;

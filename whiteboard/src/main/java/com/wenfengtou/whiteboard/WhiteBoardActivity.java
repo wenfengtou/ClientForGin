@@ -112,7 +112,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mCancelWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSketchView.revoke();
+                mSketchView.undo();
                // mSketchView.undo();
             }
         });
@@ -120,7 +120,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //mSketchView.resume();
-               // mSketchView.redo();
+                mSketchView.redo();
             }
         });
         mPenBt.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +222,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMediaCodec.stop();
+        mMediaCodec.release();
         mMediaMuxer.stop();
         mMediaMuxer.release();
         Log.i(TAG, "encodetime = " + (SystemClock.uptimeMillis() - startEncodeTime));

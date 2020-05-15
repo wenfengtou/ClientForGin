@@ -8,10 +8,13 @@ import com.wenfengtou.whiteboard.painttool.PaintTool;
 
 public class CurveShape extends Shape {
 
-    private Path mPath;
-
+    Path mPath;
     public void setPath(Path path) {
         this.mPath = path;
+    }
+
+    public Path getPath() {
+        return mPath;
     }
 
     @Override
@@ -20,5 +23,15 @@ public class CurveShape extends Shape {
             Paint paint = paintTool.getPaint();
             canvas.drawPath(mPath, paint);
         }
+    }
+
+    @Override
+    public void touchDown(float x, float y) {
+        mPath.moveTo(x, y);
+    }
+
+    @Override
+    public void touchMove(float x, float y) {
+        mPath.lineTo(x, y);
     }
 }

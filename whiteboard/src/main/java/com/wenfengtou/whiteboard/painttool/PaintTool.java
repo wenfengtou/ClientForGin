@@ -2,14 +2,36 @@ package com.wenfengtou.whiteboard.painttool;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 
+import com.wenfengtou.whiteboard.setting.PaintSetting;
 import com.wenfengtou.whiteboard.shape.Shape;
 
 public abstract class PaintTool {
+
     /**
      * 画笔
      */
     Paint mPaint;
+
+    public PaintTool(PaintSetting paintSetting) {
+        mPaint = new Paint();
+        setDefaultPaintAttr(mPaint);
+        mPaint.setStrokeWidth(paintSetting.getStrokeWidth());
+        mPaint.setColor(paintSetting.getColor());
+        mPaint.setXfermode(paintSetting.getPorterDuffMode() == null ? null : new PorterDuffXfermode(paintSetting.getPorterDuffMode()));
+    }
+
+    private void setDefaultPaintAttr(Paint paint) {
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+
+    public Paint setPaint(Paint paint) {
+        return mPaint = paint;
+    }
 
     /**
      * 获取画笔
@@ -35,7 +57,8 @@ public abstract class PaintTool {
         mPaint.setColor(color);
     }
 
-    protected void drawShape(Canvas canvas, Shape shape) {
+    public void drawShape(Canvas canvas, Shape shape) {
         shape.draw(this, canvas);
     }
+
 }
