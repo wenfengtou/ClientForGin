@@ -6,8 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
@@ -46,6 +49,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     private Canvas mBufferCanvas;
 
     private Bitmap mH264Bitmap;
+    private Bitmap mBackgroupBitmap;
     private volatile CopyOnWriteArrayList<DrawInfoItem> mShowingList = new CopyOnWriteArrayList();
     private CopyOnWriteArrayList<DrawInfoItem> mResumeList = new CopyOnWriteArrayList();
 
@@ -82,7 +86,27 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         mPenPaint = createDefaultPenPaint();
         mErasePaint = createDefaultErasePaint();
         mPaint = mPenPaint;
+        //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
+        mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
         setOnTouchListener(this);
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        //取drawable的宽高
+        int width = 1080;
+        int height = 1920;
+        //取drawable的颜色格式
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE
+                ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565;
+        //创建对应的bitmap
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        //创建对应的bitmap的画布
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        //把drawable内容画到画布中
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     private void initBuffer(){
@@ -176,6 +200,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
 
         if (mBufferBitmap != null) {
+            canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
             canvas.drawBitmap(mBufferBitmap, 0, 0, null);
         }
 
@@ -235,6 +260,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                     h264Canvas.drawRect(0, 0 , mWidth / 2, mHeight , paint);
                     //使用一个复制的mH264Bitmap来传输H264流，如果直接使用mBufferBitmap，屏幕会闪，可能时被改变了？
                     if (mH264Bitmap != null && !mH264Bitmap.isRecycled()) {
+                        h264Canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
                         h264Canvas.drawBitmap(mH264Bitmap, 0, 0, null);
                     }
                     mSurface.unlockCanvasAndPost(h264Canvas);
