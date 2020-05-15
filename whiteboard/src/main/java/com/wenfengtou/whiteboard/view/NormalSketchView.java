@@ -127,8 +127,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     private void drawList(){
         if (mShowingList != null) {
-            //mBufferBitmap.eraseColor(Color.TRANSPARENT);
-            mBufferBitmap.eraseColor(Color.BLUE);
+            mBufferBitmap.eraseColor(Color.TRANSPARENT);
+            //mBufferBitmap.eraseColor(Color.BLUE);
 
 //            mBufferCanvas.drawColor(Color.BLUE);
             Iterator it = mShowingList.iterator();
