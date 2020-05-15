@@ -38,11 +38,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private Handler mHandler;
     private TextView b1tv;
     private TextView b2tv;
-    private WindowManager mWindowManager;
     class OkHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -58,26 +56,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //HookUtil.hookWindowManagerGlobal();
         setContentView(R.layout.activity_main);
-        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         b2tv = findViewById(R.id.textView2);
         b2tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //b1tv.setVisibility(View.GONE);
-                startActivity(new Intent(MainActivity.this, CameraActivity.class));
+                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
                 //showDialog();
             }
         });
-        //int a = b2tv.getVisibility();
+
+        /*
         WindowManager localWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
         LinearLayout mNightView = new LinearLayout(this);
         //不让悬浮窗获取焦点
-
         mNightView.setBackgroundColor(Color.argb(153, 0, 8, 13));
-        //localLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-        //localLayoutParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        //支持透明度
+
         localLayoutParams.flags =  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         localLayoutParams.format = PixelFormat.RGBA_8888;
@@ -87,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         localLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         localWindowManager.addView(mNightView, localLayoutParams);
+
+         */
         try {
             //serializeStudent();
             deserializeStudent();
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
+                               // startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
                             }
                         }, 10);
                     }
@@ -149,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 });
          */
     }
-
-
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)

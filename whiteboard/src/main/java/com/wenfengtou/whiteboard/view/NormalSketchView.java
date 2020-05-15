@@ -54,8 +54,10 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     private PaintTool mPaintTool;
     private int mShapeType = Shape.SHAPE_TYPE_CURVE;
     private Shape mShape;
+    private Thread mH264Thread;
 
     private boolean mIsReDrawShowList = false;
+    private boolean mIsSendH264 = true;
 
     class DrawInfoItem {
         public PaintTool mPaintTool;
@@ -83,7 +85,6 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         //setBackgroundColor(Color.BLUE);
         mPaint = mPenPaint;
         //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
-        mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
         setOnTouchListener(this);
     }
 
@@ -161,7 +162,6 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 paintTool.drawShape(mBufferCanvas, shape);
             }
         }
-        mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
     }
 
     @Override
@@ -179,8 +179,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if (mBufferBitmap != null) {
             canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
             canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+            mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
         }
-
         /*
         Canvas h264Canvas = mSurface.lockCanvas(null);
         drawCanvas(h264Canvas);
@@ -189,14 +189,21 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        //mH264Thread.stop();
+        mIsSendH264 = false;
+    }
+
     public void startDecoreThread() {
 
-        Thread thread = new Thread(new Runnable() {
+        mH264Thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 //流绘制
                 int i = 0;
-                while (true) {
+                while (mIsSendH264) {
                     i++;
                     Log.i("wenfengwenfeng","i=" + i);
                     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -233,19 +240,19 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
 
                     Canvas h264Canvas = mSurface.lockCanvas(null);
-                    h264Canvas.drawColor(Color.BLUE);
-                    h264Canvas.drawRect(0, 0 , mWidth / 2, mHeight , paint);
                     //使用一个复制的mH264Bitmap来传输H264流，如果直接使用mBufferBitmap，屏幕会闪，可能时被改变了？
                     if (mH264Bitmap != null && !mH264Bitmap.isRecycled()) {
                         h264Canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
                         h264Canvas.drawBitmap(mH264Bitmap, 0, 0, null);
                     }
                     mSurface.unlockCanvasAndPost(h264Canvas);
-
                 }
+                mH264Bitmap.recycle();
+                mBufferBitmap.recycle();
+                mBackgroupBitmap.recycle();
             }
         });
-        thread.start();
+        mH264Thread.start();
     }
 
     private void drawCanvas(Canvas canvas) {
@@ -277,6 +284,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
                 if (mBufferBitmap == null) {
+                    mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
                     initBuffer();
                 }
                 if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
@@ -302,8 +310,8 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 mShape.touchMove(motionEvent.getX(), motionEvent.getY());
 
                 //使用画笔将形状绘制到画布上面
-                //mPaintTool.drawShape(mBufferCanvas, mShape);
-                redrawShowList();
+                mPaintTool.drawShape(mBufferCanvas, mShape);
+                //redrawShowList();
                 invalidate();
                 break;
             //在移动的时候进行绘制
