@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.wenfengtou.whiteboard.R;
 import com.wenfengtou.whiteboard.painttool.Eraser;
@@ -91,6 +92,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         mPaint = mPenPaint;
         //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
         setOnTouchListener(this);
+        RecyclerView recyclerView;
     }
 
     private Bitmap drawableToBitmap(Drawable drawable) {
