@@ -123,6 +123,10 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         mPaintToolType = paintToolType;
     }
 
+    public int getPaintToolType() {
+        return mPaintToolType;
+    }
+
     public void setPaintToolColor(int paintToolType, int color) {
         if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
             PenSetting.getInstance().setColor(color);
@@ -143,7 +147,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if (mShowingList.size() > 0) {
             DrawInfoItem removeDrawInfoItem = mShowingList.remove(mShowingList.size() -1);
             mResumeList.add(removeDrawInfoItem);
-            redrawShowList();
+            drawShowList(mShowingList, mBufferCanvas, true);
             invalidate();
         }
     }
@@ -154,20 +158,37 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if (mResumeList.size() > 0) {
             DrawInfoItem resumeDrawInfoItem = mResumeList.remove(mResumeList.size() -1);
             mShowingList.add(resumeDrawInfoItem);
-            redrawShowList();
+            drawShowList(mShowingList, mBufferCanvas, true);
             invalidate();
         }
     }
 
-    private void redrawShowList() {
+    public void clear() {
+        mResumeList.clear();
+        mShowingList.clear();
+        mBufferBitmap.eraseColor(Color.TRANSPARENT);
+        invalidate();
+    }
+
+    public Bitmap getBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(mBackgroupBitmap, 0, 0, null);
+        canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+        return bitmap;
+    }
+
+    private void drawShowList(CopyOnWriteArrayList<DrawInfoItem> list, Canvas canvas, boolean clear) {
         if (mShowingList != null) {
-            mBufferBitmap.eraseColor(Color.TRANSPARENT);
+            if (clear) {
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            }
             Iterator it = mShowingList.iterator();
             while (it != null && it.hasNext()) {
                 DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
                 PaintTool paintTool = drawInfoItem.mPaintTool;
                 Shape shape = drawInfoItem.mShape;
-                paintTool.drawShape(mBufferCanvas, shape);
+                paintTool.drawShape(canvas, shape);
             }
         }
     }

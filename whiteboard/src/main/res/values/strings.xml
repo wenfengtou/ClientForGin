@@ -4,5 +4,7 @@
     <string name="resume_write">恢复</string>
     <string name="pen">画笔</string>
     <string name="eraser">橡皮擦</string>
-    <string name="green">绿色</string>
+    <string name="clear_sketch">清空</string>
+    <string name="save_sketch">保存</string>
+    <string name="save_sketch_success">保存成功</string>
 </resources>

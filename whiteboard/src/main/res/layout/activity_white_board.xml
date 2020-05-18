@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FF00FF00"
     tools:context=".WhiteBoardActivity">
 
-    <LinearLayout
+    <com.wenfengtou.whiteboard.view.NormalSketchView
+        android:id="@+id/board_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_sketch_menu"
+        />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp">
         <Button
             android:id="@+id/bt_cancel_write"
             android:layout_width="wrap_content"
@@ -24,6 +29,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/resume_write"/>
+    </LinearLayout>
+
+    <!--
+    <LinearLayout
+        android:id="@+id/ll_tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/bt_pen"
@@ -44,9 +58,12 @@
             android:text="@string/green"/>
 
     </LinearLayout>
-    <com.wenfengtou.whiteboard.view.NormalSketchView
-        android:id="@+id/board_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    -->
+
+    <com.wenfengtou.whiteboard.view.SketchMenuView
+        android:id="@+id/ll_sketch_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         />
-</LinearLayout>
+</RelativeLayout>

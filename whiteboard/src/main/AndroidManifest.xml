@@ -3,7 +3,9 @@
     package="com.wenfengtou.whiteboard">
 
     <application>
-        <activity android:name=".WhiteBoardActivity"></activity>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".WhiteBoardActivity"/>
     </application>
 
 </manifest>

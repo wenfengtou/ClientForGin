@@ -15,15 +15,19 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.wenfengtou.commonutil.FileUtil;
 import com.wenfengtou.whiteboard.painttool.PaintTool;
 import com.wenfengtou.whiteboard.view.NormalSketchView;
+import com.wenfengtou.whiteboard.view.SketchMenuView;
 import com.wenfengtou.whiteboard.view.SketchView;
 import com.wenfengtou.whiteboard.view.TaletteViews;
 
@@ -39,9 +43,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private String mMp4Path;
     private Button mCancelWriteBt;
     private Button mResumeWriteBt;
-    private Button mPenBt;
-    private Button mEraserBt;
-    private Button mColorBt;
+
+    private SketchMenuView mSketchMenuView;
     private NormalSketchView mSketchView;
     private MediaCodec mMediaCodec;
     private Surface mSurface;
@@ -58,10 +61,9 @@ public class WhiteBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_white_board);
         mCancelWriteBt = findViewById(R.id.bt_cancel_write);
         mResumeWriteBt = findViewById(R.id.bt_resume_write);
-        mPenBt = findViewById(R.id.bt_pen);
-        mEraserBt = findViewById(R.id.bt_eraser);
-        mColorBt = findViewById(R.id.bt_color);
         mSketchView = findViewById(R.id.board_view);
+        mSketchMenuView = findViewById(R.id.ll_sketch_menu);
+        mSketchMenuView.setSketchView(mSketchView);
         mSavePath = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
         mMp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
         mSurface = MediaCodec.createPersistentInputSurface();
@@ -124,25 +126,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
                 mSketchView.redo();
             }
         });
-        mPenBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
-            }
-        });
-        mEraserBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
-            }
-        });
 
-        mColorBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSketchView.setPaintToolColor(PaintTool.PAINT_TOOL_PEN, Color.GREEN);
-            }
-        });
     }
 
     private void createMediaCodec(Surface surface) {
