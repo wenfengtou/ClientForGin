@@ -170,14 +170,14 @@ public class WhiteBoardActivity extends AppCompatActivity {
             @Override
             public void onOutputBufferAvailable(@NonNull MediaCodec mediaCodec, int i, @NonNull MediaCodec.BufferInfo bufferInfo) {
                 ByteBuffer outputBuffer = mediaCodec.getOutputBuffer(i);
-                Log.d("fengfeng", "count = " + (count++));
-                Log.d(TAG, "bufferInfo offset=" + bufferInfo.offset + " size=" + bufferInfo.size);
+                //Log.d("fengfeng", "count = " + (count++));
+                //Log.d(TAG, "bufferInfo offset=" + bufferInfo.offset + " size=" + bufferInfo.size);
                 //这里将编码后的流存入byte[]队列，也可以在这里将画面输出到文件或者发送到远端
                 if (outputBuffer != null && bufferInfo.size > 0) {
                     byte[] buffer = new byte[outputBuffer.remaining()];
                     outputBuffer.get(buffer);
                     int flag = buffer[4] & 0x1F;
-                    Log.i(TAG, "onOutputBufferAvailable =" + toHex(buffer[4]) + " flag=" + flag);
+                    //Log.i(TAG, "onOutputBufferAvailable =" + toHex(buffer[4]) + " flag=" + flag);
                     FileUtil.writeH264(buffer, mSavePath);
                     //Log.i(TAG, "onOutputBufferAvailable = remain=" + buffer.length + " flag=" + flag);
                 }

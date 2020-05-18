@@ -30,11 +30,15 @@ import com.wenfengtou.whiteboard.setting.PenSetting;
 import com.wenfengtou.whiteboard.shape.CurveShape;
 import com.wenfengtou.whiteboard.shape.Shape;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NormalSketchView extends View implements View.OnTouchListener {
+
+    private static final String TAG = "NormalSketchView";
     private int mWidth;
     private int mHeight;
     private Path mPath = new Path();
@@ -58,6 +62,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
 
     private boolean mIsReDrawShowList = false;
     private boolean mIsSendH264 = true;
+    private byte[] mPixels;
 
     class DrawInfoItem {
         public PaintTool mPaintTool;
@@ -107,7 +112,10 @@ public class NormalSketchView extends View implements View.OnTouchListener {
     }
 
     private void initBuffer(){
+        Log.i(TAG, "initBuffer width=" + getWidth() + " height=" + getHeight());
+        mPixels = new byte[getWidth() * getHeight() * 4];
         mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        mH264Bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
 
@@ -179,7 +187,13 @@ public class NormalSketchView extends View implements View.OnTouchListener {
         if (mBufferBitmap != null) {
             canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
             canvas.drawBitmap(mBufferBitmap, 0, 0, null);
-            mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
+            ByteBuffer buffer = ByteBuffer.wrap(mPixels);
+            buffer.rewind();
+            mBufferBitmap.copyPixelsToBuffer(buffer);
+            buffer.flip();
+            Log.i(TAG, "mh264 byte=" + mH264Bitmap.getByteCount() + " buffer remain=" + buffer.remaining());
+            mH264Bitmap.copyPixelsFromBuffer(buffer);
+            //mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
         }
         /*
         Canvas h264Canvas = mSurface.lockCanvas(null);
@@ -205,7 +219,7 @@ public class NormalSketchView extends View implements View.OnTouchListener {
                 int i = 0;
                 while (mIsSendH264) {
                     i++;
-                    Log.i("wenfengwenfeng","i=" + i);
+                    //Log.i("wenfengwenfeng","i=" + i);
                     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                     paint.setColor(Color.WHITE);
 
