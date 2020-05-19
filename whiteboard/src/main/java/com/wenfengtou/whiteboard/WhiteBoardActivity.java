@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.wenfengtou.commonutil.FileUtil;
 import com.wenfengtou.whiteboard.view.SketchView;
@@ -32,8 +33,8 @@ import java.nio.ByteBuffer;
 public class WhiteBoardActivity extends AppCompatActivity {
 
     private static final String TAG = "WhiteBoardActivity";
-    private Button mCancelWriteBt;
-    private Button mResumeWriteBt;
+    private ImageButton mUndoBt;
+    private ImageButton mRedoBt;
 
     private SketchMenuView mSketchMenuView;
     private SketchView mSketchView;
@@ -50,8 +51,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_white_board);
         Intent intent = getIntent();
-        mCancelWriteBt = findViewById(R.id.bt_cancel_write);
-        mResumeWriteBt = findViewById(R.id.bt_resume_write);
+        mUndoBt = findViewById(R.id.bt_undo_write);
+        mRedoBt = findViewById(R.id.bt_redo_write);
         mSketchView = findViewById(R.id.board_view);
         mSketchMenuView = findViewById(R.id.ll_sketch_menu);
         mSketchMenuView.setSketchView(mSketchView);
@@ -74,13 +75,13 @@ public class WhiteBoardActivity extends AppCompatActivity {
         });
 
 
-        mCancelWriteBt.setOnClickListener(new View.OnClickListener() {
+        mUndoBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mSketchView.undo();
             }
         });
-        mResumeWriteBt.setOnClickListener(new View.OnClickListener() {
+        mRedoBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mSketchView.redo();

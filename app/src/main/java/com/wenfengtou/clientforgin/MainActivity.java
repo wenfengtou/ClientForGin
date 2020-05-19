@@ -5,9 +5,12 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,12 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.screenrecord.ScreenRecordActivity;
 import com.wenfengtou.whiteboard.WhiteBoardActivity;
+import com.wenfengtou.whiteboard.service.FloatingService;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean toggle = false;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,29 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 //b1tv.setVisibility(View.GONE);
                 Intent intent = new Intent(MainActivity.this, WhiteBoardActivity.class);
                 intent.putExtra("bg-path", "/sdcard/screen.png");
+                intent.addFlags( Intent.FLAG_ACTIVITY_NO_ANIMATION );
                 startActivity(intent);
                 //showDialog();
             }
         });
 
-        /*
-        WindowManager localWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
-        LinearLayout mNightView = new LinearLayout(this);
-        //不让悬浮窗获取焦点
-        mNightView.setBackgroundColor(Color.argb(153, 0, 8, 13));
-
-        localLayoutParams.flags =  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-        localLayoutParams.format = PixelFormat.RGBA_8888;
-        localLayoutParams.gravity = Gravity.CENTER;
-        localLayoutParams.x = 0;
-        localLayoutParams.y = 0;
-        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        localLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        localWindowManager.addView(mNightView, localLayoutParams);
-
-         */
         try {
             //serializeStudent();
             deserializeStudent();
@@ -127,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .start();
 
+        if (Settings.canDrawOverlays(this)) {
+            startService(new Intent(this, FloatingService.class));
+        } else {
+            startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+        }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求

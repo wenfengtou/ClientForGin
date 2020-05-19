@@ -6,20 +6,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.wenfengtou.whiteboard.R;
 import com.wenfengtou.whiteboard.painttool.Eraser;
@@ -40,10 +36,7 @@ public class SketchView extends View implements View.OnTouchListener {
     private int mWidth;
     private int mHeight;
     private Path mPath = new Path();
-    private Paint mPaint;
     private Surface mSurface;
-    private Paint mErasePaint;
-    private Paint mPenPaint;
     private int mPaintToolType = PaintTool.PAINT_TOOL_PEN;
     private Bitmap mBufferBitmap;
     private Canvas mBufferCanvas;
@@ -89,29 +82,7 @@ public class SketchView extends View implements View.OnTouchListener {
 
     public SketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //setBackgroundColor(Color.BLUE);
-        mPaint = mPenPaint;
-        //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
         setOnTouchListener(this);
-        RecyclerView recyclerView;
-    }
-
-    private Bitmap drawableToBitmap(Drawable drawable) {
-        //取drawable的宽高
-        int width = 1080;
-        int height = 1920;
-        //取drawable的颜色格式
-        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE
-                ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.RGB_565;
-        //创建对应的bitmap
-        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
-        //创建对应的bitmap的画布
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, width, height);
-        //把drawable内容画到画布中
-        drawable.draw(canvas);
-        return bitmap;
     }
 
     private void initBuffer(){
@@ -236,6 +207,7 @@ public class SketchView extends View implements View.OnTouchListener {
         }
          */
         //drawCanvas(canvas);
+
 
 
         //绘制背景

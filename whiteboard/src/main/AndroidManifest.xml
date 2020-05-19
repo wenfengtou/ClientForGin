@@ -6,6 +6,8 @@
         <activity
             android:screenOrientation="landscape"
             android:name=".WhiteBoardActivity"/>
+
+        <service android:name=".service.FloatingService"/>
     </application>
 
 </manifest>
