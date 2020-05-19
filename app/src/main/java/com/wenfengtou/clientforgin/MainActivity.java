@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //b1tv.setVisibility(View.GONE);
-                startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
+                Intent intent = new Intent(MainActivity.this, WhiteBoardActivity.class);
+                intent.putExtra("bg-path", "/sdcard/screen.png");
+                startActivity(intent);
                 //showDialog();
             }
         });

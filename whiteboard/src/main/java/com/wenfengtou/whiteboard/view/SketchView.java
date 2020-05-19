@@ -83,6 +83,10 @@ public class SketchView extends View implements View.OnTouchListener {
         mSurface = surface;
     }
 
+    public void setBackgroupBitmap(Bitmap bitmap) {
+        mBackgroupBitmap = bitmap;
+    }
+
     public SketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //setBackgroundColor(Color.BLUE);
@@ -111,10 +115,10 @@ public class SketchView extends View implements View.OnTouchListener {
     }
 
     private void initBuffer(){
-        Log.i(TAG, "initBuffer width=" + getWidth() + " height=" + getHeight());
-        mPixels = new byte[getWidth() * getHeight() * 4];
-        mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_4444);
-        mH264Bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_4444);
+        Log.i(TAG, "initBuffer width=" + mWidth + " height=" + mHeight);
+        mPixels = new byte[mWidth * mHeight * 4];
+        mBufferBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        mH264Bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
 
@@ -200,7 +204,7 @@ public class SketchView extends View implements View.OnTouchListener {
     }
 
     public Bitmap getBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawBitmap(mBackgroupBitmap, 0, 0, null);
         canvas.drawBitmap(mBufferBitmap, 0, 0, null);
@@ -234,8 +238,12 @@ public class SketchView extends View implements View.OnTouchListener {
         //drawCanvas(canvas);
 
 
-        if (mBufferBitmap != null) {
+        //绘制背景
+        if (mBackgroupBitmap != null) {
             canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
+        }
+        //绘制图形
+        if (mBufferBitmap != null) {
             canvas.drawBitmap(mBufferBitmap, 0, 0, null);
             long start = SystemClock.uptimeMillis();
             ByteBuffer buffer = ByteBuffer.wrap(mPixels);
@@ -252,13 +260,11 @@ public class SketchView extends View implements View.OnTouchListener {
         drawCanvas(h264Canvas);
         mSurface.unlockCanvasAndPost(h264Canvas);
          */
-
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        //mH264Thread.stop();
         mIsSendH264 = false;
     }
 
@@ -321,17 +327,6 @@ public class SketchView extends View implements View.OnTouchListener {
         mH264Thread.start();
     }
 
-    private void drawCanvas(Canvas canvas) {
-        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        //canvas.drawColor(Color.WHITE);
-        //用drawPath进行绘制
-        Iterator it = mShowingList.iterator();
-        while (it != null && it.hasNext()) {
-            Pair pair = (Pair) it.next();
-            canvas.drawPath((Path) pair.first, (Paint) pair.second);
-        }
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -350,7 +345,6 @@ public class SketchView extends View implements View.OnTouchListener {
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
                 if (mBufferBitmap == null) {
-                    mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
                     initBuffer();
                 }
                 if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {

@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -29,16 +32,13 @@ import java.nio.ByteBuffer;
 public class WhiteBoardActivity extends AppCompatActivity {
 
     private static final String TAG = "WhiteBoardActivity";
-    private String mSavePath;
-    private String mMp4Path;
     private Button mCancelWriteBt;
     private Button mResumeWriteBt;
 
     private SketchMenuView mSketchMenuView;
     private SketchView mSketchView;
     private MediaCodec mMediaCodec;
-    private Surface mSurface;
-    private MediaFormat mMediaFormat = MediaFormat.createVideoFormat("video/avc", 1080, 1920);
+    private MediaFormat mMediaFormat;
 
     private int mVideoTrackIndex = -1;
 
@@ -49,60 +49,30 @@ public class WhiteBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_white_board);
+        Intent intent = getIntent();
         mCancelWriteBt = findViewById(R.id.bt_cancel_write);
         mResumeWriteBt = findViewById(R.id.bt_resume_write);
         mSketchView = findViewById(R.id.board_view);
         mSketchMenuView = findViewById(R.id.ll_sketch_menu);
         mSketchMenuView.setSketchView(mSketchView);
-        mSavePath = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
-        mMp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
-        mSurface = MediaCodec.createPersistentInputSurface();
-        createMediaCodec(mSurface);
-        mSketchView.setSurface(mSurface);
-
-        if (new File(mSavePath).exists()) {
-            new File(mSavePath).delete();
-        }
-        if (new File(mMp4Path).exists()) {
-            new File(mMp4Path).delete();
-        }
-
-        //((View)getWindow().getDecorView().getParent()).setBackgroundColor(Color.BLUE);
-        try {
-            mMediaMuxer = new MediaMuxer(mMp4Path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
-            //mMediaMuxer.
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        startEncode();
-        mSketchView.startDecoreThread();
-
-        /*
-        mSketchView.setSurface(mSurface);
-        mSketchView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                mSketchView.initSketch(); //清空画布
-                if (new File(mSavePath).exists()) {
-                    new File(mSavePath).delete();
-                }
-                startEncode();
-                mSketchView.startDecoreThread();
+        if (intent != null) {
+            String bgPath = intent.getStringExtra("bg-path");
+            if (bgPath != null && new File(bgPath).exists()) {
+                Bitmap bgBitmap = BitmapFactory.decodeFile(bgPath);
+                mSketchView.setBackgroupBitmap(bgBitmap);
             }
+        }
 
+
+        mSketchView.post(new Runnable() {
             @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
+            public void run() {
+                int width = mSketchView.getWidth();
+                int height = mSketchView.getHeight();
+                startEncode(width, height);
             }
         });
 
-         */
 
         mCancelWriteBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +89,8 @@ public class WhiteBoardActivity extends AppCompatActivity {
 
     }
 
-    private void createMediaCodec(Surface surface) {
+    private void createMediaCodec(Surface surface, int width, int height) {
+        mMediaFormat = MediaFormat.createVideoFormat("video/avc", width, height);
         try {
             mMediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
             mMediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 1024*1024);
@@ -133,26 +104,41 @@ public class WhiteBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void startEncode() {
+    private void startEncode(int width, int height) {
+        final String h264Path = Environment.getExternalStorageDirectory() + File.separator + "record.h264";
+        String mp4Path = Environment.getExternalStorageDirectory() + File.separator + "record.mp4";
+        Surface surface = MediaCodec.createPersistentInputSurface();
+        createMediaCodec(surface, width, height);
+        mSketchView.setSurface(surface);
+
+        if (new File(h264Path).exists()) {
+            new File(h264Path).delete();
+        }
+        if (new File(mp4Path).exists()) {
+            new File(mp4Path).delete();
+        }
+
+        try {
+            mMediaMuxer = new MediaMuxer(mp4Path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         mMediaCodec.setCallback(new MediaCodec.Callback() {
             @Override
             public void onInputBufferAvailable(@NonNull MediaCodec mediaCodec, int i) {
 
             }
 
-            int count = 0;
             @Override
             public void onOutputBufferAvailable(@NonNull MediaCodec mediaCodec, int i, @NonNull MediaCodec.BufferInfo bufferInfo) {
                 ByteBuffer outputBuffer = mediaCodec.getOutputBuffer(i);
-                //Log.d("fengfeng", "count = " + (count++));
-                //Log.d(TAG, "bufferInfo offset=" + bufferInfo.offset + " size=" + bufferInfo.size);
                 //这里将编码后的流存入byte[]队列，也可以在这里将画面输出到文件或者发送到远端
                 if (outputBuffer != null && bufferInfo.size > 0) {
                     byte[] buffer = new byte[outputBuffer.remaining()];
                     outputBuffer.get(buffer);
                     int flag = buffer[4] & 0x1F;
-                    //Log.i(TAG, "onOutputBufferAvailable =" + toHex(buffer[4]) + " flag=" + flag);
-                    FileUtil.writeH264(buffer, mSavePath);
+                    FileUtil.writeH264(buffer, h264Path);
                     //Log.i(TAG, "onOutputBufferAvailable = remain=" + buffer.length + " flag=" + flag);
                 }
 
@@ -190,15 +176,9 @@ public class WhiteBoardActivity extends AppCompatActivity {
             }
         });
         mMediaCodec.start();
+        mSketchView.startDecoreThread();
     }
 
-    public static String toHex(byte b) {
-        String result = Integer.toHexString(b & 0xFF);
-        if (result.length() == 1) {
-            result = '0' + result;
-        }
-        return result;
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
