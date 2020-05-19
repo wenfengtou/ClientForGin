@@ -54,7 +54,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
         mUndoBt = findViewById(R.id.bt_undo_write);
         mRedoBt = findViewById(R.id.bt_redo_write);
         mSketchView = findViewById(R.id.board_view);
-        mSketchMenuView = findViewById(R.id.ll_sketch_menu);
+        mSketchMenuView = findViewById(R.id.sketch_menu);
         mSketchMenuView.setSketchView(mSketchView);
         if (intent != null) {
             String bgPath = intent.getStringExtra("bg-path");

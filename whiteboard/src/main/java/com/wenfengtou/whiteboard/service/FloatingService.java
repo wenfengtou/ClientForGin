@@ -6,12 +6,16 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 
+import com.wenfengtou.whiteboard.R;
+import com.wenfengtou.whiteboard.view.SketchMenuView;
 import com.wenfengtou.whiteboard.view.SketchView;
 
 public class FloatingService extends Service {
@@ -28,21 +32,26 @@ public class FloatingService extends Service {
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         //Button button = new Button(this);
         //button.setText("悬浮窗");
-        SketchView sketchView = new SketchView(this);
-        sketchView.setBackgroundColor(Color.TRANSPARENT);
-
+        //SketchView sketchView = new SketchView(this);
+        //sketchView.setBackgroundColor(Color.TRANSPARENT);
+        View view = LayoutInflater.from(this).inflate(R.layout.activity_white_board, null, false);
+        SketchView sketchView = view.findViewById(R.id.board_view);
+        SketchMenuView sketchMenuView = view.findViewById(R.id.sketch_menu);
+        sketchMenuView.setSketchView(sketchView);
         FrameLayout frameLayout = new FrameLayout(this);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
+        layoutParams.x = 0;
+        layoutParams.y = 0;
         layoutParams.width = 1920;
-        layoutParams.height = 1200;
+        layoutParams.height = 1050;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
-        windowManager.addView(sketchView, layoutParams);
-        //sketchView.setBackgroundColor(getFilterColor(30));
+        windowManager.addView(view, layoutParams);
+        view.setBackgroundColor(getFilterColor(30));
     }
 
     public int getFilterColor(int blueFilterPercent) {

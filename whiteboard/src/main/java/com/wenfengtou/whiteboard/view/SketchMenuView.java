@@ -107,7 +107,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         colorPopUpWindow.setFocusable(true);
         int[] location = new int[2];
         mPenll.getLocationOnScreen(location);
-        colorPopUpWindow.showAtLocation(mPenll, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
+        colorPopUpWindow.showAsDropDown(mPenll);
+        //colorPopUpWindow.showAtLocation(mPenll, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
         colorPopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -138,7 +139,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         erasePopUpWindow.setFocusable(true);
         int[] location = new int[2];
         mPenll.getLocationOnScreen(location);
-        erasePopUpWindow.showAtLocation(mEraserll, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
+        erasePopUpWindow.showAsDropDown(mEraserll);
+        //erasePopUpWindow.showAtLocation(mEraserll, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
         erasePopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

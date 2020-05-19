@@ -10,7 +10,7 @@
         android:id="@+id/board_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_sketch_menu"
+        android:layout_above="@+id/sketch_menu"
         />
 
     <LinearLayout
@@ -66,7 +66,7 @@
     -->
 
     <com.wenfengtou.whiteboard.view.SketchMenuView
-        android:id="@+id/ll_sketch_menu"
+        android:id="@+id/sketch_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
