@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -12,24 +11,15 @@ import android.media.MediaMuxer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.wenfengtou.commonutil.FileUtil;
-import com.wenfengtou.whiteboard.painttool.PaintTool;
-import com.wenfengtou.whiteboard.view.NormalSketchView;
-import com.wenfengtou.whiteboard.view.SketchMenuView;
 import com.wenfengtou.whiteboard.view.SketchView;
-import com.wenfengtou.whiteboard.view.TaletteViews;
+import com.wenfengtou.whiteboard.view.SketchMenuView;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +35,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     private Button mResumeWriteBt;
 
     private SketchMenuView mSketchMenuView;
-    private NormalSketchView mSketchView;
+    private SketchView mSketchView;
     private MediaCodec mMediaCodec;
     private Surface mSurface;
     private MediaFormat mMediaFormat = MediaFormat.createVideoFormat("video/avc", 1080, 1920);

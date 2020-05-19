@@ -16,8 +16,9 @@ public class EraserSetting extends PaintSetting {
     }
 
     public void reset() {
+        mMaxStrokeWidth = 30;
         mPorterDuffMode = PorterDuff.Mode.CLEAR;
-        mStrokeWidth = 30;
+        mStrokeWidth = 15;
         mColor = Color.TRANSPARENT;
     }
 }

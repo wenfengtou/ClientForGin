@@ -6,107 +6,324 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.wenfengtou.whiteboard.R;
+import com.wenfengtou.whiteboard.painttool.Eraser;
+import com.wenfengtou.whiteboard.painttool.PaintTool;
+import com.wenfengtou.whiteboard.painttool.Pen;
+import com.wenfengtou.whiteboard.setting.EraserSetting;
+import com.wenfengtou.whiteboard.setting.PenSetting;
+import com.wenfengtou.whiteboard.shape.CurveShape;
+import com.wenfengtou.whiteboard.shape.Shape;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class SketchView extends SurfaceView implements View.OnTouchListener {
+public class SketchView extends View implements View.OnTouchListener {
 
-    private SurfaceHolder mSurfaceHolder;
+    private static final String TAG = "NormalSketchView";
+    private int mWidth;
+    private int mHeight;
+    private Path mPath = new Path();
     private Paint mPaint;
-    private Path mPath;
-    private Bitmap mBackGroupBitmap;
     private Surface mSurface;
+    private Paint mErasePaint;
+    private Paint mPenPaint;
+    private int mPaintToolType = PaintTool.PAINT_TOOL_PEN;
+    private Bitmap mBufferBitmap;
+    private Canvas mBufferCanvas;
 
-    private ArrayList<Pair<Path, Paint>> mShowingList = new ArrayList();
-    private ArrayList<Pair<Path, Paint>> mResumeList = new ArrayList();
+    private Bitmap mH264Bitmap;
+    private Bitmap mBackgroupBitmap;
+    private volatile CopyOnWriteArrayList<DrawInfoItem> mShowingList = new CopyOnWriteArrayList();
+    private CopyOnWriteArrayList<DrawInfoItem> mResumeList = new CopyOnWriteArrayList();
+
+    private PaintTool mPaintTool;
+    private int mShapeType = Shape.SHAPE_TYPE_CURVE;
+    private Shape mShape;
+    private Thread mH264Thread;
+
+    private boolean mIsReDrawShowList = false;
+    private boolean mIsSendH264 = true;
+    private byte[] mPixels;
+
+    class DrawInfoItem {
+        public PaintTool mPaintTool;
+        public Shape mShape;
+        public DrawInfoItem(PaintTool paintTool, Shape shape) {
+            mPaintTool = paintTool;
+            mShape = shape;
+        }
+    }
 
     public SketchView(Context context) {
-        super(context);
+        this(context, null);
     }
 
-    public SketchView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public SketchView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public SketchView(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
     public void setSurface(Surface surface) {
         mSurface = surface;
     }
 
-    public void init() {
-        mSurfaceHolder = getHolder();
-        mBackGroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.four)).getBitmap();
-        mPaint = new Paint();
-        mPaint.setColor(Color.RED);
-        //初始化画笔的大小
-        mPaint.setTextSize(40);
-        //给画笔清理锯齿
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(50);
+    public SketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        //setBackgroundColor(Color.BLUE);
+        mPaint = mPenPaint;
+        //mBackgroupBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.back3)).getBitmap();
         setOnTouchListener(this);
+        RecyclerView recyclerView;
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        //取drawable的宽高
+        int width = 1080;
+        int height = 1920;
+        //取drawable的颜色格式
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE
+                ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565;
+        //创建对应的bitmap
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
+        //创建对应的bitmap的画布
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        //把drawable内容画到画布中
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    private void initBuffer(){
+        Log.i(TAG, "initBuffer width=" + getWidth() + " height=" + getHeight());
+        mPixels = new byte[getWidth() * getHeight() * 4];
+        mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_4444);
+        mH264Bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_4444);
+        mBufferCanvas = new Canvas(mBufferBitmap);
+    }
+
+    public void choosePaintTool(int paintToolType) {
+        mPaintToolType = paintToolType;
+    }
+
+    public int getPaintToolType() {
+        return mPaintToolType;
+    }
+
+    public int getPaintToolColor(int paintToolType) {
+        int paintToolColor = 0;
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            paintToolColor = PenSetting.getInstance().getColor();
+        } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
+            paintToolColor = EraserSetting.getInstance().getColor();
+        }
+        return paintToolColor;
+    }
+
+    public void setPaintToolColor(int paintToolType, int color) {
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            PenSetting.getInstance().setColor(color);
+        }
+    }
+
+    public void setPaintToolStrokeWidth(int paintToolType, int size) {
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            PenSetting.getInstance().setStrokeWidth(size);
+        } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
+            EraserSetting.getInstance().setStrokeWidth(size);
+        }
+    }
+
+    public int getPaintToolStrokeWidth(int paintToolType) {
+        int paintToolStrokeWidth = 0;
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            paintToolStrokeWidth = PenSetting.getInstance().getStrokeWidth();
+        } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
+            paintToolStrokeWidth = EraserSetting.getInstance().getStrokeWidth();
+        }
+        return paintToolStrokeWidth;
+    }
+
+    public int getPaintToolMaxStrokeWidth(int paintToolType) {
+        int paintToolMaxStrokeWidth = 0;
+        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
+            paintToolMaxStrokeWidth = PenSetting.getInstance().getMaxStrokeWidth();
+        } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
+            paintToolMaxStrokeWidth = EraserSetting.getInstance().getMaxStrokeWidth();
+        }
+        return paintToolMaxStrokeWidth;
+    }
+
+    //撤销
+    public void undo() {
+        Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
+        if (mShowingList.size() > 0) {
+            DrawInfoItem removeDrawInfoItem = mShowingList.remove(mShowingList.size() -1);
+            mResumeList.add(removeDrawInfoItem);
+            drawShowList(mShowingList, mBufferCanvas, true);
+            invalidate();
+        }
+    }
+
+    //重做
+    public void redo() {
+        Toast.makeText(getContext(), R.string.resume_write, Toast.LENGTH_LONG).show();
+        if (mResumeList.size() > 0) {
+            DrawInfoItem resumeDrawInfoItem = mResumeList.remove(mResumeList.size() -1);
+            mShowingList.add(resumeDrawInfoItem);
+            drawShowList(mShowingList, mBufferCanvas, true);
+            invalidate();
+        }
+    }
+
+    public void clear() {
+        mResumeList.clear();
+        mShowingList.clear();
+        mBufferBitmap.eraseColor(Color.TRANSPARENT);
+        invalidate();
+    }
+
+    public Bitmap getBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(mBackgroupBitmap, 0, 0, null);
+        canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+        return bitmap;
+    }
+
+    private void drawShowList(CopyOnWriteArrayList<DrawInfoItem> list, Canvas canvas, boolean clear) {
+        if (mShowingList != null) {
+            if (clear) {
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            }
+            Iterator it = mShowingList.iterator();
+            while (it != null && it.hasNext()) {
+                DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
+                PaintTool paintTool = drawInfoItem.mPaintTool;
+                Shape shape = drawInfoItem.mShape;
+                paintTool.drawShape(canvas, shape);
+            }
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        /*
+        Bitmap bitmap = thread == null ? null : thread.getBitmap();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            canvas.drawBitmap(bitmap , 0 , 0 , null);
+        }
+         */
+        //drawCanvas(canvas);
+
+
+        if (mBufferBitmap != null) {
+            canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
+            canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+            long start = SystemClock.uptimeMillis();
+            ByteBuffer buffer = ByteBuffer.wrap(mPixels);
+            buffer.rewind();
+            mBufferBitmap.copyPixelsToBuffer(buffer);
+            buffer.flip();
+            mH264Bitmap.copyPixelsFromBuffer(buffer);
+            long end = SystemClock.uptimeMillis();
+            Log.i(TAG, "copy time=" + (end - start));
+            //mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
+        }
+        /*
+        Canvas h264Canvas = mSurface.lockCanvas(null);
+        drawCanvas(h264Canvas);
+        mSurface.unlockCanvasAndPost(h264Canvas);
+         */
+
     }
 
-    public void initSketch() {
-        //要绘制的话肯定要有一个画布,要通过getHolder()锁定画布,
-        Canvas canvas = getHolder().lockCanvas();
-        //初始化画布的颜色
-        //canvas.drawColor(Color.WHITE);
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        canvas.drawBitmap(mBackGroupBitmap, 0, 0, null);
-        getHolder().unlockCanvasAndPost(canvas);
-    }
-    //创建绘制方法
-    public void updateSketch(){
-        //要绘制的话肯定要有一个画布,要通过getHolder()锁定画布,
-        Canvas canvas = getHolder().lockCanvas();
-        //初始化画布的颜色
-        //canvas.drawColor(Color.WHITE);
-        drawCanvas(canvas);
-        //绘制结束后要解锁画布
-        getHolder().unlockCanvasAndPost(canvas);
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        //mH264Thread.stop();
+        mIsSendH264 = false;
     }
 
     public void startDecoreThread() {
-        Thread thread = new Thread(new Runnable() {
+
+        mH264Thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 //流绘制
-                while (true) {
+                int i = 0;
+                while (mIsSendH264) {
+                    i++;
+                    //Log.i("wenfengwenfeng","i=" + i);
+                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    paint.setColor(Color.WHITE);
+
+                    //drawCanvas(h264Canvas);
+                    /*
+                    h264Canvas.drawColor(Color.WHITE);
+                    Iterator it = mShowingList.iterator();
+                    while (it != null && it.hasNext()) {
+                        Pair pair = (Pair) it.next();
+                        h264Canvas.drawPath((Path) pair.first, (Paint) pair.second);
+                    }
+                    */
+
+
+
+
+                    //for循环方式绘制，橡皮擦会黑底
+                    /*
                     Canvas h264Canvas = mSurface.lockCanvas(null);
-                    drawCanvas(h264Canvas);
+                    h264Canvas.drawColor(Color.GREEN);
+                    Iterator it = mShowingList.iterator();
+
+                    while (it != null && it.hasNext()) {
+                        DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
+                        PaintTool paintTool = drawInfoItem.mPaintTool;
+                        Shape shape = drawInfoItem.mShape;
+                        paintTool.drawShape(h264Canvas, shape);
+                    }
+                    mSurface.unlockCanvasAndPost(h264Canvas);
+                     */
+
+
+
+                    Canvas h264Canvas = mSurface.lockCanvas(null);
+                    //使用一个复制的mH264Bitmap来传输H264流，如果直接使用mBufferBitmap，屏幕会闪，可能时被改变了？
+                    if (mH264Bitmap != null && !mH264Bitmap.isRecycled()) {
+                        h264Canvas.drawBitmap(mBackgroupBitmap, 0 ,0, null);
+                        h264Canvas.drawBitmap(mH264Bitmap, 0, 0, null);
+                    }
                     mSurface.unlockCanvasAndPost(h264Canvas);
                 }
+                mH264Bitmap.recycle();
+                mBufferBitmap.recycle();
+                mBackgroupBitmap.recycle();
             }
         });
-        thread.start();
+        mH264Thread.start();
     }
 
     private void drawCanvas(Canvas canvas) {
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        canvas.drawBitmap(mBackGroupBitmap, 0, 0, null);
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        //canvas.drawColor(Color.WHITE);
         //用drawPath进行绘制
         Iterator it = mShowingList.iterator();
         while (it != null && it.hasNext()) {
@@ -114,49 +331,63 @@ public class SketchView extends SurfaceView implements View.OnTouchListener {
             canvas.drawPath((Path) pair.first, (Paint) pair.second);
         }
     }
-    //撤销
-    public void revoke() {
-        Toast.makeText(getContext(), R.string.cancel_write, Toast.LENGTH_LONG).show();
-        if (mShowingList.size() > 0) {
-            Pair removePair = mShowingList.remove(mShowingList.size() -1);
-            mResumeList.add(removePair);
-            updateSketch();
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        if(mWidth != width || mHeight != height) {
+            mWidth = width;
+            mHeight = height;
         }
     }
 
-    //恢复
-    public void resume() {
-        if (mResumeList.size() > 0) {
-            Pair resumePair = mResumeList.remove(mResumeList.size() -1);
-            mShowingList.add(resumePair);
-            updateSketch();
-        }
-    }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (motionEvent.getAction()){
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
-                //按下的时候通过moveTo()绘制按下的这个点,获取按下点的X和Y坐标
-                //mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                mPath = new Path();
-                mResumeList.clear();
-                mPath.moveTo(motionEvent.getX(), motionEvent.getY());
-                mShowingList.add(new Pair(mPath, mPaint));
-                //获取之后调用draw()方法进行绘制
-                //draw();
+                if (mBufferBitmap == null) {
+                    mBackgroupBitmap = drawableToBitmap(getResources().getDrawable(R.drawable.back3));
+                    initBuffer();
+                }
+                if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
+                    mPaintTool = new Pen(PenSetting.getInstance());
+                } else {
+                    mPaintTool = new Eraser(EraserSetting.getInstance());
+                }
+
+                mShape = Shape.createShapeByType(mShapeType);
+                if (mShapeType == Shape.SHAPE_TYPE_CURVE) {
+                    mPath = new Path();
+                    ((CurveShape)mShape).setPath(mPath);
+                }
+
+                //mResumeList.clear();
+                mShape.touchDown(motionEvent.getX(), motionEvent.getY());
+                mShowingList.add(new DrawInfoItem(mPaintTool, mShape));
                 break;
 
             //在移动的时候进行绘制
             case MotionEvent.ACTION_MOVE:
-                mPath.lineTo(motionEvent.getX(),motionEvent.getY());
-                updateSketch();
+                //mPath.lineTo(motionEvent.getX(),motionEvent.getY());
+                mShape.touchMove(motionEvent.getX(), motionEvent.getY());
+
+                //使用画笔将形状绘制到画布上面
+                mPaintTool.drawShape(mBufferCanvas, mShape);
+                //redrawShowList();
+                invalidate();
                 break;
             //在移动的时候进行绘制
             case MotionEvent.ACTION_UP:
+                mShape.touchUp(motionEvent.getX(), motionEvent.getY());
+                //mPaintTool.drawShape(mBufferCanvas, mShape);
+                invalidate();
                 break;
         }
         return true;
     }
+
 }

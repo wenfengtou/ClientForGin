@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".WhiteBoardActivity">
 
-    <com.wenfengtou.whiteboard.view.NormalSketchView
+    <com.wenfengtou.whiteboard.view.SketchView
         android:id="@+id/board_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

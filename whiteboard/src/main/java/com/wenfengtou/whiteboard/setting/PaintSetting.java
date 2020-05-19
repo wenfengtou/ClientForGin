@@ -7,10 +7,15 @@ import android.graphics.PorterDuff;
  */
 public abstract class PaintSetting {
 
+    protected int mMaxStrokeWidth;
     protected int mStrokeWidth;
     protected int mColor;
     protected PorterDuff.Mode mPorterDuffMode;
     protected int mShape;
+
+    public int getMaxStrokeWidth() {
+        return mMaxStrokeWidth;
+    }
 
     public int getStrokeWidth() {
         return mStrokeWidth;

@@ -16,8 +16,9 @@ public class PenSetting extends PaintSetting {
     }
 
     public void reset() {
+        mMaxStrokeWidth = 30;
         mPorterDuffMode = null;
-        mStrokeWidth = 30;
+        mStrokeWidth = 15;
         mColor = Color.RED;
     }
 }
