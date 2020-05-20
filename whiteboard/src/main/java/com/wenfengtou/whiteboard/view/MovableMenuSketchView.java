@@ -12,15 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.wenfengtou.whiteboard.R;
 
-public class MovableMenuSketchView extends FrameLayout implements View.OnTouchListener {
+public class MovableMenuSketchView extends FrameLayout {
 
     private SketchView mSketchView;
     private SketchMenuView mSketchMenuView;
+    private FreeView mFreeView;
 
     public MovableMenuSketchView(Context context) {
         this(context, null);
@@ -35,13 +37,24 @@ public class MovableMenuSketchView extends FrameLayout implements View.OnTouchLi
         initView(context);
     }
 
-    private void initView(Context context) {
+    private void initView(final Context context) {
         LayoutInflater.from(context).inflate(R.layout.layout_movable_menu_sketch, this, true);
         mSketchView = findViewById(R.id.movable_skech);
         mSketchMenuView = findViewById(R.id.movable_menu);
+        mFreeView = findViewById(R.id.main_freeview);
         mSketchMenuView.setBackgroundColor(Color.BLUE);
         mSketchMenuView.setSketchView(mSketchView);
-        mSketchMenuView.setOnTouchListener(this);
+        //mSketchMenuView.setOnTouchListener(this);
+        mFreeView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFreeView.isDrag()) {
+                    Toast.makeText(context, "正在拖动",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "正在点击",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -49,17 +62,4 @@ public class MovableMenuSketchView extends FrameLayout implements View.OnTouchLi
         super.onDraw(canvas);
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-        }
-        return true;
-    }
 }

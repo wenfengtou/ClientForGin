@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -185,6 +186,71 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             FileUtil.saveBitmap("sdcard/sket.png", bitmap);
             Toast.makeText(mContext, R.string.save_sketch_success, Toast.LENGTH_LONG).show();
         }
-
     }
+
+
+    private float mDownX; //点击时的x坐标
+    private float mDownY;  // 点击时的y坐标
+    private int mWidth; //  测量宽度 FreeView的宽度
+    private int mHeight; // 测量高度 FreeView的高度
+    private boolean mIsDrag = false;
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // 获取屏宽高 和 可是适用范围 （我的需求是可在屏幕内拖动 不超出范围 也不需要隐藏）
+        mWidth = getMeasuredWidth();
+        mHeight= getMeasuredHeight();
+    }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        updataView(ev);
+        return (mIsDrag || super.onInterceptTouchEvent(ev));
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        return updataView(event);
+    }
+
+    public boolean updataView(MotionEvent event) {
+        super.onTouchEvent(event);
+        if (this.isEnabled()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mIsDrag = false;
+                    mDownX = event.getX();
+                    mDownY = event.getY();
+                    break;
+                case MotionEvent.ACTION_MOVE: // 滑动动作处理 记录离开屏幕时的 moveX  moveY 用于计算距离 和 判断滑动事件和点击事件 并作出响应
+                    final float moveX = event.getX() - mDownX;
+                    final float moveY = event.getY() - mDownY;
+                    int l,r,t,b; // 上下左右四点移动后的偏移量
+                    //计算偏移量 设置偏移量 = 3 时 为判断点击事件和滑动事件的峰值
+                    if (Math.abs(moveX) > 3 ||Math.abs(moveY) > 3) { // 偏移量的绝对值大于 3 为 滑动时间 并根据偏移量计算四点移动后的位置
+                        mIsDrag = true;
+                        l = (int) (getLeft() + moveX);
+                        r = l + mWidth;
+                        t = (int) (getTop() + moveY);
+                        b = t + mHeight;
+                        this.layout(l, t, r, b); // 重置view在layout 中位置
+                    }else {
+
+                    }
+                    break;
+                case MotionEvent.ACTION_UP: // 不处理
+                    //setPressed(false);
+                    break;
+                case MotionEvent.ACTION_CANCEL: // 不处理
+                    //setPressed(false);
+                    break;
+            }
+            return true;
+        }
+        return false;
+    }
+
 }
