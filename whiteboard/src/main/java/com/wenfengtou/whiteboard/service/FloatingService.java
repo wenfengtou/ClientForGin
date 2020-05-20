@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,10 +42,12 @@ public class FloatingService extends Service {
         FrameLayout frameLayout = new FrameLayout(this);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
-        layoutParams.x = 0;
-        layoutParams.y = 0;
-        layoutParams.width = 1920;
-        layoutParams.height = 1050;
+        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        layoutParams.x = 10;
+        layoutParams.y = 10;
+        layoutParams.width = 700;
+        layoutParams.height = 700;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
@@ -52,6 +55,7 @@ public class FloatingService extends Service {
         }
         windowManager.addView(view, layoutParams);
         view.setBackgroundColor(getFilterColor(30));
+        //view.setBackgroundColor(Color.BLUE);
     }
 
     public int getFilterColor(int blueFilterPercent) {
