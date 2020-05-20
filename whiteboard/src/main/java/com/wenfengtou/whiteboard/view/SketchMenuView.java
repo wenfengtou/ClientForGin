@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
@@ -59,13 +61,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     private void initView(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
+        ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
         mPenll = findViewById(R.id.ll_pen);
         mPenTv = findViewById(R.id.tv_pen);
         mEraserll = findViewById(R.id.ll_eraser);
         mEraserTv = findViewById(R.id.tv_eraser);
         mClearSketchll = findViewById(R.id.ll_clear_sketch);
         mSaveSketchll = findViewById(R.id.ll_save_sketch);
+
+        /*
+        LinearLayout ll_pen = findViewById(R.id.ll_pen);
+        TextView textView = new TextView(context);
+        textView.setText("hello");
+        ll_pen.addView(textView);
+         */
         mPenll.setOnClickListener(this);
         mEraserll.setOnClickListener(this);
         mClearSketchll.setOnClickListener(this);

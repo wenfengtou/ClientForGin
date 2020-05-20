@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.screenrecord.ScreenRecordActivity;
+import com.wenfengtou.whiteboard.MovableWhiteBoardActivity;
 import com.wenfengtou.whiteboard.WhiteBoardActivity;
 import com.wenfengtou.whiteboard.service.FloatingService;
 import com.yanzhenjie.permission.Action;
@@ -103,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                               // startActivity(new Intent(MainActivity.this, WhiteBoardActivity.class));
+                                Intent intent = new Intent(MainActivity.this, MovableWhiteBoardActivity.class);
+                                intent.putExtra("bg-path", "/sdcard/screen.png");
+                                intent.addFlags( Intent.FLAG_ACTIVITY_NO_ANIMATION );
+                                startActivity(intent);
                             }
                         }, 10);
                     }
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (Settings.canDrawOverlays(this)) {
 
-            startService(new Intent(this, FloatingService.class));
+            //startService(new Intent(this, FloatingService.class));
         } else {
             startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
         }

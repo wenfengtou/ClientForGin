@@ -19,9 +19,11 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.wenfengtou.commonutil.FileUtil;
+import com.wenfengtou.whiteboard.view.MovableMenuSketchView;
 import com.wenfengtou.whiteboard.view.SketchView;
 import com.wenfengtou.whiteboard.view.SketchMenuView;
 
@@ -49,7 +51,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_white_board);
+        setContentView(R.layout.layout_movable_menu_sketch);
         Intent intent = getIntent();
         mUndoBt = findViewById(R.id.bt_undo_write);
         mRedoBt = findViewById(R.id.bt_redo_write);

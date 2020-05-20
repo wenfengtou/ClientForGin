@@ -34,34 +34,6 @@
             android:text="@string/resume_write"/>
     </LinearLayout>
 
-    <!--
-    <LinearLayout
-        android:id="@+id/ll_tool"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_pen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pen"/>
-
-        <Button
-            android:id="@+id/bt_eraser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/eraser"/>
-
-        <Button
-            android:id="@+id/bt_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/green"/>
-
-    </LinearLayout>
-    -->
 
     <com.wenfengtou.whiteboard.view.SketchMenuView
         android:id="@+id/sketch_menu"

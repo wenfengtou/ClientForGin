@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -238,6 +240,11 @@ public class SketchView extends View implements View.OnTouchListener {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mIsSendH264 = false;
+    }
+
+    @Override
+    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
+
     }
 
     public void startDecoreThread() {

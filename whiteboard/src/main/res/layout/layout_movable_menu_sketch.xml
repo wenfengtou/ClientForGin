@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_movable_menu_sketch"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.wenfengtou.whiteboard.view.SketchView
+        android:id="@+id/movable_skech"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.wenfengtou.whiteboard.view.SketchMenuView
+        android:id="@+id/movable_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</FrameLayout>

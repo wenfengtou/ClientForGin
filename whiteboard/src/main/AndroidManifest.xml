@@ -3,11 +3,12 @@
     package="com.wenfengtou.whiteboard">
 
     <application>
+        <activity android:name=".MovableWhiteBoardActivity"></activity>
         <activity
-            android:screenOrientation="landscape"
-            android:name=".WhiteBoardActivity"/>
+            android:name=".WhiteBoardActivity"
+            android:screenOrientation="landscape" />
 
-        <service android:name=".service.FloatingService"/>
+        <service android:name=".service.FloatingService" />
     </application>
 
 </manifest>
