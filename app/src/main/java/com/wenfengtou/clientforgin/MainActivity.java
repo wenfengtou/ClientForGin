@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.wenfengtou.camera.CameraActivity;
+import com.wenfengtou.commonutil.SizeUtil;
 import com.wenfengtou.screenrecord.ScreenRecordActivity;
 import com.wenfengtou.whiteboard.MovableWhiteBoardActivity;
 import com.wenfengtou.whiteboard.WhiteBoardActivity;
@@ -181,6 +183,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SizeUtil.getAreaScreen(this);
+        SizeUtil.getAreaApplication(this);
+        SizeUtil.getAreaView(this);
+        SizeUtil.getAppScreenHeight(this);
         //startService(new Intent(MainActivity.this, MusicPlayerService.class));
     }
 

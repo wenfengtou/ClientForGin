@@ -216,6 +216,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         return updataView(event);
     }
 
+    private int mMinLeft = 0;
+    private int mMaxRight = 1920;
+    private int mMinTop = 0;
+    private int mMaxBottom = 960;
+
     public boolean updataView(MotionEvent event) {
         super.onTouchEvent(event);
         if (this.isEnabled()) {
@@ -236,6 +241,23 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                         r = l + mWidth;
                         t = (int) (getTop() + moveY);
                         b = t + mHeight;
+                        Log.i(TAG, "l =" + l + " t=" + t + " r=" + r + " b=" + b);
+                        if (l < mMinLeft) {
+                            l = mMinLeft;
+                            r = mMinLeft + mWidth;
+                        }
+                        if (r > mMaxRight) {
+                            l = mMaxRight - mWidth;
+                            r = mMaxRight;
+                        }
+                        if (t < mMinTop) {
+                            t = mMinTop;
+                            b = mMinTop + mHeight;
+                        }
+                        if (b > mMaxBottom) {
+                            t = mMaxBottom - mHeight;
+                            b = mMaxBottom;
+                        }
                         this.layout(l, t, r, b); // 重置view在layout 中位置
                     }else {
 
