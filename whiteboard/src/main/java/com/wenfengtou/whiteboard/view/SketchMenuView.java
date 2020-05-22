@@ -304,7 +304,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mMinLeft = 0;
     private int mMaxRight = 1920;
     private int mMinTop = 0;
-    private int mMaxBottom = 960;
+    //private int mMaxBottom = 960;
+    private int mMaxBottom = 1132;
 
     private Rect mCurrentRect = new Rect(0, 0 ,0 , 0);
 

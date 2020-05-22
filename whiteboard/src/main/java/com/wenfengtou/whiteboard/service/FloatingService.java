@@ -41,8 +41,10 @@ public class FloatingService extends Service {
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         layoutParams.x = 0;
         layoutParams.y = 0;
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        //layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        //layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.width = 1920;
+        layoutParams.height = 1132;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

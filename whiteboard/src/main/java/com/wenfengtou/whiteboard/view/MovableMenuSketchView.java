@@ -48,6 +48,7 @@ public class MovableMenuSketchView extends ViewGroup {
                     view.layout(menuLeft,
                             menuTop,
                             menuRight, menuBottom);
+                    rect.set(menuLeft, menuTop, menuRight, menuBottom);
                 } else {
                     view.layout(rect.left,
                             rect.top,
