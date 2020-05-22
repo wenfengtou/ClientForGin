@@ -35,18 +35,14 @@ public class FloatingService extends Service {
         //button.setText("悬浮窗");
         //SketchView sketchView = new SketchView(this);
         //sketchView.setBackgroundColor(Color.TRANSPARENT);
-        View view = LayoutInflater.from(this).inflate(R.layout.activity_white_board, null, false);
-        SketchView sketchView = view.findViewById(R.id.board_view);
-        SketchMenuView sketchMenuView = view.findViewById(R.id.sketch_menu);
-        sketchMenuView.setSketchView(sketchView);
-        FrameLayout frameLayout = new FrameLayout(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.activity_movable_white_board, null, false);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-        layoutParams.x = 10;
-        layoutParams.y = 10;
-        layoutParams.width = 700;
-        layoutParams.height = 700;
+        layoutParams.x = 0;
+        layoutParams.y = 0;
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

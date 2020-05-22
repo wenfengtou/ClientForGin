@@ -3,6 +3,7 @@ package com.wenfengtou.whiteboard.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Process;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -80,6 +81,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mExpandIv = findViewById(R.id.iv_expand);
         mExpandll = findViewById(R.id.ll_expand);
 
+        mExitSketchIv.setOnClickListener(this);
         mPenIv.setOnClickListener(this);
         mEraserIv.setOnClickListener(this);
         mClearSketchIv.setOnClickListener(this);
@@ -198,6 +200,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         if (id == R.id.iv_exit_sketch) {
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
             setNextMenuStatus(MENU_STATUS_INIT);
+            Process.killProcess(Process.myPid());
         } else if (id == R.id.iv_pen) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
                 showPenPopupWindow();

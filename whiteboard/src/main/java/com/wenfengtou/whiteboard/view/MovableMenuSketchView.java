@@ -1,23 +1,13 @@
 package com.wenfengtou.whiteboard.view;
 
-import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-
-import com.wenfengtou.whiteboard.R;
 
 public class MovableMenuSketchView extends ViewGroup {
 
@@ -48,9 +38,16 @@ public class MovableMenuSketchView extends ViewGroup {
             if (view instanceof  SketchMenuView) {
                 Rect rect = ((SketchMenuView) view).getCurrentRect();
                 if (rect.isEmpty()) {
-                    view.layout(rect.left,
-                            rect.top,
-                            mWidth, mHeight);
+                    int menuWidth = view.getMeasuredWidth();
+                    int menuHeight = view.getMeasuredHeight();
+
+                    int menuLeft = mWidth/2 - menuWidth/2;
+                    int menuRight = menuLeft + menuWidth;
+                    int menuTop = bottom - 2* menuHeight;
+                    int menuBottom = menuTop + menuHeight;
+                    view.layout(menuLeft,
+                            menuTop,
+                            menuRight, menuBottom);
                 } else {
                     view.layout(rect.left,
                             rect.top,

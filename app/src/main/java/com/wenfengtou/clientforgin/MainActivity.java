@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 .start();
 
         if (Settings.canDrawOverlays(this)) {
-
             //startService(new Intent(this, FloatingService.class));
         } else {
             startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
