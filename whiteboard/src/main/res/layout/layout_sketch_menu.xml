@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_sketch_menu"
     android:layout_width="wrap_content"
+    android:background="@color/pen_green"
     android:layout_height="wrap_content">
-
 
     <ImageView
         android:id="@+id/iv_exit_sketch"

@@ -47,9 +47,16 @@ public class MovableMenuSketchView extends ViewGroup {
             View view = getChildAt(i);
             if (view instanceof  SketchMenuView) {
                 Rect rect = ((SketchMenuView) view).getCurrentRect();
-                view.layout(rect.left,
-                        rect.top,
-                        mWidth, mHeight);
+                if (rect.isEmpty()) {
+                    view.layout(rect.left,
+                            rect.top,
+                            mWidth, mHeight);
+                } else {
+                    view.layout(rect.left,
+                            rect.top,
+                            rect.right, rect.bottom);
+                }
+
             } else {
                 view.layout(0,
                         0,

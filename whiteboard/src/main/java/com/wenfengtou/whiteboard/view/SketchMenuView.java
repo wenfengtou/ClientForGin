@@ -249,6 +249,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         // 获取屏宽高 和 可是适用范围 （我的需求是可在屏幕内拖动 不超出范围 也不需要隐藏）
         mWidth = getMeasuredWidth();
         mHeight= getMeasuredHeight();
+        Log.i(TAG, "onMeasure mWidth=" + mWidth + " mHeight=" + mHeight);
         //不同状态切换时，位置适配
         if (mNextMenuStatus == MENU_STATUS_INIT) {
 
@@ -268,12 +269,16 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     mCurrentRect.left = left;
                     mCurrentRect.right = right;
                 }
+            } else if (mMenuStatus == MENU_STATUS_EXPAND) { //由展开状态变成未展开状态
+                mCurrentRect.right = mCurrentRect.left + mWidth;
             }
         } else if (mNextMenuStatus == MENU_STATUS_EXPAND) {
             int right = mCurrentRect.left + mWidth;
             if (right > mMaxRight) {  //向右边展开按钮时，小于边界
                 mCurrentRect.left = mMaxRight - mWidth;
                 mCurrentRect.right = mMaxRight;
+            } else {
+                mCurrentRect.right = right;
             }
         }
         //修改状态
@@ -348,9 +353,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     }
                     break;
                 case MotionEvent.ACTION_UP: // 不处理
+                    Log.i(TAG, "MotionEvent.ACTION_UP");
                     //setPressed(false);
                     break;
                 case MotionEvent.ACTION_CANCEL: // 不处理
+                    Log.i(TAG, "MotionEvent.ACTION_CANCEL");
                     //setPressed(false);
                     break;
             }
