@@ -253,11 +253,21 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         if (mNextMenuStatus == MENU_STATUS_INIT) {
 
         } else if (mNextMenuStatus == MENU_STATUS_UNEXPAND) {
-            mExitSketchIvWidth = mExitSketchIv.getMeasuredWidth();
-            int left = mCurrentRect.left - mExitSketchIvWidth;
-            if (left < mMinLeft) {  //向左边展开按钮时，小于边界
-                mCurrentRect.left = mMinLeft;
-                mCurrentRect.right = mMinLeft + mWidth;
+            if (mMenuStatus == MENU_STATUS_INIT) { //由INIT状态转换为未展开状态
+                int exitSketchIvWidth = mExitSketchIv.getMeasuredWidth();
+                int expandIvWidth = mExpandIv.getMeasuredWidth();
+                int left = mCurrentRect.left - exitSketchIvWidth;
+                int right = mCurrentRect.right + expandIvWidth;
+                if (left < mMinLeft) {  //向左边展开按钮时，小于边界
+                    mCurrentRect.left = mMinLeft;
+                    mCurrentRect.right = mMinLeft + mWidth;
+                } else if (right > mMaxRight) {
+                    mCurrentRect.left = mMaxRight - mWidth;
+                    mCurrentRect.right = mMaxRight;
+                } else {
+                    mCurrentRect.left = left;
+                    mCurrentRect.right = right;
+                }
             }
         } else if (mNextMenuStatus == MENU_STATUS_EXPAND) {
             int right = mCurrentRect.left + mWidth;
