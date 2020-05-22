@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this, MovableWhiteBoardActivity.class);
                                 intent.putExtra("bg-path", "/sdcard/screen.png");
                                 intent.addFlags( Intent.FLAG_ACTIVITY_NO_ANIMATION );
-                                startActivity(intent);
+                                //startActivity(intent);
                             }
                         }, 10);
                     }
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 .start();
 
         if (Settings.canDrawOverlays(this)) {
-            //startService(new Intent(this, FloatingService.class));
+            startService(new Intent(this, FloatingService.class));
         } else {
             startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
         }

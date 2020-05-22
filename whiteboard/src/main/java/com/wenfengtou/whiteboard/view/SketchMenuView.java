@@ -125,9 +125,14 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 300, 200);
         colorPopUpWindow.setFocusable(true);
         int[] location = new int[2];
-        mPenIv.getLocationOnScreen(location);
-        //colorPopUpWindow.showAsDropDown(mPenll);
-        colorPopUpWindow.showAtLocation(mPenIv, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
+        mPenIv.getLocationInWindow(location);
+        //colorPopUpWindow.showAsDropDown(mPenIv);
+        if (location[1] < colorPopUpWindow.getHeight()) {
+            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mPenIv.getHeight());
+        } else {
+            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - colorPopUpWindow.getHeight());
+        }
+        //colorPopUpWindow.showAtLocation(mPenIv, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
         colorPopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -157,9 +162,14 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         PopupWindow erasePopUpWindow = new PopupWindow(eraseToolView, 300, 80);
         erasePopUpWindow.setFocusable(true);
         int[] location = new int[2];
-        mEraserIv.getLocationOnScreen(location);
-        //erasePopUpWindow.showAsDropDown(mEraserll);
-        erasePopUpWindow.showAtLocation(mEraserIv, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
+        mEraserIv.getLocationInWindow(location);
+        //erasePopUpWindow.showAsDropDown(mEraserIv);
+        //erasePopUpWindow.showAtLocation(mEraserIv, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
+        if (location[1] < erasePopUpWindow.getHeight()) {
+            erasePopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mEraserIv.getHeight());
+        } else {
+            erasePopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - erasePopUpWindow.getHeight());
+        }
         erasePopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -304,8 +314,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mMinLeft = 0;
     private int mMaxRight = 1920;
     private int mMinTop = 0;
-    //private int mMaxBottom = 960;
-    private int mMaxBottom = 1132;
+    private int mMaxBottom = 960;
+    //private int mMaxBottom = 1132;
 
     private Rect mCurrentRect = new Rect(0, 0 ,0 , 0);
 
