@@ -4,94 +4,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_exit_sketch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_exit_sketch"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/exit_sketch"/>
-    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_exit_sketch"
+        android:visibility="gone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_exit"/>
+
+    <ImageView
+        android:id="@+id/iv_pen"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_pen_unpressed"/>
+
 
     <LinearLayout
-        android:id="@+id/ll_pen"
+        android:id="@+id/ll_expand"
+        android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
         <ImageView
+            android:id="@+id/iv_eraser"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_pen"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pen"/>
+            android:background="@drawable/ic_eraser_unpressed"/>
+
+        <ImageView
+            android:id="@+id/iv_clear_sketch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_trash"/>
+
+
+        <ImageView
+            android:id="@+id/iv_save_sketch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_save"/>
+
+        <ImageView
+            android:id="@+id/iv_undo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_undo"/>
+
+        <ImageView
+            android:id="@+id/iv_redo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_redo"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_eraser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_eraser"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/eraser"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_clear_sketch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_clear_sketch"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/clear_sketch"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_save_sketch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_save_sketch"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save_sketch"/>
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_expand"
+        android:visibility="gone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_expand"/>
 
 </LinearLayout>

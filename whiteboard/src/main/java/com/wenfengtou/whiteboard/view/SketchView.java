@@ -39,7 +39,8 @@ public class SketchView extends View implements View.OnTouchListener {
     private int mHeight;
     private Path mPath = new Path();
     private Surface mSurface;
-    private int mPaintToolType = PaintTool.PAINT_TOOL_PEN;
+    //默认没有绘制工具
+    private int mPaintToolType = PaintTool.PAINT_TOOL_NONE;
     private Bitmap mBufferBitmap;
     private Canvas mBufferCanvas;
 

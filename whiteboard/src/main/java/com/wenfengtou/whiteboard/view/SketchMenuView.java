@@ -2,7 +2,7 @@ package com.wenfengtou.whiteboard.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,11 +10,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,16 +31,15 @@ import java.util.ArrayList;
 public class SketchMenuView extends LinearLayout implements View.OnClickListener {
 
     private static final String TAG = "SketchMenuView";
-    private LinearLayout mPenll;
-    private TextView mPenTv;
-    private LinearLayout mEraserll;
-    private TextView mEraserTv;
-    private LinearLayout mClearSketchll;
-    private TextView mClearSketchTv;
-    private LinearLayout mSaveSketchll;
-    private TextView mSaveSketchTv;
-    private LinearLayout mExitSketchll;
-    private TextView mExitSketchTv;
+    private ImageView mExitSketchIv;
+    private ImageView mPenIv;
+    private ImageView mEraserIv;
+    private ImageView mClearSketchIv;
+    private ImageView mSaveSketchIv;
+    private ImageView mUndoIv;
+    private ImageView mRedoIv;
+    private ImageView mExpandIv;
+    private LinearLayout mExpandll;
     private SketchView mSketchView;
     private Context mContext;
 
@@ -65,23 +63,23 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     private void initView(Context context) {
         ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
-        mPenll = findViewById(R.id.ll_pen);
-        mPenTv = findViewById(R.id.tv_pen);
-        mEraserll = findViewById(R.id.ll_eraser);
-        mEraserTv = findViewById(R.id.tv_eraser);
-        mClearSketchll = findViewById(R.id.ll_clear_sketch);
-        mSaveSketchll = findViewById(R.id.ll_save_sketch);
-        mExitSketchll = findViewById(R.id.ll_exit_sketch);
-        /*
-        LinearLayout ll_pen = findViewById(R.id.ll_pen);
-        TextView textView = new TextView(context);
-        textView.setText("hello");
-        ll_pen.addView(textView);
-         */
-        mPenll.setOnClickListener(this);
-        mEraserll.setOnClickListener(this);
-        mClearSketchll.setOnClickListener(this);
-        mSaveSketchll.setOnClickListener(this);
+        mExitSketchIv = findViewById(R.id.iv_exit_sketch);
+        mPenIv = findViewById(R.id.iv_pen);
+        mEraserIv = findViewById(R.id.iv_eraser);
+        mSaveSketchIv = findViewById(R.id.iv_save_sketch);
+        mClearSketchIv = findViewById(R.id.iv_clear_sketch);
+        mUndoIv = findViewById(R.id.iv_undo);
+        mRedoIv = findViewById(R.id.iv_redo);
+        mExpandIv = findViewById(R.id.iv_expand);
+        mExpandll = findViewById(R.id.ll_expand);
+
+        mPenIv.setOnClickListener(this);
+        mEraserIv.setOnClickListener(this);
+        mClearSketchIv.setOnClickListener(this);
+        mSaveSketchIv.setOnClickListener(this);
+        mUndoIv.setOnClickListener(this);
+        mRedoIv.setOnClickListener(this);
+        mExpandIv.setOnClickListener(this);
     }
 
     /**
@@ -118,9 +116,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 300, 200);
         colorPopUpWindow.setFocusable(true);
         int[] location = new int[2];
-        mPenll.getLocationOnScreen(location);
+        mPenIv.getLocationOnScreen(location);
         //colorPopUpWindow.showAsDropDown(mPenll);
-        colorPopUpWindow.showAtLocation(mPenll, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
+        colorPopUpWindow.showAtLocation(mPenIv, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
         colorPopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -150,9 +148,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         PopupWindow erasePopUpWindow = new PopupWindow(eraseToolView, 300, 80);
         erasePopUpWindow.setFocusable(true);
         int[] location = new int[2];
-        mPenll.getLocationOnScreen(location);
+        mEraserIv.getLocationOnScreen(location);
         //erasePopUpWindow.showAsDropDown(mEraserll);
-        erasePopUpWindow.showAtLocation(mEraserll, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
+        erasePopUpWindow.showAtLocation(mEraserIv, Gravity.NO_GRAVITY, location[0], location[1] - erasePopUpWindow.getHeight());
         erasePopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -169,41 +167,54 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onLayout(changed, l, t, r, b);
     }
 
-    private boolean mIsSetVisual = false;
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.ll_pen) {
+        if (id == R.id.iv_pen) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
                 showPenPopupWindow();
+                return;
             }
-            if (mExitSketchll.getVisibility() == VISIBLE) {
-                mExitSketchll.setVisibility(GONE);
-                this.layout(100, 100, 100+mWidth, 100+mHeight);
-            } else {
-                mExitSketchll.setVisibility(VISIBLE);
-                this.layout(100, 100, 100+mWidth, 100+mHeight);
+            if (mExitSketchIv.getVisibility() == GONE) {
+                mExitSketchIv.setVisibility(VISIBLE);
             }
-            mPenTv.setTextColor(Color.YELLOW);
-            mEraserTv.setTextColor(Color.BLACK);
+            if (mExpandIv.getVisibility() == GONE) {
+                mExpandIv.setVisibility(VISIBLE);
+            }
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
-        } else if (id == R.id.ll_eraser) {
+        } else if (id == R.id.iv_eraser) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
                 showEraserPopupWindow();
             }
-            mEraserTv.setTextColor(Color.YELLOW);
-            mPenTv.setTextColor(Color.BLACK);
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_pressed));
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
-        } else if (id == R.id.ll_clear_sketch) {
+        } else if (id == R.id.iv_clear_sketch) {
             mSketchView.clear();
-        } else if (id == R.id.ll_save_sketch) {
+        } else if (id == R.id.iv_save_sketch) {
             Bitmap bitmap = mSketchView.getBitmap();
             FileUtil.saveBitmap("sdcard/sket.png", bitmap);
             Toast.makeText(mContext, R.string.save_sketch_success, Toast.LENGTH_LONG).show();
+        } else if (id == R.id.iv_undo) {
+            mSketchView.undo();
+        } else if (id == R.id.iv_redo) {
+            mSketchView.redo();
+        } else if (id == R.id.iv_expand) {
+            if (mIsExpanding) {
+                mIsExpanding = false;
+                mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_expand));
+                mExpandll.setVisibility(GONE);
+            } else {
+                mIsExpanding = true;
+                mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_unexpand));
+                mExpandll.setVisibility(VISIBLE);
+            }
         }
     }
 
-
+    private boolean mIsExpanding = false;
     private float mDownX; //点击时的x坐标
     private float mDownY;  // 点击时的y坐标
     private int mWidth; //  测量宽度 FreeView的宽度
@@ -235,6 +246,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mMaxRight = 1920;
     private int mMinTop = 0;
     private int mMaxBottom = 960;
+
+    private Rect mCurrentRect = new Rect(0, 0 ,0 , 0);
+
+    public Rect getCurrentRect() {
+        return mCurrentRect;
+    }
 
     public boolean updataView(MotionEvent event) {
         super.onTouchEvent(event);
@@ -273,6 +290,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                             t = mMaxBottom - mHeight;
                             b = mMaxBottom;
                         }
+                        mCurrentRect.set(l, t, r, b);
                         this.layout(l, t, r, b); // 重置view在layout 中位置
                     } else {
 

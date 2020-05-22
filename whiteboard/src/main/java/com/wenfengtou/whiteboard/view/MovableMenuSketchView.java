@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,10 +19,12 @@ import androidx.annotation.Nullable;
 
 import com.wenfengtou.whiteboard.R;
 
-public class MovableMenuSketchView extends FrameLayout {
+public class MovableMenuSketchView extends ViewGroup {
 
     private SketchView mSketchView;
     private SketchMenuView mSketchMenuView;
+    private int mWidth;
+    private int mHeight;
 
     public MovableMenuSketchView(Context context) {
         this(context, null);
@@ -36,13 +39,39 @@ public class MovableMenuSketchView extends FrameLayout {
         initView(context);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        mWidth = right - left;
+        mHeight = bottom - top;
+        for (int i = 0; i < getChildCount(); i++) {
+            View view = getChildAt(i);
+            if (view instanceof  SketchMenuView) {
+                Rect rect = ((SketchMenuView) view).getCurrentRect();
+                view.layout(rect.left,
+                        rect.top,
+                        mWidth, mHeight);
+            } else {
+                view.layout(0,
+                        0,
+                        mWidth, mHeight);
+            }
+
+        }
+    }
+
     private void initView(final Context context) {
-        LayoutInflater.from(context).inflate(R.layout.layout_movable_menu_sketch, this, true);
-        mSketchView = findViewById(R.id.movable_skech);
-        mSketchMenuView = findViewById(R.id.movable_menu);
-        mSketchMenuView.setBackgroundColor(Color.BLUE);
-        mSketchMenuView.setSketchView(mSketchView);
+        SketchView sketchView = new SketchView(context);
+        addView(sketchView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        SketchMenuView sketchMenuView = new SketchMenuView(context);
+        addView(sketchMenuView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        sketchMenuView.setSketchView(sketchView);
         //mSketchMenuView.setOnTouchListener(this);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
