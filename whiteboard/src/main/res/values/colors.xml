@@ -4,4 +4,5 @@
     <color name="pen_green">#FF00FF00</color>
     <color name="pen_blue">#FF0000FF</color>
     <color name="yellow_FFFFFF00">#FFFFFF00</color>
+    <color name="black">#FF000000</color>
 </resources>

@@ -5,16 +5,35 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ll_exit_sketch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_launcher"/>
+        <TextView
+            android:id="@+id/tv_exit_sketch"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exit_sketch"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_pen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <com.wenfengtou.whiteboard.view.PenImageView
+        <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/ic_launcher"/>
         <TextView
             android:id="@+id/tv_pen"
+            android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,6 +51,7 @@
             android:background="@drawable/ic_launcher"/>
         <TextView
             android:id="@+id/tv_eraser"
+            android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +69,7 @@
             android:background="@drawable/ic_launcher"/>
         <TextView
             android:id="@+id/tv_clear_sketch"
+            android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,6 +87,7 @@
             android:background="@drawable/ic_launcher"/>
         <TextView
             android:id="@+id/tv_save_sketch"
+            android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

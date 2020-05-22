@@ -22,7 +22,6 @@ public class MovableMenuSketchView extends FrameLayout {
 
     private SketchView mSketchView;
     private SketchMenuView mSketchMenuView;
-    private FreeView mFreeView;
 
     public MovableMenuSketchView(Context context) {
         this(context, null);
@@ -41,20 +40,9 @@ public class MovableMenuSketchView extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.layout_movable_menu_sketch, this, true);
         mSketchView = findViewById(R.id.movable_skech);
         mSketchMenuView = findViewById(R.id.movable_menu);
-        mFreeView = findViewById(R.id.main_freeview);
         mSketchMenuView.setBackgroundColor(Color.BLUE);
         mSketchMenuView.setSketchView(mSketchView);
         //mSketchMenuView.setOnTouchListener(this);
-        mFreeView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mFreeView.isDrag()) {
-                    Toast.makeText(context, "正在拖动",Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "正在点击",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     @Override

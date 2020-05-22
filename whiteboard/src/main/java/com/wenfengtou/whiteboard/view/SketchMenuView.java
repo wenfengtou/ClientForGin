@@ -40,6 +40,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private TextView mClearSketchTv;
     private LinearLayout mSaveSketchll;
     private TextView mSaveSketchTv;
+    private LinearLayout mExitSketchll;
+    private TextView mExitSketchTv;
     private SketchView mSketchView;
     private Context mContext;
 
@@ -69,7 +71,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mEraserTv = findViewById(R.id.tv_eraser);
         mClearSketchll = findViewById(R.id.ll_clear_sketch);
         mSaveSketchll = findViewById(R.id.ll_save_sketch);
-
+        mExitSketchll = findViewById(R.id.ll_exit_sketch);
         /*
         LinearLayout ll_pen = findViewById(R.id.ll_pen);
         TextView textView = new TextView(context);
@@ -163,21 +165,34 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
+
+    private boolean mIsSetVisual = false;
+    @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.ll_pen) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
                 showPenPopupWindow();
             }
-            mPenTv.setTextColor(Color.BLUE);
-            mEraserTv.setTextColor(Color.GRAY);
+            if (mExitSketchll.getVisibility() == VISIBLE) {
+                mExitSketchll.setVisibility(GONE);
+                this.layout(100, 100, 100+mWidth, 100+mHeight);
+            } else {
+                mExitSketchll.setVisibility(VISIBLE);
+                this.layout(100, 100, 100+mWidth, 100+mHeight);
+            }
+            mPenTv.setTextColor(Color.YELLOW);
+            mEraserTv.setTextColor(Color.BLACK);
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
         } else if (id == R.id.ll_eraser) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
                 showEraserPopupWindow();
             }
-            mEraserTv.setTextColor(Color.BLUE);
-            mPenTv.setTextColor(Color.GRAY);
+            mEraserTv.setTextColor(Color.YELLOW);
+            mPenTv.setTextColor(Color.BLACK);
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
         } else if (id == R.id.ll_clear_sketch) {
             mSketchView.clear();
@@ -259,7 +274,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                             b = mMaxBottom;
                         }
                         this.layout(l, t, r, b); // 重置view在layout 中位置
-                    }else {
+                    } else {
 
                     }
                     break;
