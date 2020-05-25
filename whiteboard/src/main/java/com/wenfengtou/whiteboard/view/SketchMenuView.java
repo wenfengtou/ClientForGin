@@ -25,6 +25,8 @@ import com.wenfengtou.commonutil.FileUtil;
 import com.wenfengtou.whiteboard.R;
 import com.wenfengtou.whiteboard.adapter.PenColorBean;
 import com.wenfengtou.whiteboard.adapter.PenColorSelectAdapter;
+import com.wenfengtou.whiteboard.adapter.PenStrokeWidthBean;
+import com.wenfengtou.whiteboard.adapter.PenStrokeWidthSelectAdapter;
 import com.wenfengtou.whiteboard.painttool.PaintTool;
 
 import java.util.ArrayList;
@@ -102,26 +104,39 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
         penColorRv.setLayoutManager(new GridLayoutManager(mContext, 3));
-        final PenColorSelectAdapter selectadapter = new PenColorSelectAdapter();
+        final PenColorSelectAdapter colorSelectadapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.rectangle_red));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.rectangle_green));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.rectangle_blue));
-        selectadapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
-        selectadapter.setPenColorBeanList(penColorBeans);
-        selectadapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.paintcolor_rectangle_red));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.paintcolor_rectangle_green));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.paintcolor_rectangle_blue));
+        colorSelectadapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
+        colorSelectadapter.setPenColorBeanList(penColorBeans);
+        colorSelectadapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 PenColorBean penColorBean = penColorBeans.get(position);
-                selectadapter.setCurrentColor(penColorBean.color);
+                colorSelectadapter.setCurrentColor(penColorBean.color);
             }
         });
-        penColorRv.setAdapter(selectadapter);
+        penColorRv.setAdapter(colorSelectadapter);
 
-        //大小设置
-        final SeekBar penSizeBar = penToolView.findViewById(R.id.sb_pen_size);
-        int process = (int)(((float)mSketchView.getPaintToolStrokeWidth(paintToolType)/(float) mSketchView.getPaintToolMaxStrokeWidth(paintToolType)) * 100);
-        penSizeBar.setProgress(process);
+        //大小选择
+        final RecyclerView penSizeRv = penToolView.findViewById(R.id.rv_pen_size);
+        penSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
+        final PenStrokeWidthSelectAdapter sizeSelectadapter = new PenStrokeWidthSelectAdapter();
+        final ArrayList<PenStrokeWidthBean> penStrokeWidthBeans = new ArrayList<>();
+        penStrokeWidthBeans.add(new PenStrokeWidthBean(R.drawable.paintsize_rectangle_l1_pressed, R.drawable.paintsize_rectangle_l1_unpressed, 10));
+        penStrokeWidthBeans.add(new PenStrokeWidthBean(R.drawable.paintsize_rectangle_l2_pressed, R.drawable.paintsize_rectangle_l2_unpressed, 30));
+        sizeSelectadapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
+        sizeSelectadapter.setPenStrokeWidthBeanList(penStrokeWidthBeans);
+        sizeSelectadapter.setOnItemClickListener(new PenStrokeWidthSelectAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                PenStrokeWidthBean penStrokeWidthBean = penStrokeWidthBeans.get(position);
+                sizeSelectadapter.setCurrentStrokeWidth(penStrokeWidthBean.strokeWidth);
+            }
+        });
+        penSizeRv.setAdapter(sizeSelectadapter);
 
 
         PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 600, 200);
@@ -139,11 +154,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             @Override
             public void onDismiss() {
                 //更新颜色
-                int color = selectadapter.getCurrentColor();
+                int color = colorSelectadapter.getCurrentColor();
                 mSketchView.setPaintToolColor(paintToolType, color);
                 //更新大小
-                float percent = (float)penSizeBar.getProgress()/(float)100;
-                int size = (int) (percent * mSketchView.getPaintToolMaxStrokeWidth(paintToolType));
+                int size = sizeSelectadapter.getCurrentStrokeWidth();
                 mSketchView.setPaintToolStrokeWidth(paintToolType,  size);
             }
         });
