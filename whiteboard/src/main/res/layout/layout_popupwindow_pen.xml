@@ -2,13 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFF0FFF"
+    android:background="#FFFFFFFF"
     android:orientation="vertical">
 
     <SeekBar
         android:id="@+id/sb_pen_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/black"
+        android:padding="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_pen_color"

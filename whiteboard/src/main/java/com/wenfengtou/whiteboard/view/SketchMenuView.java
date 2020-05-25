@@ -101,12 +101,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         final int paintToolType = PaintTool.PAINT_TOOL_PEN;
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
-        penColorRv.setLayoutManager(new GridLayoutManager(mContext, 2));
+        penColorRv.setLayoutManager(new GridLayoutManager(mContext, 3));
         final PenColorSelectAdapter selectadapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.circle_red));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.circle_green));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.circle_blue));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.rectangle_red));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.rectangle_green));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.rectangle_blue));
         selectadapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
         selectadapter.setPenColorBeanList(penColorBeans);
         selectadapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
@@ -124,7 +124,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penSizeBar.setProgress(process);
 
 
-        PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 300, 200);
+        PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 600, 200);
         colorPopUpWindow.setFocusable(true);
         int[] location = new int[2];
         mPenIv.getLocationInWindow(location);

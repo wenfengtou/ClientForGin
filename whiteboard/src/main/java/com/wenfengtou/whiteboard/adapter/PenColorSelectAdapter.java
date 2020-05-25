@@ -1,5 +1,6 @@
 package com.wenfengtou.whiteboard.adapter;
 
+import android.content.Context;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
     ArrayList<PenColorBean> mPenColorBeanList;
     private int mCurrentColor;
     private OnItemClickListener mOnItemClickListener;
+    private Context mContext;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -27,7 +29,8 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
     @NonNull
     @Override
     public ColorSelectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_pen_color_item, parent, false);
+        mContext = parent.getContext();
+        View root = LayoutInflater.from(mContext).inflate(R.layout.layout_pen_color_item, parent, false);
         return new ColorSelectViewHolder(root);
     }
 
@@ -35,11 +38,11 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
     public void onBindViewHolder(@NonNull ColorSelectViewHolder holder, final int position) {
         if (mPenColorBeanList != null && mPenColorBeanList.size() > position) {
             PenColorBean penColorBean = mPenColorBeanList.get(position);
-            holder.mColorIv.setBackgroundResource(penColorBean.drawableId);
+            holder.mColorIv.setImageResource(penColorBean.drawableId);
             if (mCurrentColor == penColorBean.color) {
-                holder.mColorPickerIv.setVisibility(View.VISIBLE);
+                holder.mColorIv.setBackground(mContext.getDrawable(R.drawable.rectangle_frame_blue));
             } else {
-                holder.mColorPickerIv.setVisibility(View.GONE);
+                holder.mColorIv.setBackground(null);
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +83,10 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
     class ColorSelectViewHolder extends ViewHolder {
 
         ImageView mColorIv;
-        ImageView mColorPickerIv;
 
         public ColorSelectViewHolder(@NonNull View itemView) {
             super(itemView);
             mColorIv = itemView.findViewById(R.id.iv_color);
-            mColorPickerIv = itemView.findViewById(R.id.iv_color_picker);
         }
 
     }

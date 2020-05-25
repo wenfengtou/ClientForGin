@@ -7,20 +7,13 @@
 
     <ImageView
         android:id="@+id/iv_color"
+        android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/circle_blue"
+        android:padding="2dp"
+        android:src="@drawable/rectangle_blue"
+        android:background="@drawable/rectangle_frame_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_color_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@drawable/rectangle_yellow"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_color"
-        app:layout_constraintEnd_toEndOf="@+id/iv_color"
-        app:layout_constraintStart_toStartOf="@+id/iv_color"
-        app:layout_constraintTop_toTopOf="@+id/iv_color" />
 </androidx.constraintlayout.widget.ConstraintLayout>
