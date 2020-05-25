@@ -18,12 +18,9 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.wenfengtou.commonutil.FileUtil;
-import com.wenfengtou.whiteboard.view.MovableMenuSketchView;
 import com.wenfengtou.whiteboard.view.SketchView;
 import com.wenfengtou.whiteboard.view.SketchMenuView;
 

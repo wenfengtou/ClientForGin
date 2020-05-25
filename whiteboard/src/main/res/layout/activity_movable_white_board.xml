@@ -6,7 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MovableWhiteBoardActivity">
 
-    <com.wenfengtou.whiteboard.view.MovableMenuSketchView
+    <com.wenfengtou.whiteboard.view.MovableMenuSketchLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <com.wenfengtou.whiteboard.view.SketchView
+            android:id="@+id/sketch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.wenfengtou.whiteboard.view.SketchMenuView
+            android:id="@+id/sketch_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </com.wenfengtou.whiteboard.view.MovableMenuSketchLayout>
 </FrameLayout>

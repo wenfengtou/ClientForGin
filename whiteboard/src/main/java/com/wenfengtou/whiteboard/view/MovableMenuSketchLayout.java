@@ -4,30 +4,33 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-public class MovableMenuSketchView extends ViewGroup {
+public class MovableMenuSketchLayout extends ViewGroup {
 
+    private static final String TAG = "MovableMenuSketchView";
     private SketchView mSketchView;
     private SketchMenuView mSketchMenuView;
     private int mWidth;
     private int mHeight;
+    private int mChildCount;
 
-    public MovableMenuSketchView(Context context) {
+    public MovableMenuSketchLayout(Context context) {
         this(context, null);
     }
 
-    public MovableMenuSketchView(Context context, @Nullable AttributeSet attrs) {
+    public MovableMenuSketchLayout(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MovableMenuSketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MovableMenuSketchLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context);
     }
+
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -64,14 +67,6 @@ public class MovableMenuSketchView extends ViewGroup {
         }
     }
 
-    private void initView(final Context context) {
-        SketchView sketchView = new SketchView(context);
-        addView(sketchView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        SketchMenuView sketchMenuView = new SketchMenuView(context);
-        addView(sketchMenuView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        sketchMenuView.setSketchView(sketchView);
-        //mSketchMenuView.setOnTouchListener(this);
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -82,6 +77,34 @@ public class MovableMenuSketchView extends ViewGroup {
         if (mHeight != height || mWidth != width) {
             mWidth = width;
             mHeight = height;
+        }
+        bindSketchToMenu();
+    }
+
+    /**
+     * 绑定画板与菜单栏
+     */
+    private void bindSketchToMenu() {
+        mChildCount = getChildCount();
+        Log.i(TAG, "mChildCount = " + mChildCount);
+        if (mChildCount == 2) {
+            if (mSketchView == null) {
+                for (int i = 0; i < mChildCount; i++) {
+                    View child = getChildAt(i);
+                    if (child instanceof SketchView) {
+                        mSketchView = (SketchView) child;
+                    } else if (child instanceof SketchMenuView) {
+                        mSketchMenuView = (SketchMenuView) child;
+                    }
+                }
+                if (mSketchView == null || mSketchMenuView == null) {
+                    throw new UnsupportedOperationException("Sketch or SketchMenu null!");
+                } else {
+                    mSketchMenuView.setSketchView(mSketchView);
+                }
+            }
+        } else {
+            throw new UnsupportedOperationException("only support 2 children!");
         }
     }
 
