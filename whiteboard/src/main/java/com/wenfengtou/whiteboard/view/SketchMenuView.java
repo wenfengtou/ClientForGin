@@ -44,6 +44,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private SketchView mSketchView;
     private Context mContext;
 
+    private ViewGroup mViewRoot;
+
     private static int MENU_STATUS_INIT = 0;
     private static int MENU_STATUS_UNEXPAND = 1;
     private static int MENU_STATUS_EXPAND = 2;
@@ -70,7 +72,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     private void initView(Context context) {
-        ViewGroup root = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
+        mViewRoot = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
         mExitSketchIv = findViewById(R.id.iv_exit_sketch);
         mPenIv = findViewById(R.id.iv_pen);
         mEraserIv = findViewById(R.id.iv_eraser);
@@ -248,21 +250,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         }
     }
 
-    private boolean mIsExpanding = false;
     private float mDownX; //点击时的x坐标
     private float mDownY;  // 点击时的y坐标
-    private int mWidth; //  测量宽度 FreeView的宽度
-    private int mHeight; // 测量高度 FreeView的高度
+    private int mWidth;
+    private int mHeight;
     private boolean mIsDrag = false;
 
-    private int mExitSketchIvWidth;
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        // 获取屏宽高 和 可是适用范围 （我的需求是可在屏幕内拖动 不超出范围 也不需要隐藏）
+
+        mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
-        mHeight= getMeasuredHeight();
-        Log.i(TAG, "onMeasure mWidth=" + mWidth + " mHeight=" + mHeight);
+
+        Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
         //不同状态切换时，位置适配
         if (mNextMenuStatus == MENU_STATUS_INIT) {
 

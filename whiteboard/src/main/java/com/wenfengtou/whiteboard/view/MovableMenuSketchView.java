@@ -85,10 +85,6 @@ public class MovableMenuSketchView extends ViewGroup {
         }
     }
 
-    private void SetSketchMenuMoveLimit(int maxWidth, int maxHeight) {
-
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
