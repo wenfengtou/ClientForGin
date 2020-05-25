@@ -77,6 +77,16 @@ public class MovableMenuSketchView extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getMode(heightMeasureSpec);
+        if (mHeight != height || mWidth != width) {
+            mWidth = width;
+            mHeight = height;
+        }
+    }
+
+    private void SetSketchMenuMoveLimit(int maxWidth, int maxHeight) {
+
     }
 
     @Override

@@ -3,21 +3,14 @@ package com.wenfengtou.clientforgin;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.Size;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,9 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.wenfengtou.camera.CameraActivity;
 import com.wenfengtou.commonutil.SizeUtil;
-import com.wenfengtou.screenrecord.ScreenRecordActivity;
 import com.wenfengtou.whiteboard.MovableWhiteBoardActivity;
 import com.wenfengtou.whiteboard.WhiteBoardActivity;
 import com.wenfengtou.whiteboard.service.FloatingService;
@@ -125,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         if (Settings.canDrawOverlays(this)) {
             startService(new Intent(this, FloatingService.class));
         } else {
-            startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+            //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
         }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
