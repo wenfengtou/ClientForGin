@@ -3,7 +3,6 @@ package com.wenfengtou.clientforgin;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,13 +47,6 @@ public class MainActivity extends AppCompatActivity {
             sendEmptyMessageDelayed(1,1000);
             Log.i("wenfengtou", "handleMessage");
         }
-    }
-
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        Log.i("wenfengtou", "onConfigurationChanged");
-        super.onConfigurationChanged(newConfig);
     }
 
     private boolean toggle = false;
@@ -121,7 +113,11 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .start();
 
-
+        if (Settings.canDrawOverlays(this)) {
+            startService(new Intent(this, FloatingService.class));
+        } else {
+            //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+        }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求
@@ -174,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i("wenfengtou", "onRestoreInstanceState");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onResume() {
         super.onResume();
@@ -182,11 +177,6 @@ public class MainActivity extends AppCompatActivity {
         SizeUtil.getAreaApplication(this);
         SizeUtil.getAreaView(this);
         SizeUtil.getAppScreenHeight(this);
-        if (Settings.canDrawOverlays(this)) {
-            startService(new Intent(this, FloatingService.class));
-        } else {
-            //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
-        }
         //startService(new Intent(MainActivity.this, MusicPlayerService.class));
     }
 
