@@ -53,8 +53,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private static int MENU_STATUS_UNEXPANDED = 1;
     private static int MENU_STATUS_EXPANDED = 2;
 
-    private int mMenuStatus = MENU_STATUS_INIT;
-    private int mNextMenuStatus = MENU_STATUS_INIT;
+    private int mDefaultPaintTool = PaintTool.PAINT_TOOL_PEN;
+    private int mDefaultMenuStatus = MENU_STATUS_UNEXPANDED;
+    private int mMenuStatus = MENU_STATUS_UNEXPANDED; //第一个状态为收缩状态
+    private int mLastMenuStatus = MENU_STATUS_UNEXPANDED;
 
     private int mOrientation = -1;
 
@@ -74,6 +76,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     public void setSketchView(SketchView sketchView) {
         mSketchView = sketchView;
+        onSketchViewBind(mSketchView, mDefaultPaintTool, mDefaultMenuStatus);
+    }
+
+    private void onSketchViewBind(SketchView sketchView, int defaultPaintTool, int defaultMenuStatus) {
+        sketchView.choosePaintTool(defaultPaintTool);
+        setMenuStatus(defaultMenuStatus);
     }
 
     private void initView(Context context) {
@@ -211,15 +219,15 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onConfigurationChanged(newConfig);
         int  orientation = newConfig.orientation;
         if (mOrientation != orientation) {
-            setNextMenuStatus(MENU_STATUS_INIT);
+            mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
+            setMenuStatus(MENU_STATUS_UNEXPANDED);
         }
     }
 
-    public void setNextMenuStatus(int status) {
-        mNextMenuStatus = status;
+    public void setMenuStatus(int status) {
+        mLastMenuStatus = mMenuStatus;
+        mMenuStatus = status;
         if (status == MENU_STATUS_INIT) {
-            mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
-            mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
             mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
             mExitSketchIv.setVisibility(GONE);
             mExpandIv.setVisibility(GONE);
@@ -233,6 +241,14 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             mExpandIv.setVisibility(VISIBLE);
             mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_expand));
         }
+
+        if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
+        } else if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_pressed));
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
+        }
     }
 
     @Override
@@ -240,7 +256,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         int id = view.getId();
         if (id == R.id.iv_exit_sketch) {
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
-            setNextMenuStatus(MENU_STATUS_INIT);
+            setMenuStatus(MENU_STATUS_INIT);
             Process.killProcess(Process.myPid());
         } else if (id == R.id.iv_pen) {
             if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
@@ -248,7 +264,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 return;
             }
             if (mMenuStatus == MENU_STATUS_INIT) {
-                setNextMenuStatus(MENU_STATUS_UNEXPANDED);
+                setMenuStatus(MENU_STATUS_UNEXPANDED);
             }
             mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
             mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
@@ -272,9 +288,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             mSketchView.redo();
         } else if (id == R.id.iv_expand) {
             if (mMenuStatus == MENU_STATUS_EXPANDED) {
-                setNextMenuStatus(MENU_STATUS_UNEXPANDED);
+                setMenuStatus(MENU_STATUS_UNEXPANDED);
             } else {
-                setNextMenuStatus(MENU_STATUS_EXPANDED);
+                setMenuStatus(MENU_STATUS_EXPANDED);
             }
         }
     }
@@ -293,10 +309,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mWidth = getMeasuredWidth();
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
-        if (mNextMenuStatus == MENU_STATUS_INIT) {
+        if (mMenuStatus == MENU_STATUS_INIT) {
 
-        } else if (mNextMenuStatus == MENU_STATUS_UNEXPANDED) {
-            if (mMenuStatus == MENU_STATUS_INIT) { //由INIT状态转换为未展开状态
+        } else if (mMenuStatus == MENU_STATUS_UNEXPANDED) {
+            if (mLastMenuStatus == MENU_STATUS_INIT) { //由INIT状态转换为未展开状态
                 int exitSketchIvWidth = mExitSketchIv.getMeasuredWidth();
                 int expandIvWidth = mExpandIv.getMeasuredWidth();
                 int left = mCurrentRect.left - exitSketchIvWidth;
@@ -311,10 +327,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     mCurrentRect.left = left;
                     mCurrentRect.right = right;
                 }
-            } else if (mMenuStatus == MENU_STATUS_EXPANDED) { //由展开状态变成未展开状态
+            } else if (mLastMenuStatus == MENU_STATUS_EXPANDED) { //由展开状态变成未展开状态
                 mCurrentRect.right = mCurrentRect.left + mWidth;
             }
-        } else if (mNextMenuStatus == MENU_STATUS_EXPANDED) {
+        } else if (mMenuStatus == MENU_STATUS_EXPANDED) {
             int right = mCurrentRect.left + mWidth;
             if (right > mMaxRight) {  //向右边展开按钮时，小于边界
                 mCurrentRect.left = mMaxRight - mWidth;
@@ -324,7 +340,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             }
         }
         //修改状态
-        mMenuStatus = mNextMenuStatus;
+        //mMenuStatus = mNextMenuStatus;
     }
 
 

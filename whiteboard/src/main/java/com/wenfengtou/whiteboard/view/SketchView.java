@@ -314,6 +314,7 @@ public class SketchView extends View implements View.OnTouchListener {
             mWidth = width;
             mHeight = height;
             initBuffer();
+            clear();
         }
     }
 
