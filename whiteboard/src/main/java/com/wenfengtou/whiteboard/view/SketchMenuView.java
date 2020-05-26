@@ -217,11 +217,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int  orientation = newConfig.orientation;
+        /*
+        Log.i(TAG, "menu onConfigurationChanged");
+        int orientation = newConfig.orientation;
         if (mOrientation != orientation) {
             mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
             setMenuStatus(MENU_STATUS_UNEXPANDED);
         }
+         */
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        Log.i(TAG, "menu onSizeChanged");
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     public void setMenuStatus(int status) {
@@ -301,10 +310,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mHeight;
     private boolean mIsDrag = false;
 
+    private void onOrientationChange(int orientation) {
+        mOrientation = orientation;
+        mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
+        //setMenuStatus(MENU_STATUS_UNEXPANDED);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
+        int orientation = getOrientation();
+        if (mOrientation != orientation) {
+            onOrientationChange(mOrientation);
+        }
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
