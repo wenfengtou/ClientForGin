@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -315,6 +313,7 @@ public class SketchView extends View implements View.OnTouchListener {
         if(mWidth != width || mHeight != height) {
             mWidth = width;
             mHeight = height;
+            initBuffer();
         }
     }
 
@@ -324,9 +323,6 @@ public class SketchView extends View implements View.OnTouchListener {
         switch (motionEvent.getAction()){
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
-                if (mBufferBitmap == null) {
-                    initBuffer();
-                }
                 if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
                     mPaintTool = new Pen(PenSetting.getInstance());
                 } else {

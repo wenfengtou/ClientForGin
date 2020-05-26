@@ -1,6 +1,7 @@
 package com.wenfengtou.whiteboard.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Process;
@@ -54,6 +55,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     private int mMenuStatus = MENU_STATUS_INIT;
     private int mNextMenuStatus = MENU_STATUS_INIT;
+
+    private int mOrientation;
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -202,9 +205,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onLayout(changed, l, t, r, b);
     }
 
-    private void setNextMenuStatus(int status) {
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int  orientation = newConfig.orientation;
+        if (mOrientation != orientation) {
+            setNextMenuStatus(MENU_STATUS_INIT);
+        }
+    }
+
+    public void setNextMenuStatus(int status) {
         mNextMenuStatus = status;
         if (status == MENU_STATUS_INIT) {
+            mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
+            mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
             mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
             mExitSketchIv.setVisibility(GONE);
             mExpandIv.setVisibility(GONE);
@@ -276,7 +290,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
-
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
         //不同状态切换时，位置适配
         if (mNextMenuStatus == MENU_STATUS_INIT) {
@@ -316,14 +329,14 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        updataView(ev);
+        updateView(ev);
         return (mIsDrag || super.onInterceptTouchEvent(ev));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        return updataView(event);
+        return updateView(event);
     }
 
     private int mMinLeft = 0;
@@ -338,14 +351,19 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         return mCurrentRect;
     }
 
-    public boolean updataView(MotionEvent event) {
-        super.onTouchEvent(event);
-        if (mMaxRight == -1) {
-            View parent = ((View)getParent());
-            mMaxRight = parent.getRight();
-            mMaxBottom = parent.getBottom();
-            Log.i(TAG, "mMaxRight = " + mMaxRight + " mMaxBottom = " + mMaxBottom);
+    private void updateLimit() {
+        View parent = ((View)getParent());
+        int maxRight = parent.getRight();
+        int maxBottom = parent.getBottom();
+        if (mMaxRight != maxRight || mMaxBottom != maxBottom) {
+            mMaxRight = maxRight;
+            mMaxBottom = maxBottom;
+            Log.i(TAG, "updateLimit mMaxRight = " + mMaxRight + " mMaxBottom = " + mMaxBottom);
         }
+    }
+    public boolean updateView(MotionEvent event) {
+        super.onTouchEvent(event);
+        updateLimit();
         if (this.isEnabled()) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
