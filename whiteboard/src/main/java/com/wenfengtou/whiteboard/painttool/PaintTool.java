@@ -2,7 +2,6 @@ package com.wenfengtou.whiteboard.painttool;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
 import com.wenfengtou.whiteboard.setting.PaintSetting;
@@ -29,6 +28,7 @@ public abstract class PaintTool {
     private void setDefaultPaintAttr(Paint paint) {
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
 

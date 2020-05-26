@@ -27,11 +27,16 @@ public class CurveShape extends Shape {
 
     @Override
     public void touchDown(float x, float y) {
+        super.touchDown(x, y);
         mPath.moveTo(x, y);
     }
 
     @Override
     public void touchMove(float x, float y) {
-        mPath.lineTo(x, y);
+        float middleX = (mLastX + x) / 2;
+        float middleY = (mLastY + y) / 2;
+        //mPath.lineTo(x, y);
+        mPath.quadTo(mLastX, mLastY, middleX, middleY);
+        super.touchMove(x, y); //放在最后再更新mLastX，mLastY
     }
 }
