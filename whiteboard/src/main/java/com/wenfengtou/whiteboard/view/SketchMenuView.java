@@ -1,6 +1,9 @@
 package com.wenfengtou.whiteboard.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -12,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -58,7 +62,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mMenuStatus = MENU_STATUS_UNEXPANDED; //第一个状态为收缩状态
     private int mLastMenuStatus = MENU_STATUS_UNEXPANDED;
 
-    private int mOrientation = -1;
+    private int mRotation = -1;
+    private WindowManager mWindowManager;
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -104,6 +109,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mUndoIv.setOnClickListener(this);
         mRedoIv.setOnClickListener(this);
         mExpandIv.setOnClickListener(this);
+        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
     /**
@@ -213,15 +219,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onLayout(changed, l, t, r, b);
     }
 
-    //横竖屏变化时，重新回到初始状态
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int  orientation = newConfig.orientation;
-        if (mOrientation != orientation) {
-            mCurrentRect.setEmpty(); //清空坐标,在横竖屏切换时处理
-            setMenuStatus(MENU_STATUS_UNEXPANDED);
-        }
+        Log.i(TAG, "menu onConfigurationChanged");
     }
 
     public void setMenuStatus(int status) {
@@ -307,7 +308,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
-        Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
+        int rotation = mWindowManager.getDefaultDisplay().getRotation();
+        Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight + " rotation=" + rotation);
+        if (mRotation != rotation) { //横竖屏变化后，将菜单位置居中
+            mRotation = rotation;
+            mCurrentRect.setEmpty();
+        }
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
         if (mMenuStatus == MENU_STATUS_INIT) {
 
