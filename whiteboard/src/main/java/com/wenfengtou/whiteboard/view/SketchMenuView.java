@@ -50,13 +50,13 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private ViewGroup mViewRoot;
 
     private static int MENU_STATUS_INIT = 0;
-    private static int MENU_STATUS_UNEXPAND = 1;
-    private static int MENU_STATUS_EXPAND = 2;
+    private static int MENU_STATUS_UNEXPANDED = 1;
+    private static int MENU_STATUS_EXPANDED = 2;
 
     private int mMenuStatus = MENU_STATUS_INIT;
     private int mNextMenuStatus = MENU_STATUS_INIT;
 
-    private int mOrientation;
+    private int mOrientation = -1;
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -205,6 +205,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onLayout(changed, l, t, r, b);
     }
 
+    //横竖屏变化时，重新回到初始状态
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -223,10 +224,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             mExitSketchIv.setVisibility(GONE);
             mExpandIv.setVisibility(GONE);
             mExpandll.setVisibility(GONE);
-        } else if (status == MENU_STATUS_EXPAND) {
+        } else if (status == MENU_STATUS_EXPANDED) {
             mExpandll.setVisibility(VISIBLE);
             mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_unexpand));
-        } else if (status == MENU_STATUS_UNEXPAND) {
+        } else if (status == MENU_STATUS_UNEXPANDED) {
             mExitSketchIv.setVisibility(VISIBLE);
             mExpandll.setVisibility(GONE);
             mExpandIv.setVisibility(VISIBLE);
@@ -247,7 +248,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 return;
             }
             if (mMenuStatus == MENU_STATUS_INIT) {
-                setNextMenuStatus(MENU_STATUS_UNEXPAND);
+                setNextMenuStatus(MENU_STATUS_UNEXPANDED);
             }
             mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
             mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
@@ -270,10 +271,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         } else if (id == R.id.iv_redo) {
             mSketchView.redo();
         } else if (id == R.id.iv_expand) {
-            if (mMenuStatus == MENU_STATUS_EXPAND) {
-                setNextMenuStatus(MENU_STATUS_UNEXPAND);
+            if (mMenuStatus == MENU_STATUS_EXPANDED) {
+                setNextMenuStatus(MENU_STATUS_UNEXPANDED);
             } else {
-                setNextMenuStatus(MENU_STATUS_EXPAND);
+                setNextMenuStatus(MENU_STATUS_EXPANDED);
             }
         }
     }
@@ -291,10 +292,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight);
-        //不同状态切换时，位置适配
+        //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
         if (mNextMenuStatus == MENU_STATUS_INIT) {
 
-        } else if (mNextMenuStatus == MENU_STATUS_UNEXPAND) {
+        } else if (mNextMenuStatus == MENU_STATUS_UNEXPANDED) {
             if (mMenuStatus == MENU_STATUS_INIT) { //由INIT状态转换为未展开状态
                 int exitSketchIvWidth = mExitSketchIv.getMeasuredWidth();
                 int expandIvWidth = mExpandIv.getMeasuredWidth();
@@ -310,10 +311,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     mCurrentRect.left = left;
                     mCurrentRect.right = right;
                 }
-            } else if (mMenuStatus == MENU_STATUS_EXPAND) { //由展开状态变成未展开状态
+            } else if (mMenuStatus == MENU_STATUS_EXPANDED) { //由展开状态变成未展开状态
                 mCurrentRect.right = mCurrentRect.left + mWidth;
             }
-        } else if (mNextMenuStatus == MENU_STATUS_EXPAND) {
+        } else if (mNextMenuStatus == MENU_STATUS_EXPANDED) {
             int right = mCurrentRect.left + mWidth;
             if (right > mMaxRight) {  //向右边展开按钮时，小于边界
                 mCurrentRect.left = mMaxRight - mWidth;
