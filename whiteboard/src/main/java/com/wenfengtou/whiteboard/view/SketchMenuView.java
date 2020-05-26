@@ -156,15 +156,17 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penSizeRv.setAdapter(sizeSelectadapter);
 
 
-        PopupWindow colorPopUpWindow = new PopupWindow(penToolView, 600, 200);
+        PopupWindow colorPopUpWindow = new PopupWindow(penToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        penToolView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        int colorPopUpWindowHeight = penToolView.getMeasuredHeight();
         colorPopUpWindow.setFocusable(true);
         int[] location = new int[2];
         mPenIv.getLocationInWindow(location);
         //colorPopUpWindow.showAsDropDown(mPenIv);
-        if (location[1] < colorPopUpWindow.getHeight()) {
+        if (location[1] < colorPopUpWindowHeight) {
             colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mPenIv.getHeight());
         } else {
-            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - colorPopUpWindow.getHeight());
+            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - colorPopUpWindowHeight);
         }
         //colorPopUpWindow.showAtLocation(mPenIv, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
         colorPopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
