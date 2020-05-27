@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".WhiteBoardActivity">
+    tools:context="cn.com.ava.whiteboard.WhiteBoardActivity">
 
-    <com.wenfengtou.whiteboard.view.SketchView
+    <cn.com.ava.whiteboard.view.SketchView
         android:id="@+id/board_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +35,7 @@
     </LinearLayout>
 
 
-    <com.wenfengtou.whiteboard.view.SketchMenuView
+    <cn.com.ava.whiteboard.view.SketchMenuView
         android:id="@+id/sketch_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

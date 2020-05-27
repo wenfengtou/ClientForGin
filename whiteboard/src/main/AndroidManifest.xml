@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wenfengtou.whiteboard">
+    package="cn.com.ava.whiteboard">
 
     <application>
         <activity android:name=".MovableWhiteBoardActivity"></activity>
         <activity
-            android:name=".WhiteBoardActivity"
+            android:name="cn.com.ava.whiteboard.WhiteBoardActivity"
             android:screenOrientation="landscape" />
 
         <service android:name=".service.FloatingService" />

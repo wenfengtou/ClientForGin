@@ -18,10 +18,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.wenfengtou.commonutil.SizeUtil;
-import com.wenfengtou.whiteboard.MovableWhiteBoardActivity;
-import com.wenfengtou.whiteboard.WhiteBoardActivity;
-import com.wenfengtou.whiteboard.service.FloatingService;
+//import com.wenfengtou.commonutil.SizeUtil;
+import cn.com.ava.whiteboard.MovableWhiteBoardActivity;
+import cn.com.ava.whiteboard.WhiteBoardActivity;
+import cn.com.ava.whiteboard.service.FloatingService;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -173,10 +173,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        /*
         SizeUtil.getAreaScreen(this);
         SizeUtil.getAreaApplication(this);
         SizeUtil.getAreaView(this);
         SizeUtil.getAppScreenHeight(this);
+         */
         //startService(new Intent(MainActivity.this, MusicPlayerService.class));
     }
 
