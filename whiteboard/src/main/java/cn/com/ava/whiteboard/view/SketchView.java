@@ -52,8 +52,8 @@ public class SketchView extends View implements View.OnTouchListener {
     private Shape mShape;
     private Thread mH264Thread;
 
-    private boolean mIsReDrawShowList = false;
     private boolean mIsSendH264 = true;
+    private boolean mIsSupportEncode = false;
     private byte[] mPixels;
 
     class DrawInfoItem {
@@ -88,9 +88,11 @@ public class SketchView extends View implements View.OnTouchListener {
 
     private void initBuffer(){
         Log.i(TAG, "initBuffer width=" + mWidth + " height=" + mHeight);
-        mPixels = new byte[mWidth * mHeight * 4];
+        if (mIsSupportEncode) {
+            mPixels = new byte[mWidth * mHeight * 4];
+            mH264Bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+        }
         mBufferBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        mH264Bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
 
@@ -178,17 +180,22 @@ public class SketchView extends View implements View.OnTouchListener {
     public Bitmap getBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawBitmap(mBackgroupBitmap, 0, 0, null);
-        canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+        if (mBackgroupBitmap != null && !mBackgroupBitmap.isRecycled()) {
+            canvas.drawBitmap(mBackgroupBitmap, 0, 0, null);
+        }
+
+        if (mBufferBitmap != null && !mBufferBitmap.isRecycled()) {
+            canvas.drawBitmap(mBufferBitmap, 0, 0, null);
+        }
         return bitmap;
     }
 
     private void drawShowList(CopyOnWriteArrayList<DrawInfoItem> list, Canvas canvas, boolean clear) {
-        if (mShowingList != null) {
+        if (list != null) {
             if (clear) {
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             }
-            Iterator it = mShowingList.iterator();
+            Iterator it = list.iterator();
             while (it != null && it.hasNext()) {
                 DrawInfoItem drawInfoItem = (DrawInfoItem) it.next();
                 PaintTool paintTool = drawInfoItem.mPaintTool;
@@ -218,14 +225,16 @@ public class SketchView extends View implements View.OnTouchListener {
         //绘制图形
         if (mBufferBitmap != null) {
             canvas.drawBitmap(mBufferBitmap, 0, 0, null);
-            long start = SystemClock.uptimeMillis();
-            ByteBuffer buffer = ByteBuffer.wrap(mPixels);
-            buffer.rewind();
-            mBufferBitmap.copyPixelsToBuffer(buffer);
-            buffer.flip();
-            mH264Bitmap.copyPixelsFromBuffer(buffer);
-            long end = SystemClock.uptimeMillis();
-            Log.i(TAG, "copy time=" + (end - start));
+            if (mIsSupportEncode) {
+                long start = SystemClock.uptimeMillis();
+                ByteBuffer buffer = ByteBuffer.wrap(mPixels);
+                buffer.rewind();
+                mBufferBitmap.copyPixelsToBuffer(buffer);
+                buffer.flip();
+                mH264Bitmap.copyPixelsFromBuffer(buffer);
+                long end = SystemClock.uptimeMillis();
+                Log.i(TAG, "copy time=" + (end - start));
+            }
             //mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
         }
         /*
@@ -252,25 +261,7 @@ public class SketchView extends View implements View.OnTouchListener {
             @Override
             public void run() {
                 //流绘制
-                int i = 0;
                 while (mIsSendH264) {
-                    i++;
-                    //Log.i("wenfengwenfeng","i=" + i);
-                    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                    paint.setColor(Color.WHITE);
-
-                    //drawCanvas(h264Canvas);
-                    /*
-                    h264Canvas.drawColor(Color.WHITE);
-                    Iterator it = mShowingList.iterator();
-                    while (it != null && it.hasNext()) {
-                        Pair pair = (Pair) it.next();
-                        h264Canvas.drawPath((Path) pair.first, (Paint) pair.second);
-                    }
-                    */
-
-
-
 
                     //for循环方式绘制，橡皮擦会黑底
                     /*
@@ -336,25 +327,22 @@ public class SketchView extends View implements View.OnTouchListener {
                     ((CurveShape)mShape).setPath(mPath);
                 }
 
-                //mResumeList.clear();
+                mResumeList.clear();
                 mShape.touchDown(motionEvent.getX(), motionEvent.getY());
                 mShowingList.add(new DrawInfoItem(mPaintTool, mShape));
                 break;
 
             //在移动的时候进行绘制
             case MotionEvent.ACTION_MOVE:
-                //mPath.lineTo(motionEvent.getX(),motionEvent.getY());
                 mShape.touchMove(motionEvent.getX(), motionEvent.getY());
 
                 //使用画笔将形状绘制到画布上面
                 mPaintTool.drawShape(mBufferCanvas, mShape);
-                //redrawShowList();
                 invalidate();
                 break;
             //在移动的时候进行绘制
             case MotionEvent.ACTION_UP:
                 mShape.touchUp(motionEvent.getX(), motionEvent.getY());
-                //mPaintTool.drawShape(mBufferCanvas, mShape);
                 invalidate();
                 break;
         }

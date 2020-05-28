@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import cn.com.ava.whiteboard.MovableWhiteBoardActivity;
 import cn.com.ava.whiteboard.WhiteBoardActivity;
 import cn.com.ava.whiteboard.service.FloatingService;
+
+import com.wenfengtou.commonutil.ScreenUtil;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -50,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean toggle = false;
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         insertnote.setComment("hehe " + random);
         insertnote.setData("hahahah " + random);
         MyApplication.getInstance().getDaoSession().getNoteDao().insert(insertnote);
+
+
+        Log.i("wenfengtou", "screen rotate=" + ScreenUtil.isAutoRotate(this));
 
         List<Note> notes = MyApplication.getInstance().getDaoSession().getNoteDao().loadAll();
         for (Note note : notes) {
@@ -113,10 +117,15 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .start();
 
-        if (Settings.canDrawOverlays(this)) {
-            startService(new Intent(this, FloatingService.class));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this)) {
+                startService(new Intent(this, FloatingService.class));
+            } else {
+                //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+            }
         } else {
-            //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+            startService(new Intent(this, FloatingService.class));
         }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
