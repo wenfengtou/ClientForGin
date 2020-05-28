@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Process;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -111,8 +112,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mUndoIv.setOnClickListener(this);
         mRedoIv.setOnClickListener(this);
         mExpandIv.setOnClickListener(this);
+        initDialog(context);
+        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    }
 
-        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+    private void initDialog(Context context) {
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setMessage("清空画板？");
         builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
             @Override
@@ -122,12 +127,13 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         });
         builder.setNegativeButton(R.string.cancle, null);
         mClearAlertDialog = builder.create();
-        mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        } else {
+            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         mClearAlertDialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
-
-        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
-
     /**
      * 显示画笔设置框
      */

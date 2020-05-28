@@ -1,11 +1,14 @@
 package cn.com.ava.whiteboard.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import cn.com.ava.whiteboard.R;
 
 
 public class FloatingService extends Service {
+
+    private static final String TAG = "FloatingService";
 
     @Nullable
     @Override
@@ -51,6 +56,20 @@ public class FloatingService extends Service {
         windowManager.addView(view, layoutParams);
         view.setBackgroundColor(getFilterColor(30));
         //view.setBackgroundColor(Color.BLUE);
+        Log.i(TAG, "isAutoRotate = " + isAutoRotate(this));
+    }
+
+
+    // 判断是否开启了 “屏幕自动旋转”,true则为开启
+    private boolean isAutoRotate(Context context) {
+        int gravity = 0;
+        try {
+            gravity = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.ACCELEROMETER_ROTATION);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return gravity == 1;
     }
 
     public int getFilterColor(int blueFilterPercent) {
