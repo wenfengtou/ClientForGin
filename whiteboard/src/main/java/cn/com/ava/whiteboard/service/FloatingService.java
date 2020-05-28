@@ -36,14 +36,13 @@ public class FloatingService extends Service {
         super.onCreate();
 
         if (isAutoRotate(this)) {
-            showAutoRateDialog();
+            showAutoRotateDialog();
         } else {
             showSketch();
         }
-        Log.i(TAG, "isAutoRotate = " + isAutoRotate(this));
     }
 
-    private void showAutoRateDialog() {
+    private void showAutoRotateDialog() {
         AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setMessage("开启了自动转屏，转屏后笔迹会清空！");
         builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
@@ -64,10 +63,6 @@ public class FloatingService extends Service {
 
     private void showSketch() {
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        //Button button = new Button(this);
-        //button.setText("悬浮窗");
-        //SketchView sketchView = new SketchView(this);
-        //sketchView.setBackgroundColor(Color.TRANSPARENT);
         View view = LayoutInflater.from(this).inflate(R.layout.activity_movable_white_board, null, false);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
@@ -87,7 +82,11 @@ public class FloatingService extends Service {
     }
 
 
-    // 判断是否开启了 “屏幕自动旋转”,true则为开启
+    /**
+     * 判断是否开启了“屏幕自动旋转”,true则为开启
+     * @param context 上下文
+     * @return true为开启，false为未开启
+     */
     private boolean isAutoRotate(Context context) {
         int gravity = 0;
         try {
@@ -96,7 +95,14 @@ public class FloatingService extends Service {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        return gravity == 1;
+        boolean isAutoRotate;
+        if (gravity == 1) {
+            isAutoRotate = true;
+        } else {
+            isAutoRotate =false;
+        }
+        Log.i(TAG, "isAutoRotate = " + isAutoRotate);
+        return isAutoRotate;
     }
 
     public int getFilterColor(int blueFilterPercent) {
