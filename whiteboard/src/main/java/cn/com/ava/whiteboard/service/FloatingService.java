@@ -1,7 +1,9 @@
 package cn.com.ava.whiteboard.service;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -32,6 +34,35 @@ public class FloatingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (isAutoRotate(this)) {
+            showAutoRateDialog();
+        } else {
+            showSketch();
+        }
+        Log.i(TAG, "isAutoRotate = " + isAutoRotate(this));
+    }
+
+    private void showAutoRateDialog() {
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("开启了自动转屏，转屏后笔迹会清空！");
+        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showSketch();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        } else {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
+        dialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
+        dialog.show();
+    }
+
+    private void showSketch() {
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         //Button button = new Button(this);
         //button.setText("悬浮窗");
@@ -43,8 +74,6 @@ public class FloatingService extends Service {
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         layoutParams.x = 0;
         layoutParams.y = 0;
-        //layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        //layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -55,8 +84,6 @@ public class FloatingService extends Service {
         }
         windowManager.addView(view, layoutParams);
         view.setBackgroundColor(getFilterColor(30));
-        //view.setBackgroundColor(Color.BLUE);
-        Log.i(TAG, "isAutoRotate = " + isAutoRotate(this));
     }
 
 
