@@ -8,4 +8,7 @@
     <string name="save_sketch">保存</string>
     <string name="exit_sketch">退出</string>
     <string name="save_sketch_success">保存成功</string>
+    <string name="clear_sketch_alert">清空画板？</string>
+    <string name="sure">确定</string>
+    <string name="cancle">取消</string>
 </resources>

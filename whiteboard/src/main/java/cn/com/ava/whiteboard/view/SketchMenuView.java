@@ -1,6 +1,8 @@
 package cn.com.ava.whiteboard.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -63,6 +65,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     private int mRotation = -1;
     private WindowManager mWindowManager;
+    private AlertDialog mClearAlertDialog;
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -108,6 +111,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mUndoIv.setOnClickListener(this);
         mRedoIv.setOnClickListener(this);
         mExpandIv.setOnClickListener(this);
+
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+        builder.setMessage("清空画板？");
+        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mSketchView.clear();
+            }
+        });
+        builder.setNegativeButton(R.string.cancle, null);
+        mClearAlertDialog = builder.create();
+        mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        mClearAlertDialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
+
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
@@ -279,7 +296,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
             mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
         } else if (id == R.id.iv_clear_sketch) {
-            mSketchView.clear();
+            mClearAlertDialog.show();
         } else if (id == R.id.iv_save_sketch) {
             Bitmap bitmap = mSketchView.getBitmap();
             //FileUtil.saveBitmap("sdcard/sket.png", bitmap);
@@ -313,6 +330,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight + " rotation=" + rotation);
         if (mRotation != rotation) { //横竖屏变化后，将菜单位置居中
             mRotation = rotation;
+            if (mClearAlertDialog.isShowing()) {
+                mClearAlertDialog.dismiss();
+            }
             mCurrentRect.setEmpty();
         }
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
