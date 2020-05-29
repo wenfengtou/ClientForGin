@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Log.i("wenfengtou", "screen rotate=" + ScreenUtil.isAutoRotate(this));
+        ScreenUtil.getAndroiodScreenProperty(this);
 
         List<Note> notes = MyApplication.getInstance().getDaoSession().getNoteDao().loadAll();
         for (Note note : notes) {
