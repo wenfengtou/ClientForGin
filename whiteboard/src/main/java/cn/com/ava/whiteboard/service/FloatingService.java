@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -15,6 +16,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
 
@@ -25,6 +30,9 @@ public class FloatingService extends Service {
 
     private static final String TAG = "FloatingService";
 
+    private static final String SKETCH_AUTO_ROTATE = "sketch_auto_rotate";
+    private static final String KEY_SHOW_AGAIN = "show_again";
+    private boolean mIsShowAgain = true;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -34,8 +42,16 @@ public class FloatingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (isAutoRotate(this)) {
+        SharedPreferences preferences = getSharedPreferences(SKETCH_AUTO_ROTATE, MODE_PRIVATE);
+        boolean isShow = true;
+        if (preferences.contains(KEY_SHOW_AGAIN)) {
+            if (preferences.getBoolean(KEY_SHOW_AGAIN, true)) {
+                isShow = true;
+            } else {
+                isShow = false;
+            }
+        }
+        if (isAutoRotate(this) && isShow) {
             showAutoRotateDialog();
         } else {
             showSketch();
@@ -44,14 +60,40 @@ public class FloatingService extends Service {
 
     private void showAutoRotateDialog() {
         AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setMessage("开启了自动转屏，转屏后笔迹会清空！");
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View contentView = inflater.inflate(R.layout.whiteboard_dialog_autorotate, null, false);
+        /*
+        builder.setMessage("");
         builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 showSketch();
             }
         });
-        AlertDialog dialog = builder.create();
+
+         */
+        final AlertDialog dialog = builder.create();
+        Button sureButton = contentView.findViewById(R.id.sure_bt);
+        sureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences(SKETCH_AUTO_ROTATE, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(KEY_SHOW_AGAIN, mIsShowAgain);
+                editor.apply();
+                showSketch();
+                dialog.dismiss();
+            }
+        });
+
+        CheckBox noAskAgainCheckBox = contentView.findViewById(R.id.no_ask_again_checkBox);
+        noAskAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mIsShowAgain = (!isChecked);
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         } else {
@@ -59,6 +101,7 @@ public class FloatingService extends Service {
         }
         dialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
         dialog.show();
+        dialog.setContentView(contentView);
     }
 
     private void showSketch() {
