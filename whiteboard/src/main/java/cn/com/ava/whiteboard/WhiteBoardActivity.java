@@ -26,7 +26,7 @@ import android.widget.ImageButton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import cn.com.ava.whiteboard.R;
+
 import cn.com.ava.whiteboard.view.SketchMenuView;
 import cn.com.ava.whiteboard.view.SketchView;
 
@@ -50,7 +50,7 @@ public class WhiteBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_movable_menu_sketch);
+        setContentView(R.layout.whiteboard_movable_menu_sketch);
         Intent intent = getIntent();
         mUndoBt = findViewById(R.id.bt_undo_write);
         mRedoBt = findViewById(R.id.bt_redo_write);

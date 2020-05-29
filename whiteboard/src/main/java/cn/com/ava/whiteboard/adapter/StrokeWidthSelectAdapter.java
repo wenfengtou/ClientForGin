@@ -30,7 +30,7 @@ public class StrokeWidthSelectAdapter extends RecyclerView.Adapter<StrokeWidthSe
     @Override
     public StrokeWidthSelectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
-        View root = LayoutInflater.from(mContext).inflate(R.layout.layout_size_item, parent, false);
+        View root = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_recycle_item_size, parent, false);
         return new StrokeWidthSelectViewHolder(root);
     }
 

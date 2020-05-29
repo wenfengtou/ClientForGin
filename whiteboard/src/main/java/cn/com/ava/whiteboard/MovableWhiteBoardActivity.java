@@ -15,7 +15,7 @@ public class MovableWhiteBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movable_white_board);
+        setContentView(R.layout.whiteboard_activity_movable_white_board);
         //mSketchView = findViewById(R.id.sketch);
         //mSketchMenuView = findViewById(R.id.sketch_menu);
         //mSketchMenuView.setSketchView(mSketchView);

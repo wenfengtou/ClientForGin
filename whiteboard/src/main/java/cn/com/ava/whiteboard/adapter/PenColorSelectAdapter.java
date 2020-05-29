@@ -30,7 +30,7 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
     @Override
     public ColorSelectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
-        View root = LayoutInflater.from(mContext).inflate(R.layout.layout_pen_color_item, parent, false);
+        View root = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_recycle_item_color, parent, false);
         return new ColorSelectViewHolder(root);
     }
 

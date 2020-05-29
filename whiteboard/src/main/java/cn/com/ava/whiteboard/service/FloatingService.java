@@ -63,7 +63,7 @@ public class FloatingService extends Service {
 
     private void showSketch() {
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        View view = LayoutInflater.from(this).inflate(R.layout.activity_movable_white_board, null, false);
+        View view = LayoutInflater.from(this).inflate(R.layout.whiteboard_activity_movable_white_board, null, false);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;

@@ -96,7 +96,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     private void initView(Context context) {
-        mViewRoot = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.layout_sketch_menu, this, true);
+        mViewRoot = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.whiteboard_sketch_menu, this, true);
         mExitSketchIv = findViewById(R.id.iv_exit_sketch);
         mPenIv = findViewById(R.id.iv_pen);
         mEraserIv = findViewById(R.id.iv_eraser);
@@ -121,7 +121,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
 
     private void initPenPopupWindow() {
-        View penToolView = LayoutInflater.from(mContext).inflate(R.layout.layout_popupwindow_pen, null, true);
+        View penToolView = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_popupwindow_pen, null, true);
         final int paintToolType = PaintTool.PAINT_TOOL_PEN;
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
@@ -179,7 +179,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     private void initEraserPopupWindow() {
-        View eraseToolView = LayoutInflater.from(mContext).inflate(R.layout.layout_popupwindow_eraser, null, true);
+        View eraseToolView = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_popupwindow_eraser, null, true);
         final int paintToolType = PaintTool.PAINT_TOOL_ERASER;
         //大小选择
         final RecyclerView eraserSizeRv = eraseToolView.findViewById(R.id.rv_eraser_size);
@@ -223,7 +223,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 mSketchView.clear();
             }
         });
-        builder.setNegativeButton(R.string.cancle, null);
+        builder.setNegativeButton(R.string.cancel, null);
         mClearAlertDialog = builder.create();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
