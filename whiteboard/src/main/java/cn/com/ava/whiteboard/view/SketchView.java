@@ -138,15 +138,6 @@ public class SketchView extends View implements View.OnTouchListener {
         return paintToolStrokeWidth;
     }
 
-    public int getPaintToolMaxStrokeWidth(int paintToolType) {
-        int paintToolMaxStrokeWidth = 0;
-        if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
-            paintToolMaxStrokeWidth = PenSetting.getInstance().getMaxStrokeWidth();
-        } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
-            paintToolMaxStrokeWidth = EraserSetting.getInstance().getMaxStrokeWidth();
-        }
-        return paintToolMaxStrokeWidth;
-    }
 
     //撤销
     public void undo() {

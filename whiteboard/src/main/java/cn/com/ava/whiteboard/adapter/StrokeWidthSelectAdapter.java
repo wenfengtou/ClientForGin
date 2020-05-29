@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 import cn.com.ava.whiteboard.R;
 
-public class PenStrokeWidthSelectAdapter extends RecyclerView.Adapter<PenStrokeWidthSelectAdapter.StrokeWidthSelectViewHolder>{
+public class StrokeWidthSelectAdapter extends RecyclerView.Adapter<StrokeWidthSelectAdapter.StrokeWidthSelectViewHolder>{
 
-    ArrayList<PenStrokeWidthBean> mPenStrokeWidthBeanList;
+    ArrayList<StrokeWidthBean> mStrokeWidthBeanList;
     private int mCurrentStrokeWidth;
     private OnItemClickListener mOnItemClickListener;
     private Context mContext;
@@ -36,13 +36,13 @@ public class PenStrokeWidthSelectAdapter extends RecyclerView.Adapter<PenStrokeW
 
     @Override
     public void onBindViewHolder(@NonNull StrokeWidthSelectViewHolder holder, final int position) {
-        if (mPenStrokeWidthBeanList != null && mPenStrokeWidthBeanList.size() > position) {
-            PenStrokeWidthBean penStrokeWidthBean = mPenStrokeWidthBeanList.get(position);
+        if (mStrokeWidthBeanList != null && mStrokeWidthBeanList.size() > position) {
+            StrokeWidthBean strokeWidthBean = mStrokeWidthBeanList.get(position);
 
-            if (mCurrentStrokeWidth == penStrokeWidthBean.strokeWidth) {
-                holder.mStrokeWidthIv.setImageResource(penStrokeWidthBean.pressedDrawableId);
+            if (mCurrentStrokeWidth == strokeWidthBean.strokeWidth) {
+                holder.mStrokeWidthIv.setImageResource(strokeWidthBean.pressedDrawableId);
             } else {
-                holder.mStrokeWidthIv.setImageResource(penStrokeWidthBean.unPressedDrawableId);
+                holder.mStrokeWidthIv.setImageResource(strokeWidthBean.unPressedDrawableId);
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +58,7 @@ public class PenStrokeWidthSelectAdapter extends RecyclerView.Adapter<PenStrokeW
 
     @Override
     public int getItemCount() {
-        return mPenStrokeWidthBeanList == null ? 0 : mPenStrokeWidthBeanList.size();
+        return mStrokeWidthBeanList == null ? 0 : mStrokeWidthBeanList.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -74,8 +74,8 @@ public class PenStrokeWidthSelectAdapter extends RecyclerView.Adapter<PenStrokeW
         return mCurrentStrokeWidth;
     }
 
-    public void setPenStrokeWidthBeanList(ArrayList<PenStrokeWidthBean> penStrokeWidthBeanList) {
-        mPenStrokeWidthBeanList = penStrokeWidthBeanList;
+    public void setPenStrokeWidthBeanList(ArrayList<StrokeWidthBean> strokeWidthBeanList) {
+        mStrokeWidthBeanList = strokeWidthBeanList;
     }
 
 
