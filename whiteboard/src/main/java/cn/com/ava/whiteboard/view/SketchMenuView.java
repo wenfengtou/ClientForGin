@@ -67,6 +67,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mRotation = -1;
     private WindowManager mWindowManager;
     private AlertDialog mClearAlertDialog;
+    private PopupWindow mPenPopupWindow;
+    private int mPenPopupWindowHeight;
+    private PopupWindow mEraserPopupWindow;
+    private int mEraserPopupWindowHeight;
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -116,28 +120,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
-    private void initDialog(Context context) {
-        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setMessage("清空画板？");
-        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mSketchView.clear();
-            }
-        });
-        builder.setNegativeButton(R.string.cancle, null);
-        mClearAlertDialog = builder.create();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        } else {
-            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        }
-        mClearAlertDialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
-    }
-    /**
-     * 显示画笔设置框
-     */
-    private void showPenPopupWindow() {
+
+    private void initPenPopupWindow() {
         View penToolView = LayoutInflater.from(mContext).inflate(R.layout.layout_popupwindow_pen, null, true);
         final int paintToolType = PaintTool.PAINT_TOOL_PEN;
         //颜色选择
@@ -178,20 +162,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penSizeRv.setAdapter(sizeSelectAdapter);
 
 
-        PopupWindow colorPopUpWindow = new PopupWindow(penToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPenPopupWindow = new PopupWindow(penToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         penToolView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-        int colorPopUpWindowHeight = penToolView.getMeasuredHeight();
-        colorPopUpWindow.setFocusable(true);
-        int[] location = new int[2];
-        mPenIv.getLocationInWindow(location);
-        //colorPopUpWindow.showAsDropDown(mPenIv);
-        if (location[1] < colorPopUpWindowHeight) {
-            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mPenIv.getHeight());
-        } else {
-            colorPopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - colorPopUpWindowHeight);
-        }
-        //colorPopUpWindow.showAtLocation(mPenIv, Gravity.NO_GRAVITY, location[0], location[1]-colorPopUpWindow.getHeight());
-        colorPopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        mPenPopupWindowHeight = penToolView.getMeasuredHeight();
+        mPenPopupWindow.setFocusable(true);
+        mPenPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 //更新颜色
@@ -204,14 +179,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         });
     }
 
-
-    /**
-     * 显示橡皮擦设置框
-     */
-    private void showEraserPopupWindow() {
+    private void initEraserPopupWindow() {
         View eraseToolView = LayoutInflater.from(mContext).inflate(R.layout.layout_popupwindow_eraser, null, true);
         final int paintToolType = PaintTool.PAINT_TOOL_ERASER;
-        //大小设置
         //大小选择
         final RecyclerView eraserSizeRv = eraseToolView.findViewById(R.id.rv_eraser_size);
         eraserSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
@@ -230,19 +200,12 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         });
         eraserSizeRv.setAdapter(sizeSelectAdapter);
 
-        PopupWindow erasePopUpWindow = new PopupWindow(eraseToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mEraserPopupWindow = new PopupWindow(eraseToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         eraseToolView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-        int eraserPopUpWindowHeight = eraseToolView.getMeasuredHeight();
-        erasePopUpWindow.setFocusable(true);
-        int[] location = new int[2];
-        mEraserIv.getLocationInWindow(location);
-        if (location[1] < eraserPopUpWindowHeight) {
-            erasePopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + eraserPopUpWindowHeight);
-        } else {
-            erasePopUpWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - eraserPopUpWindowHeight);
-        }
+        mEraserPopupWindowHeight = eraseToolView.getMeasuredHeight();
+        mEraserPopupWindow.setFocusable(true);
 
-        erasePopUpWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        mEraserPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 //更新大小
@@ -250,6 +213,67 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 mSketchView.setPaintToolStrokeWidth(paintToolType,  size);
             }
         });
+    }
+
+    private void initDialog(Context context) {
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setMessage("清空画板？");
+        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mSketchView.clear();
+            }
+        });
+        builder.setNegativeButton(R.string.cancle, null);
+        mClearAlertDialog = builder.create();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        } else {
+            mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
+        mClearAlertDialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
+    }
+
+    /**
+     * 显示画笔设置框
+     */
+    private void showPenPopupWindow() {
+        if (mPenPopupWindow == null) {
+            initPenPopupWindow();
+        }
+        int[] location = new int[2];
+        mPenIv.getLocationInWindow(location);
+        if (location[1] < mPenPopupWindowHeight) {
+            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mPenIv.getHeight());
+        } else {
+            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - mPenPopupWindowHeight);
+        }
+    }
+
+
+    /**
+     * 显示橡皮擦设置框
+     */
+    private void showEraserPopupWindow() {
+        if (mEraserPopupWindow == null) {
+            initEraserPopupWindow();
+        }
+        int[] location = new int[2];
+        mEraserIv.getLocationInWindow(location);
+        if (location[1] < mEraserPopupWindowHeight) {
+            mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mEraserIv.getHeight());
+        } else {
+            mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - mEraserPopupWindowHeight);
+        }
+    }
+
+    private void dismissAllPopupWindow() {
+        if (mEraserPopupWindow != null && mEraserPopupWindow.isShowing()) {
+            mEraserPopupWindow.dismiss();
+        }
+        if (mEraserPopupWindow != null && mPenPopupWindow.isShowing()) {
+            mPenPopupWindow.dismiss();
+        }
     }
 
     @Override
@@ -353,6 +377,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             if (mClearAlertDialog.isShowing()) {
                 mClearAlertDialog.dismiss();
             }
+            dismissAllPopupWindow();
             mCurrentRect.setEmpty();
         }
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
