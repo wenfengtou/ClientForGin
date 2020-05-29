@@ -7,12 +7,12 @@
 
     <ImageView
         android:id="@+id/iv_size"
-        android:layout_margin="5dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_margin="@dimen/sw_5dp"
+        android:layout_width="@dimen/sw_40dp"
+        android:layout_height="@dimen/sw_40dp"
         android:rotation="-45"
         android:scaleType="centerInside"
-        android:src="@drawable/paintsize_rectangle_l1_unpressed"
+        android:src="@drawable/paintsize_level1_unpressed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -14,7 +14,7 @@ public class ScreenUtil {
     public static boolean isAutoRotate(Context context) {
         int gravity = 0;
         try {
-            gravity = Settings.System.getInt(context.getContentResolver(),git
+            gravity = Settings.System.getInt(context.getContentResolver(),
                     Settings.System.ACCELEROMETER_ROTATION);
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();

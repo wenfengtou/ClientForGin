@@ -40,7 +40,7 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
             PenColorBean penColorBean = mPenColorBeanList.get(position);
             holder.mColorIv.setImageResource(penColorBean.drawableId);
             if (mCurrentColor == penColorBean.color) {
-                holder.mColorIv.setBackground(mContext.getDrawable(R.drawable.paintcolor_rectangle_frame_blue));
+                holder.mColorIv.setBackground(mContext.getDrawable(R.drawable.paintcolor_frame));
             } else {
                 holder.mColorIv.setBackground(null);
             }

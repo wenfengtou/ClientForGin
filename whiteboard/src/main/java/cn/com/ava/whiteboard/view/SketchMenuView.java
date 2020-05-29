@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -129,9 +128,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penColorRv.setLayoutManager(new GridLayoutManager(mContext, 3));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.paintcolor_rectangle_red));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.paintcolor_rectangle_green));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.paintcolor_rectangle_blue));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.paintcolor_red));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.paintcolor_green));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.paintcolor_blue));
         colorSelectAdapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
         colorSelectAdapter.setPenColorBeanList(penColorBeans);
         colorSelectAdapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
@@ -148,8 +147,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_rectangle_l1_pressed, R.drawable.paintsize_rectangle_l1_unpressed, 10));
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_rectangle_l2_pressed, R.drawable.paintsize_rectangle_l2_unpressed, 30));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level1_pressed, R.drawable.paintsize_level1_unpressed, 10));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 30));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {
@@ -187,8 +186,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         eraserSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_rectangle_l1_pressed, R.drawable.paintsize_rectangle_l1_unpressed, 10));
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_rectangle_l2_pressed, R.drawable.paintsize_rectangle_l2_unpressed, 30));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level1_pressed, R.drawable.paintsize_level1_unpressed, 10));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 30));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {

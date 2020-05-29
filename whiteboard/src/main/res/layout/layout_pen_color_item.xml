@@ -7,13 +7,13 @@
 
     <ImageView
         android:id="@+id/iv_color"
-        android:layout_margin="5dp"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:padding="2dp"
+        android:layout_margin="@dimen/sw_5dp"
+        android:layout_width="@dimen/sw_42dp"
+        android:layout_height="@dimen/sw_42dp"
+        android:padding="@dimen/sw_2dp"
         android:scaleType="centerInside"
-        android:src="@drawable/paintcolor_rectangle_blue"
-        android:background="@drawable/paintcolor_rectangle_blue"
+        android:src="@drawable/paintcolor_blue"
+        android:background="@drawable/paintcolor_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
