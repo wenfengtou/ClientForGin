@@ -101,6 +101,7 @@ public class MovableMenuSketchLayout extends ViewGroup {
                     throw new UnsupportedOperationException("Sketch or SketchMenu null!");
                 } else {
                     mSketchMenuView.setSketchView(mSketchView);
+                    mSketchView.setOnStartDrawListener(mSketchMenuView);
                 }
             }
         } else {
