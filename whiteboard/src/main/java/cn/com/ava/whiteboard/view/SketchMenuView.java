@@ -37,7 +37,7 @@ import cn.com.ava.whiteboard.adapter.StrokeWidthBean;
 import cn.com.ava.whiteboard.adapter.StrokeWidthSelectAdapter;
 import cn.com.ava.whiteboard.painttool.PaintTool;
 
-public class SketchMenuView extends LinearLayout implements View.OnClickListener, SketchView.onStartDrawListener {
+public class SketchMenuView extends LinearLayout implements View.OnClickListener {
 
     private static final String TAG = "SketchMenuView";
     private ImageView mExitSketchIv;
@@ -237,6 +237,15 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     /**
+     * 点击了菜单之外的处理,主要是隐藏PopupWindow
+     *
+     */
+    public void touchDownOutside() {
+        dismissPenPopupWindow();
+        dismissEraserPopupWindow();
+    }
+
+    /**
      * 切换画笔设置框状态
      */
     private void togglePenPopupWindow() {
@@ -274,7 +283,21 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private void dismissPenPopupWindow() {
         if (mPenPopupWindow != null && mPenPopupWindow.isShowing()) {
             mPenPopupWindow.dismiss();
-            return;
+        }
+    }
+
+    /**
+     * 切换橡皮擦设置框状态
+     */
+    private void toggleEraserPopupWindow() {
+        if (mEraserPopupWindow != null) {
+            if (mEraserPopupWindow.isShowing()) {
+                dismissEraserPopupWindow();
+            } else {
+                showEraserPopupWindow();
+            }
+        } else {
+            showEraserPopupWindow();
         }
     }
 
@@ -300,10 +323,17 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private void dismissEraserPopupWindow() {
         if (mEraserPopupWindow != null && mEraserPopupWindow.isShowing()) {
             mEraserPopupWindow.dismiss();
-            return;
         }
     }
 
+
+    /**
+     * 隐藏所有PopupWindow
+     */
+    private void dismissAllPopupWindow() {
+        dismissPenPopupWindow();
+        dismissEraserPopupWindow();
+    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -362,15 +392,14 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             } else if (id == R.id.iv_eraser) {
                 dismissPenPopupWindow();
                 if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
-                    showEraserPopupWindow();
+                    toggleEraserPopupWindow();
                 }
                 mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_pressed));
                 mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
             }
         } else {
-            dismissPenPopupWindow();
-            dismissEraserPopupWindow();
+            dismissAllPopupWindow();
             if (id == R.id.iv_exit_sketch) {
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
                 setMenuStatus(MENU_STATUS_INIT);
@@ -414,8 +443,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             if (mClearAlertDialog.isShowing()) {
                 mClearAlertDialog.dismiss();
             }
-            dismissPenPopupWindow();
-            dismissEraserPopupWindow();
+            dismissAllPopupWindow();
             mCurrentRect.setEmpty();
         }
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
@@ -510,8 +538,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     int l,r,t,b; // 上下左右四点移动后的偏移量
                     //计算偏移量 设置偏移量 = 3 时 为判断点击事件和滑动事件的峰值
                     if (Math.abs(moveX) > 3 ||Math.abs(moveY) > 3) { // 偏移量的绝对值大于 3 为 滑动时间 并根据偏移量计算四点移动后的位置
-                        dismissPenPopupWindow();
-                        dismissEraserPopupWindow();
+                        dismissAllPopupWindow();
                         mIsDrag = true;
                         l = (int) (getLeft() + moveX);
                         r = l + mWidth;
@@ -554,9 +581,4 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         return false;
     }
 
-    @Override
-    public void onStartDraw() {
-        dismissPenPopupWindow();
-        dismissEraserPopupWindow();
-    }
 }

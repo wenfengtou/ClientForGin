@@ -55,7 +55,6 @@ public class SketchView extends View implements View.OnTouchListener {
     private boolean mIsSendH264 = true;
     private boolean mIsSupportEncode = false;
     private byte[] mPixels;
-    private onStartDrawListener mOnStartDrawListener;
 
     class DrawInfoItem {
         public PaintTool mPaintTool;
@@ -64,12 +63,6 @@ public class SketchView extends View implements View.OnTouchListener {
             mPaintTool = paintTool;
             mShape = shape;
         }
-    }
-
-
-
-    interface onStartDrawListener {
-        void onStartDraw();
     }
 
     public SketchView(Context context) {
@@ -91,10 +84,6 @@ public class SketchView extends View implements View.OnTouchListener {
     public SketchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOnTouchListener(this);
-    }
-
-    public void setOnStartDrawListener(onStartDrawListener onStartDrawListener) {
-        mOnStartDrawListener = onStartDrawListener;
     }
 
     private void initBuffer(){
@@ -317,9 +306,6 @@ public class SketchView extends View implements View.OnTouchListener {
         switch (motionEvent.getAction()){
             //处理按下事件
             case MotionEvent.ACTION_DOWN:
-                if (mOnStartDrawListener != null) {
-                    mOnStartDrawListener.onStartDraw();
-                }
 
                 if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
                     mPaintTool = new Pen(PenSetting.getInstance());

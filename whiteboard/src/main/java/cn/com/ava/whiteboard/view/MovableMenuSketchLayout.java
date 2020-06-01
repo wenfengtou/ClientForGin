@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -101,7 +102,6 @@ public class MovableMenuSketchLayout extends ViewGroup {
                     throw new UnsupportedOperationException("Sketch or SketchMenu null!");
                 } else {
                     mSketchMenuView.setSketchView(mSketchView);
-                    mSketchView.setOnStartDrawListener(mSketchMenuView);
                 }
             }
         } else {
@@ -112,6 +112,21 @@ public class MovableMenuSketchLayout extends ViewGroup {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+            float x = ev.getX();
+            float y = ev.getY();
+            int[] location = new int[2];
+            mSketchMenuView.getLocationInWindow(location);
+            boolean inRect = (x <= (location[0] + mSketchMenuView.getMeasuredWidth())  && x >= location[0]) && (y <= (location[1] + mSketchMenuView.getMeasuredHeight()) && y >= location[1]);
+            if (!inRect) {
+                mSketchMenuView.touchDownOutside();
+            }
+        }
+        return super.onInterceptTouchEvent(ev);
     }
 
 }
