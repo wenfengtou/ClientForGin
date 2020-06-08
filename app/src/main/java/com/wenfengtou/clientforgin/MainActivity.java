@@ -162,7 +162,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        char weight = (char) (Character.MAX_VALUE * 0.53);
+        byte heightByte = (byte) (weight >> 8);
+        byte lowtByte = (byte) (weight & 0xFF);
+        String heightString = String.format("%x", heightByte);
+        String lowString = String.format("%x", lowtByte);
         Log.i("wenfengtou", "onResume getConfiguration = " + getResources().getConfiguration());
+        byte[] cmd = new byte[3];
+        cmd[0] = 0x34;
+        cmd[1] = heightByte;
+        cmd[2] = lowtByte;
+        Log.i("wenfengtou", "onResume abc = " + getResources().getConfiguration());
+
         /*
         SizeUtil.getAreaScreen(this);
         SizeUtil.getAreaApplication(this);
