@@ -3,6 +3,8 @@ package com.wenfengtou.clientforgin;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +26,7 @@ import cn.com.ava.whiteboard.WhiteBoardActivity;
 import cn.com.ava.whiteboard.service.FloatingService;
 
 import com.wenfengtou.commonutil.ScreenUtil;
+import com.wenfengtou.screenrecord.ScreenRecordActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -54,21 +57,30 @@ public class MainActivity extends AppCompatActivity {
     private boolean toggle = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
         //HookUtil.hookWindowManagerGlobal();
         setContentView(R.layout.activity_main);
         b2tv = findViewById(R.id.textView2);
-        b2tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        b2tv.setOnClickListener((View view) ->  {
                 //b1tv.setVisibility(View.GONE);
-                Intent intent = new Intent(MainActivity.this, WhiteBoardActivity.class);
-                intent.putExtra("bg-path", "/sdcard/screen.png");
-                intent.addFlags( Intent.FLAG_ACTIVITY_NO_ANIMATION );
-                startActivity(intent);
-                //showDialog();
-            }
-        });
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(MainActivity.this)) {
+                        Intent intent = new Intent(MainActivity.this, FloatingService.class);
+                        intent.putExtra("config", getResources().getConfiguration());
+                        startService(intent);
+                    } else {
+                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+                    }
+                } else {
+                    startService(new Intent(MainActivity.this, FloatingService.class));
+                }
+
+               // MainActivity.this.startActivity(new Intent(MainActivity.this, ScreenRecordActivity.class));
+            });
+
 
         try {
             //serializeStudent();
@@ -93,41 +105,8 @@ public class MainActivity extends AppCompatActivity {
             + " data=" + note.getData() + " id=" + note.getId());
         }
 
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.READ_EXTERNAL_STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> strings) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(MainActivity.this, MovableWhiteBoardActivity.class);
-                                intent.putExtra("bg-path", "/sdcard/screen.png");
-                                intent.addFlags( Intent.FLAG_ACTIVITY_NO_ANIMATION );
-                                //startActivity(intent);
-                            }
-                        }, 10);
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> strings) {
-
-                    }
-                })
-                .start();
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.canDrawOverlays(this)) {
-                startService(new Intent(this, FloatingService.class));
-            } else {
-                //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
-            }
-        } else {
-            startService(new Intent(this, FloatingService.class));
-        }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求
@@ -183,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("wenfengtou", "onResume getConfiguration = " + getResources().getConfiguration());
         /*
         SizeUtil.getAreaScreen(this);
         SizeUtil.getAreaApplication(this);

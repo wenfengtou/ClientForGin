@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -42,6 +44,14 @@ public class FloatingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        //Configuration configuration = (Configuration) intent.getExtras().get("config");
+        //getResources().getConfiguration().updateFrom(configuration);
+        Log.i("wenfengtou", "onStartCommand getConfiguration = " + getResources().getConfiguration());
         SharedPreferences preferences = getSharedPreferences(SKETCH_AUTO_ROTATE, MODE_PRIVATE);
         boolean isShow = true;
         if (preferences.contains(KEY_SHOW_AGAIN)) {
@@ -56,22 +66,21 @@ public class FloatingService extends Service {
         } else {
             showSketch();
         }
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     private void showAutoRotateDialog() {
         AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
         View contentView = inflater.inflate(R.layout.whiteboard_dialog_autorotate, null, false);
-        /*
-        builder.setMessage("");
-        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                showSketch();
-            }
-        });
 
-         */
         final AlertDialog dialog = builder.create();
         Button sureButton = contentView.findViewById(R.id.sure_bt);
         sureButton.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +118,13 @@ public class FloatingService extends Service {
         View view = LayoutInflater.from(this).inflate(R.layout.whiteboard_activity_movable_white_board, null, false);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.format = PixelFormat.TRANSLUCENT;
+        //layoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         layoutParams.x = 0;
         layoutParams.y = 0;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.setTitle("float_wf");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

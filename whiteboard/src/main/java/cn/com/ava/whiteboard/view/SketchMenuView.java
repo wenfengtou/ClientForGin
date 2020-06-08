@@ -189,7 +189,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
         strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level1_pressed, R.drawable.paintsize_level1_unpressed, 10));
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 30));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 120));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {
@@ -204,8 +204,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mEraserPopupWindow = new PopupWindow(eraseToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         eraseToolView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
         mEraserPopupWindowHeight = eraseToolView.getMeasuredHeight();
-        mPenPopupWindow.setFocusable(false);
-        mPenPopupWindow.setOutsideTouchable(false);
+        mEraserPopupWindow.setFocusable(false);
+        mEraserPopupWindow.setOutsideTouchable(false);
 
         mEraserPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -340,11 +340,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onLayout(changed, l, t, r, b);
     }
 
+
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.i(TAG, "menu onConfigurationChanged");
+        /*
+        if (mClearAlertDialog.isShowing()) {
+            mClearAlertDialog.dismiss();
+        }
+        dismissAllPopupWindow();
+        mCurrentRect.setEmpty();
+         */
     }
+
 
     public void setMenuStatus(int status) {
         mLastMenuStatus = mMenuStatus;
@@ -437,7 +446,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
         int rotation = mWindowManager.getDefaultDisplay().getRotation();
+
         Log.i(TAG, "mWidth = " + mWidth + " mHeight = " + mHeight + " rotation=" + rotation);
+
         if (mRotation != rotation) { //横竖屏变化后，将菜单位置居中
             mRotation = rotation;
             if (mClearAlertDialog.isShowing()) {
@@ -446,6 +457,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             dismissAllPopupWindow();
             mCurrentRect.setEmpty();
         }
+
         //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
         if (mMenuStatus == MENU_STATUS_INIT) {
 
@@ -522,6 +534,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
     }
 
+    private int mLargeMoveCount = 0;
     public boolean updateView(MotionEvent event) {
         super.onTouchEvent(event);
         updateLimit();
@@ -529,6 +542,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     mIsDrag = false;
+                    mLargeMoveCount = 0;
                     mDownX = event.getX();
                     mDownY = event.getY();
                     break;
@@ -537,7 +551,18 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     final float moveY = event.getY() - mDownY;
                     int l,r,t,b; // 上下左右四点移动后的偏移量
                     //计算偏移量 设置偏移量 = 3 时 为判断点击事件和滑动事件的峰值
-                    if (Math.abs(moveX) > 3 ||Math.abs(moveY) > 3) { // 偏移量的绝对值大于 3 为 滑动时间 并根据偏移量计算四点移动后的位置
+                    // 偏移量的绝对值大于 3 为 滑动时间 并根据偏移量计算四点移动后的位置
+                    //参考：https://blog.csdn.net/yuhui77268769/article/details/103771252
+                    if (Math.abs(moveX) > 5 || Math.abs(moveY) > 5) {
+                        Log.i(TAG, "Math.abs large!!!!!!");
+                        mLargeMoveCount++;
+                    }
+                    //优化：偏移量大的点大于1个才判断为滑动事件，不然太灵敏了。也不能设置太大，否则感觉第一下拖不动
+                    if (mLargeMoveCount > 2) {
+                        mIsDrag = true;
+                    }
+
+                    if (mIsDrag) {
                         dismissAllPopupWindow();
                         mIsDrag = true;
                         l = (int) (getLeft() + moveX);
@@ -563,17 +588,13 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                         }
                         mCurrentRect.set(l, t, r, b);
                         this.layout(l, t, r, b); // 重置view在layout 中位置
-                    } else {
-
                     }
                     break;
                 case MotionEvent.ACTION_UP: // 不处理
                     Log.i(TAG, "MotionEvent.ACTION_UP");
-                    //setPressed(false);
                     break;
                 case MotionEvent.ACTION_CANCEL: // 不处理
                     Log.i(TAG, "MotionEvent.ACTION_CANCEL");
-                    //setPressed(false);
                     break;
             }
             return true;

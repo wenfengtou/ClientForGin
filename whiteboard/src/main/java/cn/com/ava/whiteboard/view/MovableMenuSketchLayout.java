@@ -1,6 +1,7 @@
 package cn.com.ava.whiteboard.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -127,6 +128,19 @@ public class MovableMenuSketchLayout extends ViewGroup {
             }
         }
         return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i(TAG, "onConfigurationChanged");
+    }
+
+
+    @Override
+    public void dispatchConfigurationChanged(Configuration newConfig) {
+        Log.i(TAG, "dispatchConfigurationChanged");
+        super.dispatchConfigurationChanged(newConfig);
     }
 
 }

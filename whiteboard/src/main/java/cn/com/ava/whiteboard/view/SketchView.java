@@ -228,6 +228,11 @@ public class SketchView extends View implements View.OnTouchListener {
             }
             //mH264Bitmap = mBufferBitmap.copy(Bitmap.Config.ARGB_8888, false);
         }
+        if (mPaintToolType == PaintTool.PAINT_TOOL_ERASER) {
+            if (mShape.getState() != Shape.STATE_UP) {
+                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), 60, EraserSetting.getInstance().getCirclePaint());
+            }
+        }
         /*
         Canvas h264Canvas = mSurface.lockCanvas(null);
         drawCanvas(h264Canvas);
@@ -322,6 +327,7 @@ public class SketchView extends View implements View.OnTouchListener {
                 mResumeList.clear();
                 mShape.touchDown(motionEvent.getX(), motionEvent.getY());
                 mShowingList.add(new DrawInfoItem(mPaintTool, mShape));
+                invalidate();
                 break;
 
             //在移动的时候进行绘制
