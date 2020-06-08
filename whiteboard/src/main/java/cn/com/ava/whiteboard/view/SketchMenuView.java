@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.wenfengtou.commonutil.FileUtil;
@@ -125,12 +126,18 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         final int paintToolType = PaintTool.PAINT_TOOL_PEN;
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
-        penColorRv.setLayoutManager(new GridLayoutManager(mContext, 3));
+        penColorRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_red), R.drawable.paintcolor_red));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_green), R.drawable.paintcolor_green));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_blue), R.drawable.paintcolor_blue));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_000000), R.drawable.whiteboard_paint_color_000000));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_929699), R.drawable.whiteboard_paint_color_929699));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_e62223), R.drawable.whiteboard_paint_color_e62223));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_ff6a0c), R.drawable.whiteboard_paint_color_ff6a0c));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_f7b500), R.drawable.whiteboard_paint_color_f7b500));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_00be50), R.drawable.whiteboard_paint_color_00be50));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_43d7b5), R.drawable.whiteboard_paint_color_43d7b5));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_006fff), R.drawable.whiteboard_paint_color_006fff));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_6236ff), R.drawable.whiteboard_paint_color_6236ff));
         colorSelectAdapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
         colorSelectAdapter.setPenColorBeanList(penColorBeans);
         colorSelectAdapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
@@ -140,6 +147,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 colorSelectAdapter.setCurrentColor(penColorBean.color);
             }
         });
+        penColorRv.setHasFixedSize(true);
         penColorRv.setAdapter(colorSelectAdapter);
 
         //大小选择

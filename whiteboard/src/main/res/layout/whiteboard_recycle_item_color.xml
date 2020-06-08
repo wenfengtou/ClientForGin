@@ -12,8 +12,8 @@
         android:layout_height="@dimen/sw_34dp"
         android:padding="@dimen/sw_4dp"
         android:scaleType="centerInside"
-        android:src="@drawable/paintcolor_blue"
-        android:background="@drawable/paintcolor_blue"
+        android:src="@drawable/whiteboard_paint_color_000000"
+        android:background="@drawable/whiteboard_paint_color_000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

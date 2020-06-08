@@ -5,4 +5,14 @@
     <color name="whiteboard_pen_blue">#FF0000FF</color>
     <color name="yellow_FFFFFF00">#FFFFFF00</color>
     <color name="black">#FF000000</color>
+
+    <color name="whiteboard_000000">#000000</color>
+    <color name="whiteboard_929699">#929699</color>
+    <color name="whiteboard_e62223">#e62223</color>
+    <color name="whiteboard_ff6a0c">#ff6a0c</color>
+    <color name="whiteboard_f7b500">#f7b500</color>
+    <color name="whiteboard_00be50">#00be50</color>
+    <color name="whiteboard_43d7b5">#43d7b5</color>
+    <color name="whiteboard_006fff">#006fff</color>
+    <color name="whiteboard_6236ff">#6236ff</color>
 </resources>
