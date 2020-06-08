@@ -18,20 +18,20 @@
         android:layout_height="wrap_content">
         <ImageButton
             android:id="@+id/bt_undo_write"
-            android:src="@drawable/ic_undo"
+            android:src="@drawable/whiteboard_ic_undo"
             android:layout_marginRight="20dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@color/yellow_FFFFFF00"
-            android:text="@string/cancel_write"/>
+            android:text="@string/whiteboard_cancel_write"/>
 
         <ImageButton
             android:id="@+id/bt_redo_write"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_redo"
+            android:src="@drawable/whiteboard_ic_redo"
             android:background="@color/yellow_FFFFFF00"
-            android:text="@string/resume_write"/>
+            android:text="@string/whiteboard_resume_write"/>
     </LinearLayout>
 
 

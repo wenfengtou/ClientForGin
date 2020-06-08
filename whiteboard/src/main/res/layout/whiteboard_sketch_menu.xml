@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_sketch_menu"
     android:layout_width="wrap_content"
-    android:background="@color/pen_green"
+    android:background="@color/whiteboard_pen_green"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -10,13 +10,13 @@
         android:visibility="gone"
         android:layout_width="@dimen/sw_50dp"
         android:layout_height="@dimen/sw_50dp"
-        android:background="@drawable/ic_exit"/>
+        android:background="@drawable/whiteboard_ic_exit"/>
 
     <ImageView
         android:id="@+id/iv_pen"
         android:layout_width="@dimen/sw_50dp"
         android:layout_height="@dimen/sw_50dp"
-        android:background="@drawable/ic_pen_unpressed"/>
+        android:background="@drawable/whiteboard_ic_pen_unpressed"/>
 
 
     <LinearLayout
@@ -29,32 +29,32 @@
             android:id="@+id/iv_eraser"
             android:layout_width="@dimen/sw_50dp"
             android:layout_height="@dimen/sw_50dp"
-            android:background="@drawable/ic_eraser_unpressed"/>
+            android:background="@drawable/whiteboard_ic_eraser_unpressed"/>
 
         <ImageView
             android:id="@+id/iv_clear_sketch"
             android:layout_width="@dimen/sw_50dp"
             android:layout_height="@dimen/sw_50dp"
-            android:background="@drawable/ic_trash"/>
+            android:background="@drawable/whiteboard_ic_trash"/>
 
 
         <ImageView
             android:id="@+id/iv_save_sketch"
             android:layout_width="@dimen/sw_50dp"
             android:layout_height="@dimen/sw_50dp"
-            android:background="@drawable/ic_save"/>
+            android:background="@drawable/whiteboard_ic_save"/>
 
         <ImageView
             android:id="@+id/iv_undo"
             android:layout_width="@dimen/sw_50dp"
             android:layout_height="@dimen/sw_50dp"
-            android:background="@drawable/ic_undo"/>
+            android:background="@drawable/whiteboard_ic_undo"/>
 
         <ImageView
             android:id="@+id/iv_redo"
             android:layout_width="@dimen/sw_50dp"
             android:layout_height="@dimen/sw_50dp"
-            android:background="@drawable/ic_redo"/>
+            android:background="@drawable/whiteboard_ic_redo"/>
     </LinearLayout>
 
 
@@ -63,6 +63,6 @@
         android:visibility="gone"
         android:layout_width="@dimen/sw_50dp"
         android:layout_height="@dimen/sw_50dp"
-        android:background="@drawable/ic_expand"/>
+        android:background="@drawable/whiteboard_ic_expand"/>
 
 </LinearLayout>

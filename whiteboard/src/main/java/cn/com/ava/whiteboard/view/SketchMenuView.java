@@ -128,9 +128,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         penColorRv.setLayoutManager(new GridLayoutManager(mContext, 3));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_red), R.drawable.paintcolor_red));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_green), R.drawable.paintcolor_green));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.pen_blue), R.drawable.paintcolor_blue));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_red), R.drawable.paintcolor_red));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_green), R.drawable.paintcolor_green));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_pen_blue), R.drawable.paintcolor_blue));
         colorSelectAdapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
         colorSelectAdapter.setPenColorBeanList(penColorBeans);
         colorSelectAdapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
@@ -220,13 +220,13 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private void initDialog(Context context) {
         AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setMessage("清空画板？");
-        builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.whiteboard_sure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mSketchView.clear();
             }
         });
-        builder.setNegativeButton(R.string.cancel, null);
+        builder.setNegativeButton(R.string.whiteboard_cancel, null);
         mClearAlertDialog = builder.create();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
@@ -359,26 +359,26 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mLastMenuStatus = mMenuStatus;
         mMenuStatus = status;
         if (status == MENU_STATUS_INIT) {
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
             mExitSketchIv.setVisibility(GONE);
             mExpandIv.setVisibility(GONE);
             mExpandll.setVisibility(GONE);
         } else if (status == MENU_STATUS_EXPANDED) {
             mExpandll.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_unexpand));
+            mExpandIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_unexpand));
         } else if (status == MENU_STATUS_UNEXPANDED) {
             mExitSketchIv.setVisibility(VISIBLE);
             mExpandll.setVisibility(GONE);
             mExpandIv.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.drawable.ic_expand));
+            mExpandIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_expand));
         }
 
         if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
-            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_pressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_unpressed));
         } else if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
-            mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_pressed));
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_pressed));
+            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
         }
     }
 
@@ -395,16 +395,16 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 if (mMenuStatus == MENU_STATUS_INIT) {
                     setMenuStatus(MENU_STATUS_UNEXPANDED);
                 }
-                mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_pressed));
-                mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_unpressed));
+                mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_pressed));
+                mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
             } else if (id == R.id.iv_eraser) {
                 dismissPenPopupWindow();
                 if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
                     toggleEraserPopupWindow();
                 }
-                mEraserIv.setBackground(getResources().getDrawable(R.drawable.ic_eraser_pressed));
-                mPenIv.setBackground(getResources().getDrawable(R.drawable.ic_pen_unpressed));
+                mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_pressed));
+                mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
             }
         } else {
@@ -418,7 +418,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             } else if (id == R.id.iv_save_sketch) {
                 Bitmap bitmap = mSketchView.getBitmap();
                 //FileUtil.saveBitmap("sdcard/sket.png", bitmap);
-                Toast.makeText(mContext, R.string.save_sketch_success, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.whiteboard_save_sketch_success, Toast.LENGTH_LONG).show();
             } else if (id == R.id.iv_undo) {
                 mSketchView.undo();
             } else if (id == R.id.iv_redo) {

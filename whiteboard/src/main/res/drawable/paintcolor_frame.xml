@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <stroke android:color="@color/pen_blue" android:width="@dimen/sw_1dp"/>
+    <stroke android:color="@color/whiteboard_pen_blue" android:width="@dimen/sw_1dp"/>
     <corners android:radius="@dimen/sw_5dp"/>
     <size android:height="@dimen/sw_34dp"
         android:width= "@dimen/sw_34dp"/>

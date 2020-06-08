@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">WhiteBoard</string>
-    <string name="cancel_write">撤销</string>
-    <string name="resume_write">恢复</string>
-    <string name="pen">画笔</string>
-    <string name="eraser">橡皮擦</string>
-    <string name="clear_sketch">清空</string>
-    <string name="save_sketch">保存</string>
-    <string name="exit_sketch">退出</string>
-    <string name="save_sketch_success">保存成功</string>
-    <string name="clear_sketch_alert">清空画板？</string>
-    <string name="sure">确定</string>
-    <string name="cancel">取消</string>
-    <string name="rotate_alert">开启了自动转屏，转屏后笔迹会清空！</string>
-    <string name="no_ask_again">不再提醒</string>
+    <string name="whiteboard_app_name">WhiteBoard</string>
+    <string name="whiteboard_cancel_write">撤销</string>
+    <string name="whiteboard_resume_write">恢复</string>
+    <string name="whiteboard_pen">画笔</string>
+    <string name="whiteboard_eraser">橡皮擦</string>
+    <string name="whiteboard_clear_sketch">清空</string>
+    <string name="whiteboard_save_sketch">保存</string>
+    <string name="whiteboard_exit_sketch">退出</string>
+    <string name="whiteboard_save_sketch_success">保存成功</string>
+    <string name="whiteboard_clear_sketch_alert">清空画板？</string>
+    <string name="whiteboard_sure">确定</string>
+    <string name="whiteboard_cancel">取消</string>
+    <string name="whiteboard_rotate_alert">开启了自动转屏，转屏后笔迹会清空！</string>
+    <string name="whiteboard_no_ask_again">不再提醒</string>
 </resources>
