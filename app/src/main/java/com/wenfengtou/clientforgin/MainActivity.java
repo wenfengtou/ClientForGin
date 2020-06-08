@@ -162,16 +162,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        char weight = (char) (Character.MAX_VALUE * 0.53);
-        byte heightByte = (byte) (weight >> 8);
-        byte lowtByte = (byte) (weight & 0xFF);
-        String heightString = String.format("%x", heightByte);
-        String lowString = String.format("%x", lowtByte);
+        int mask = 0x000000FF;
+        int weight = (int) ((Integer.MAX_VALUE * 1));
+        byte FourByte = (byte) ((weight >> 24) & mask);
+        byte ThreeByte = (byte) ((weight >> 16) & mask);
+        byte TwoByte = (byte) ((weight >> 8) & mask);
+        byte OneByte = (byte) (weight & mask);
+        String FourString = String.format("%2x", FourByte);
+        String ThreeString = String.format("%2x", ThreeByte);
+        String TwoString = String.format("%2x", TwoByte);
+        String OneString = String.format("%2x", OneByte);
         Log.i("wenfengtou", "onResume getConfiguration = " + getResources().getConfiguration());
         byte[] cmd = new byte[3];
         cmd[0] = 0x34;
-        cmd[1] = heightByte;
-        cmd[2] = lowtByte;
         Log.i("wenfengtou", "onResume abc = " + getResources().getConfiguration());
 
         /*
