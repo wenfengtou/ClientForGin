@@ -65,19 +65,6 @@ public class MainActivity extends AppCompatActivity {
         b2tv.setOnClickListener((View view) ->  {
                 //b1tv.setVisibility(View.GONE);
 
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (Settings.canDrawOverlays(MainActivity.this)) {
-                        Intent intent = new Intent(MainActivity.this, FloatingService.class);
-                        intent.putExtra("config", getResources().getConfiguration());
-                        startService(intent);
-                    } else {
-                        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
-                    }
-                } else {
-                    startService(new Intent(MainActivity.this, FloatingService.class));
-                }
-
                // MainActivity.this.startActivity(new Intent(MainActivity.this, ScreenRecordActivity.class));
             });
 
@@ -106,7 +93,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(MainActivity.this)) {
+                Intent intent = new Intent(MainActivity.this, FloatingService.class);
+                intent.putExtra("config", getResources().getConfiguration());
+                startService(intent);
+            } else {
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
+            }
+        } else {
+            startService(new Intent(MainActivity.this, FloatingService.class));
+        }
         /*
         OkGo.<String>get("http://192.168.43.125:8000")                            // 请求方式和请求url
                 .tag(this)                       // 请求的 tag, 主要用于取消对应的请求
@@ -177,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         cmd[0] = 0x34;
         Log.i("wenfengtou", "onResume abc = " + getResources().getConfiguration());
 
+        float bb = getResources().getDimension(R.dimen.sw_34dp);
+        bb++;
         /*
         SizeUtil.getAreaScreen(this);
         SizeUtil.getAreaApplication(this);

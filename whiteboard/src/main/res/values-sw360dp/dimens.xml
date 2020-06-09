@@ -1303,4 +1303,9 @@
   <dimen name="sw_98sp">98.0sp</dimen>
   <dimen name="sw_99sp">99.0sp</dimen>
   <dimen name="sw_100sp">100.0sp</dimen>
+  <dimen name="paint_size1">3dp</dimen>
+  <dimen name="paint_size2">5dp</dimen>
+  <dimen name="paint_size3">7dp</dimen>
+  <dimen name="paint_size4">9dp</dimen>
+  <dimen name="paint_size5">11dp</dimen>
 </resources>

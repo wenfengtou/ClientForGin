@@ -22,7 +22,6 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import cn.com.ava.whiteboard.R;
 import cn.com.ava.whiteboard.adapter.PenColorBean;
 import cn.com.ava.whiteboard.adapter.PenColorSelectAdapter;
+import cn.com.ava.whiteboard.adapter.SpacesItemDecoration;
 import cn.com.ava.whiteboard.adapter.StrokeWidthBean;
 import cn.com.ava.whiteboard.adapter.StrokeWidthSelectAdapter;
 import cn.com.ava.whiteboard.painttool.PaintTool;
@@ -69,6 +69,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private AlertDialog mClearAlertDialog;
     private PopupWindow mPenPopupWindow;
     private int mPenPopupWindowHeight;
+    private int mPenPopupWindowWidth;
     private PopupWindow mEraserPopupWindow;
     private int mEraserPopupWindowHeight;
 
@@ -122,11 +123,15 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
 
     private void initPenPopupWindow() {
-        View penToolView = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_popupwindow_pen, null, true);
+        View penToolView = LayoutInflater.from(mContext).inflate(R.layout.whiteboard_popupwindow_pen, null, false);
+
         final int paintToolType = PaintTool.PAINT_TOOL_PEN;
+
+        int leftRightMargin = getResources().getDimensionPixelSize(R.dimen.sw_5dp);
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
         penColorRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
+        //penColorRv.setLayoutManager(new GridLayoutManager(mContext, 8));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
         penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_000000), R.drawable.whiteboard_paint_color_000000));
@@ -147,16 +152,23 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 colorSelectAdapter.setCurrentColor(penColorBean.color);
             }
         });
-        penColorRv.setHasFixedSize(true);
+
         penColorRv.setAdapter(colorSelectAdapter);
+        //设置item之间的间隔
+        penColorRv.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen.sw_5dp), leftRightMargin));
+
 
         //大小选择
         final RecyclerView penSizeRv = penToolView.findViewById(R.id.rv_pen_size);
-        penSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
+        penSizeRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
+        //penSizeRv.setLayoutManager(new GridLayoutManager(mContext, 4));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level1_pressed, R.drawable.paintsize_level1_unpressed, 10));
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 30));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size1_pressed, R.drawable.whiteboard_paint_size1_unpressed, getResources().getDimensionPixelSize(R.dimen.paint_size1)));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size2_pressed, R.drawable.whiteboard_paint_size2_unpressed, getResources().getDimensionPixelSize(R.dimen.paint_size2)));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size3_pressed, R.drawable.whiteboard_paint_size3_unpressed, getResources().getDimensionPixelSize(R.dimen.paint_size3)));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size4_pressed, R.drawable.whiteboard_paint_size4_unpressed, getResources().getDimensionPixelSize(R.dimen.paint_size4)));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size5_pressed, R.drawable.whiteboard_paint_size5_unpressed, getResources().getDimensionPixelSize(R.dimen.paint_size5)));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {
@@ -168,13 +180,20 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         });
         penSizeRv.setAdapter(sizeSelectAdapter);
 
-
-        mPenPopupWindow = new PopupWindow(penToolView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         penToolView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
         mPenPopupWindowHeight = penToolView.getMeasuredHeight();
+        mPenPopupWindowWidth = penToolView.getMeasuredWidth();
+
+        //测量完之后，设置画笔大小RecyclerView的间距，使其均匀分布
+        int penSizeRvItemWidth = getResources().getDimensionPixelSize(R.dimen.sw_34dp);
+        int penSizeRvItemWidthSum = penSizeRvItemWidth * sizeSelectAdapter.getItemCount();
+        int space = (mPenPopupWindowWidth - penSizeRvItemWidthSum - 2 * leftRightMargin)/(sizeSelectAdapter.getItemCount() - 1);
+        penSizeRv.addItemDecoration(new SpacesItemDecoration(space, leftRightMargin));
+
+        //显示popupWindow
+        mPenPopupWindow = new PopupWindow(penToolView, mPenPopupWindowWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
         mPenPopupWindow.setFocusable(false);
         mPenPopupWindow.setOutsideTouchable(false);
-
         mPenPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -193,11 +212,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         final int paintToolType = PaintTool.PAINT_TOOL_ERASER;
         //大小选择
         final RecyclerView eraserSizeRv = eraseToolView.findViewById(R.id.rv_eraser_size);
-        eraserSizeRv.setLayoutManager(new GridLayoutManager(mContext, 3));
+        eraserSizeRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level1_pressed, R.drawable.paintsize_level1_unpressed, 10));
-        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.paintsize_level2_pressed, R.drawable.paintsize_level2_unpressed, 120));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size1_pressed, R.drawable.whiteboard_paint_size1_unpressed, 10));
+        strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_paint_size2_pressed, R.drawable.whiteboard_paint_size2_unpressed, 120));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {

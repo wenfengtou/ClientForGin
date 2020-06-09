@@ -45,6 +45,7 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
                 holder.mColorIv.setBackground(null);
             }
 
+            final ImageView colorIv = holder.mColorIv;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

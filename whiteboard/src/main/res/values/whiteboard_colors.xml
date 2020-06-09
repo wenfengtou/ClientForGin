@@ -6,6 +6,10 @@
     <color name="yellow_FFFFFF00">#FFFFFF00</color>
     <color name="black">#FF000000</color>
 
+    <color name="whiteboard_color_popupwindow_divider">#F8F8F8</color>
+
+
+    <!-- 选色板的可选颜色 -->
     <color name="whiteboard_000000">#000000</color>
     <color name="whiteboard_929699">#929699</color>
     <color name="whiteboard_e62223">#e62223</color>
@@ -15,4 +19,6 @@
     <color name="whiteboard_43d7b5">#43d7b5</color>
     <color name="whiteboard_006fff">#006fff</color>
     <color name="whiteboard_6236ff">#6236ff</color>
+
+
 </resources>
