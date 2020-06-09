@@ -1,6 +1,7 @@
 package cn.com.ava.whiteboard.setting;
 
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 
 /**
@@ -12,6 +13,11 @@ public abstract class PaintSetting {
     protected int mColor;
     protected PorterDuff.Mode mPorterDuffMode;
     protected int mShape;
+    protected Context mContext;
+
+    public PaintSetting(Context context) {
+        mContext = context;
+    }
 
     public int getStrokeWidth() {
         return mStrokeWidth;

@@ -22,7 +22,6 @@
             android:layout_marginRight="20dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@color/yellow_FFFFFF00"
             android:text="@string/whiteboard_cancel_write"/>
 
         <ImageButton
@@ -30,7 +29,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/whiteboard_ic_redo"
-            android:background="@color/yellow_FFFFFF00"
             android:text="@string/whiteboard_resume_write"/>
     </LinearLayout>
 

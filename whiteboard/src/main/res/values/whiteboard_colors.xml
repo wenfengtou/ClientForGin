@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="whiteboard_pen_red">#FFFF0000</color>
-    <color name="whiteboard_pen_green">#FF00FF00</color>
-    <color name="whiteboard_pen_blue">#FF0000FF</color>
-    <color name="yellow_FFFFFF00">#FFFFFF00</color>
-    <color name="black">#FF000000</color>
+
+    <color name="whiteboard_pen_frame">#FF0000FF</color>
+    <color name="whiteboard_erase_circle">#FF0000FF</color>
+    <color name="whiteboard_choose_unpressed">#000000</color>
+    <color name="whiteboard_choose_pressed">#FF0000FF</color>
 
     <color name="whiteboard_color_popupwindow_divider">#F8F8F8</color>
 

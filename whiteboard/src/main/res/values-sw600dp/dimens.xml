@@ -1303,9 +1303,12 @@
 	<dimen name="sw_98sp">163.37sp</dimen>
 	<dimen name="sw_99sp">165.03sp</dimen>
 	<dimen name="sw_100sp">166.7sp</dimen>
-	<dimen name="paint_size1">5dp</dimen>
-	<dimen name="paint_size2">8.3dp</dimen>
-	<dimen name="paint_size3">11.7dp</dimen>
-	<dimen name="paint_size4">15dp</dimen>
-	<dimen name="paint_size5">18.4dp</dimen>
+	<dimen name="pen_size1">5dp</dimen>
+	<dimen name="pen_size2">11.7dp</dimen>
+	<dimen name="pen_size3">16.7dp</dimen>
+	<dimen name="pen_size4">23.4dp</dimen>
+	<dimen name="pen_size5">28.4dp</dimen>
+	<dimen name="eraser_size1">25dp</dimen>
+	<dimen name="eraser_size2">50.1dp</dimen>
+	<dimen name="eraser_size3">75.2dp</dimen>
 </resources>

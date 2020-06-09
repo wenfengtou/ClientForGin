@@ -107,33 +107,33 @@ public class SketchView extends View implements View.OnTouchListener {
     public int getPaintToolColor(int paintToolType) {
         int paintToolColor = 0;
         if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
-            paintToolColor = PenSetting.getInstance().getColor();
+            paintToolColor = PenSetting.getInstance(getContext()).getColor();
         } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
-            paintToolColor = EraserSetting.getInstance().getColor();
+            paintToolColor = EraserSetting.getInstance(getContext()).getColor();
         }
         return paintToolColor;
     }
 
     public void setPaintToolColor(int paintToolType, int color) {
         if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
-            PenSetting.getInstance().setColor(color);
+            PenSetting.getInstance(getContext()).setColor(color);
         }
     }
 
     public void setPaintToolStrokeWidth(int paintToolType, int size) {
         if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
-            PenSetting.getInstance().setStrokeWidth(size);
+            PenSetting.getInstance(getContext()).setStrokeWidth(size);
         } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
-            EraserSetting.getInstance().setStrokeWidth(size);
+            EraserSetting.getInstance(getContext()).setStrokeWidth(size);
         }
     }
 
     public int getPaintToolStrokeWidth(int paintToolType) {
         int paintToolStrokeWidth = 0;
         if (paintToolType == PaintTool.PAINT_TOOL_PEN) {
-            paintToolStrokeWidth = PenSetting.getInstance().getStrokeWidth();
+            paintToolStrokeWidth = PenSetting.getInstance(getContext()).getStrokeWidth();
         } else if (paintToolType == PaintTool.PAINT_TOOL_ERASER) {
-            paintToolStrokeWidth = EraserSetting.getInstance().getStrokeWidth();
+            paintToolStrokeWidth = EraserSetting.getInstance(getContext()).getStrokeWidth();
         }
         return paintToolStrokeWidth;
     }
@@ -230,7 +230,7 @@ public class SketchView extends View implements View.OnTouchListener {
         }
         if (mPaintToolType == PaintTool.PAINT_TOOL_ERASER) {
             if (mShape.getState() != Shape.STATE_UP) {
-                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), 60, EraserSetting.getInstance().getCirclePaint());
+                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), EraserSetting.getInstance(getContext()).getStrokeWidth()/2, EraserSetting.getInstance(getContext()).getCirclePaint());
             }
         }
         /*
@@ -313,9 +313,9 @@ public class SketchView extends View implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
 
                 if (mPaintToolType == PaintTool.PAINT_TOOL_PEN) {
-                    mPaintTool = new Pen(PenSetting.getInstance());
+                    mPaintTool = new Pen(PenSetting.getInstance(getContext()));
                 } else {
-                    mPaintTool = new Eraser(EraserSetting.getInstance());
+                    mPaintTool = new Eraser(EraserSetting.getInstance(getContext()));
                 }
 
                 mShape = Shape.createShapeByType(mShapeType);

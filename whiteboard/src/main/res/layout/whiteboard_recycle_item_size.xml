@@ -7,10 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_size"
-        android:layout_width="@dimen/sw_34dp"
-        android:layout_height="@dimen/sw_34dp"
-        android:src="@drawable/whiteboard_paint_size1_unpressed"
+        android:layout_width="@dimen/sw_35dp"
+        android:layout_height="@dimen/sw_35dp"
+        android:src="@drawable/whiteboard_pen_size1_unpressed"
         android:rotation="-45"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

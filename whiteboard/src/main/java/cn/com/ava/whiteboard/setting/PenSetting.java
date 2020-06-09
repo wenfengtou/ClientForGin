@@ -1,14 +1,20 @@
 package cn.com.ava.whiteboard.setting;
 
-import android.graphics.Color;
+import android.content.Context;
+
+import cn.com.ava.whiteboard.R;
 
 public class PenSetting extends PaintSetting {
 
     private static PenSetting mInstance;
 
-    public static PenSetting getInstance() {
+    private PenSetting(Context context) {
+        super(context);
+    }
+
+    public static PenSetting getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new PenSetting();
+            mInstance = new PenSetting(context);
             mInstance.reset();
         }
         return mInstance;
@@ -16,8 +22,8 @@ public class PenSetting extends PaintSetting {
 
     public void reset() {
         mPorterDuffMode = null;
-        mStrokeWidth = 15;
-        mColor = Color.RED;
+        mStrokeWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.pen_size3);
+        mColor = mContext.getResources().getColor(R.color.whiteboard_000000);
     }
 }
 
