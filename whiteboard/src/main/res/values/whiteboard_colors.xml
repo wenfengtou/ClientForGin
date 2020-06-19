@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="whiteboard_pen_frame">#FF0000FF</color>
+    <color name="whiteboard_pen_frame">#1A63B2</color>
     <color name="whiteboard_erase_circle">#FF0000FF</color>
     <color name="whiteboard_choose_unpressed">#000000</color>
     <color name="whiteboard_choose_pressed">#FF0000FF</color>
+    <color name="whiteboard_color_size_round">#CCCCCC</color>
+    <color name="whiteboard_color_size_line">#CCCCCC</color>
 
-    <color name="whiteboard_color_popupwindow_divider">#F8F8F8</color>
+    <color name="whiteboard_color_popup_window_divider">#F8F8F8</color>
+    <color name="whiteboard_color_popup_window_background">#802B292A</color>
 
-
+    <color name="whiteboard_pen_color_background_pressed">#FFFFFF</color>
     <!-- 选色板的可选颜色 -->
     <color name="whiteboard_000000">#000000</color>
     <color name="whiteboard_929699">#929699</color>

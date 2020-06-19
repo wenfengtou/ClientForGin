@@ -38,11 +38,11 @@ public class StrokeWidthSelectAdapter extends RecyclerView.Adapter<StrokeWidthSe
     public void onBindViewHolder(@NonNull StrokeWidthSelectViewHolder holder, final int position) {
         if (mStrokeWidthBeanList != null && mStrokeWidthBeanList.size() > position) {
             StrokeWidthBean strokeWidthBean = mStrokeWidthBeanList.get(position);
-
+            holder.mStrokeWidthIv.setImageResource(strokeWidthBean.drawableId);
             if (mCurrentStrokeWidth == strokeWidthBean.strokeWidth) {
-                holder.mStrokeWidthIv.setImageResource(strokeWidthBean.pressedDrawableId);
+                holder.mStrokeWidthIv.setBackground(mContext.getDrawable(R.drawable.whiteboard_eraser_size_background_pressed));
             } else {
-                holder.mStrokeWidthIv.setImageResource(strokeWidthBean.unPressedDrawableId);
+                holder.mStrokeWidthIv.setBackground(null);
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

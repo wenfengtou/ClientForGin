@@ -1,6 +1,7 @@
 package cn.com.ava.whiteboard.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class PenColorSelectAdapter extends RecyclerView.Adapter<PenColorSelectAd
             PenColorBean penColorBean = mPenColorBeanList.get(position);
             holder.mColorIv.setImageResource(penColorBean.drawableId);
             if (mCurrentColor == penColorBean.color) {
-                holder.mColorIv.setBackground(mContext.getDrawable(R.drawable.whiteboard_pen_color_frame));
+                holder.mColorIv.setBackground(mContext.getDrawable(R.drawable.whiteboard_pen_color_background_pressed));
             } else {
                 holder.mColorIv.setBackground(null);
             }

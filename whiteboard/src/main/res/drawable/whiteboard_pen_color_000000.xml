@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/whiteboard_000000"/>
-    <corners android:radius="@dimen/sw_5dp"/>
-    <size android:height="@dimen/sw_30dp"
-        android:width= "@dimen/sw_30dp"/>
+    <corners android:radius="@dimen/sw_3dp"/>
+    <size android:height="@dimen/sw_20dp"
+        android:width= "@dimen/sw_20dp"/>
 </shape>

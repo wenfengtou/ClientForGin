@@ -1309,6 +1309,8 @@
 	<dimen name="pen_size4">21dp</dimen>
 	<dimen name="pen_size5">25.5dp</dimen>
 	<dimen name="eraser_size1">22.5dp</dimen>
-	<dimen name="eraser_size2">45dp</dimen>
-	<dimen name="eraser_size3">67.5dp</dimen>
+	<dimen name="eraser_size2">34.5dp</dimen>
+	<dimen name="eraser_size3">46.5dp</dimen>
+	<dimen name="eraser_size4">58.5dp</dimen>
+	<dimen name="eraser_size5">70.5dp</dimen>
 </resources>

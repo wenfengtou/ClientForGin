@@ -9,7 +9,6 @@
         android:id="@+id/iv_color"
         android:layout_width="@dimen/sw_34dp"
         android:layout_height="@dimen/sw_34dp"
-        android:padding="@dimen/sw_4dp"
         android:scaleType="centerInside"
         android:src="@drawable/whiteboard_pen_color_000000"
         android:background="@drawable/whiteboard_pen_color_000000"

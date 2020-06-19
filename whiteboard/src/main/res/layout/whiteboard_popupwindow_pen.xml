@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFFFF"
+    android:background="@drawable/whiteboard_popup_window_background"
     android:orientation="vertical">
 
 
@@ -12,12 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/sw_5dp"
         android:layout_marginTop="@dimen/sw_5dp"/>
-
-    <View
-        android:background="@color/whiteboard_color_popupwindow_divider"
-        android:padding="@dimen/sw_1dp"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/sw_2dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_pen_color"

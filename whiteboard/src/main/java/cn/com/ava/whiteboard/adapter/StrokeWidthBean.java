@@ -2,13 +2,11 @@ package cn.com.ava.whiteboard.adapter;
 
 public class StrokeWidthBean {
 
-    public int pressedDrawableId;
-    public int unPressedDrawableId;
     public int strokeWidth;
+    public int drawableId;
 
-    public StrokeWidthBean(int pressedDrawableId, int unPressedDrawableId, int strokeWidth) {
-        this.pressedDrawableId = pressedDrawableId;
-        this.unPressedDrawableId = unPressedDrawableId;
+    public StrokeWidthBean(int strokeWidth, int drawableId) {
         this.strokeWidth = strokeWidth;
+        this.drawableId = drawableId;
     }
 }
