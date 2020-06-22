@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Process;
 import android.util.AttributeSet;
@@ -37,6 +40,8 @@ import cn.com.ava.whiteboard.adapter.PenColorSelectAdapter;
 import cn.com.ava.whiteboard.adapter.SpacesItemDecoration;
 import cn.com.ava.whiteboard.adapter.StrokeWidthBean;
 import cn.com.ava.whiteboard.adapter.StrokeWidthSelectAdapter;
+import cn.com.ava.whiteboard.drawable.SharpDrawable;
+import cn.com.ava.whiteboard.drawable.SharpView;
 import cn.com.ava.whiteboard.painttool.PaintTool;
 
 public class SketchMenuView extends LinearLayout implements View.OnClickListener {
@@ -134,6 +139,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mExpandIv.setOnClickListener(this);
         initDialog(context);
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
     }
 
 
@@ -322,15 +328,35 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             initPenPopupWindow();
         }
 
-        int[] location = new int[2];
-        mPenLl.getLocationInWindow(location);
-        if (location[1] < mPenPopupWindowHeight) {
-            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mPenLl.getHeight());
-            mPenDownTriangleIv.setVisibility(VISIBLE);
+        int[] penLocation = new int[2];
+        mPenLl.getLocationInWindow(penLocation);
+        SharpView.ArrowDirection direction;
+        if (penLocation[1] < mPenPopupWindowHeight) {
+            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] + mPenLl.getHeight());
+            direction = SharpView.ArrowDirection.TOP;
+            //mPenDownTriangleIv.setVisibility(VISIBLE);
         } else {
-            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - mPenPopupWindowHeight);
-            mPenUpTriangleIv.setVisibility(VISIBLE);
+            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] - mPenPopupWindowHeight);
+            direction = SharpView.ArrowDirection.BOTTOM;
+            //mPenUpTriangleIv.setVisibility(VISIBLE);
         }
+
+        int penLlHalfwidth = mPenLl.getMeasuredWidth()/2;
+
+        SharpDrawable bd = new SharpDrawable(GradientDrawable.Orientation.LEFT_RIGHT, null);
+        bd.setSharpSize(20);
+        bd.setBgColor(Color.WHITE);
+        bd.setArrowDirection(direction);
+        bd.setCornerRadius(10);
+        bd.setRelativePosition((float)penLlHalfwidth/(float)(mPenPopupWindowWidth));
+        if (penLocation[0] + mPenPopupWindowWidth > mMaxRight) {
+            Log.i(TAG, "max over");
+            int penMarginRight = mMaxRight - (penLocation[0] +penLlHalfwidth);
+            bd.setRelativePosition(1 - (float)penMarginRight/(float)(mPenPopupWindowWidth));
+        }
+        mPenPopupWindow.getContentView().setBackground(bd);
+
+
     }
 
     /**
@@ -340,8 +366,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         if (mPenPopupWindow != null && mPenPopupWindow.isShowing()) {
             mPenPopupWindow.dismiss();
         }
-        mPenUpTriangleIv.setVisibility(INVISIBLE);
-        mPenDownTriangleIv.setVisibility(INVISIBLE);
+        //mPenUpTriangleIv.setVisibility(INVISIBLE);
+        //mPenDownTriangleIv.setVisibility(INVISIBLE);
     }
 
     /**
@@ -370,10 +396,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mEraserLl.getLocationInWindow(location);
         if (location[1] < mEraserPopupWindowHeight) {
             mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mEraserLl.getHeight());
-            mEraserDownTriangleIv.setVisibility(VISIBLE);
+            //mEraserDownTriangleIv.setVisibility(VISIBLE);
         } else {
             mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - mEraserPopupWindowHeight);
-            mEraserUpTriangleIv.setVisibility(VISIBLE);
+           // mEraserUpTriangleIv.setVisibility(VISIBLE);
         }
     }
 
@@ -383,8 +409,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private void dismissEraserPopupWindow() {
         if (mEraserPopupWindow != null && mEraserPopupWindow.isShowing()) {
             mEraserPopupWindow.dismiss();
-            mEraserUpTriangleIv.setVisibility(INVISIBLE);
-            mEraserDownTriangleIv.setVisibility(INVISIBLE);
+           // mEraserUpTriangleIv.setVisibility(INVISIBLE);
+           // mEraserDownTriangleIv.setVisibility(INVISIBLE);
         }
     }
 

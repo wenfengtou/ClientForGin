@@ -27,7 +27,7 @@
             android:id="@+id/iv_pen_up_triangle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/whiteboard_inverted_triangle"
             />
@@ -42,7 +42,7 @@
             android:id="@+id/iv_pen_down_triangle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/whiteboard_regular_triangle"
             />
@@ -69,7 +69,7 @@
                 android:id="@+id/iv_eraser_up_triangle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/whiteboard_inverted_triangle"
                 />
@@ -84,7 +84,7 @@
                 android:id="@+id/iv_eraser_down_triangle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/whiteboard_regular_triangle"
                 />
