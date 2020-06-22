@@ -8,16 +8,55 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 
-import androidx.annotation.ColorInt;
-
+//from https://github.com/zengzhaoxing/SharpView
 public class SharpDrawable extends GradientDrawable {
 
-    enum ArrowDirection {
-        LEFT, TOP, RIGHT, BOTTOM
-    }
-    public SharpDrawable(Orientation orientation, @ColorInt int[] colors) {
-        super(orientation, colors);
+    public static final int ARROW_DIRECTION_TOP = 0;
+    public static final int ARROW_DIRECTION_BOTTOM = 1;
+
+    private float mSharpSize;
+
+    private int mBgColor;
+
+    private float mCornerRadius;
+
+    private int mArrowDirection;
+
+    private float mBorder;
+
+    private int mBorderColor;
+
+    /**
+     * from 0 to 1
+     */
+    private float mRelativePosition;
+
+    private Paint mPaint;
+
+    private RectF mRect;
+
+    private Path mPath;
+
+    private PointF[] mPointFs;
+
+    public SharpDrawable() {
+        super();
         init();
+    }
+
+    private void init() {
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setAntiAlias(true);
+        mRect = new RectF();
+        mPointFs = new PointF[3];
+        mPath = new Path();
+        mPointFs[0] = new PointF();
+        mPointFs[1] = new PointF();
+        mPointFs[2] = new PointF();
+    }
+
+    void setPaint(Paint paint) {
+        mPaint = paint;
     }
 
     public void setBgColor(int bgColor) {
@@ -30,7 +69,7 @@ public class SharpDrawable extends GradientDrawable {
         super.setCornerRadius(cornerRadius);
     }
 
-    public void setArrowDirection(SharpView.ArrowDirection arrowDirection) {
+    public void setArrowDirection(int arrowDirection) {
         mArrowDirection = arrowDirection;
     }
 
@@ -52,51 +91,6 @@ public class SharpDrawable extends GradientDrawable {
         mSharpSize = sharpSize;
     }
 
-    private float mSharpSize;
-
-    private int mBgColor;
-
-    private float mCornerRadius;
-
-    private SharpView.ArrowDirection mArrowDirection;
-
-    private float mBorder;
-
-    private int mBorderColor;
-
-    /**
-     * from 0 to 1
-     */
-    private float mRelativePosition;
-
-    void setPaint(Paint paint) {
-        mPaint = paint;
-    }
-
-    private Paint mPaint;
-
-    private RectF mRect;
-
-    private Path mPath;
-
-    private PointF[] mPointFs;
-
-    SharpDrawable() {
-        super();
-        init();
-    }
-
-    private void init() {
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setAntiAlias(true);
-        mRect = new RectF();
-        mPointFs = new PointF[3];
-        mPath = new Path();
-        mPointFs[0] = new PointF();
-        mPointFs[1] = new PointF();
-        mPointFs[2] = new PointF();
-    }
-
     @Override
     public void draw(Canvas canvas) {
         if (mSharpSize == 0) {
@@ -109,39 +103,19 @@ public class SharpDrawable extends GradientDrawable {
             int bottom = bounds.bottom;
             float length;
             switch (mArrowDirection) {
-                case LEFT:
-                    left += mSharpSize;
-                    length = Math.max(mRelativePosition * bounds.height() + bounds.top, mSharpSize + mCornerRadius);
-                    length = Math.min(length, bounds.height() - mSharpSize - mCornerRadius);
-                    mPointFs[0].set(bounds.left, length + bounds.top);
-                    mPointFs[1].set(left, mPointFs[0].y - mSharpSize);
-                    mPointFs[2].set(left, mPointFs[0].y + mSharpSize);
-                    mRect.set(left, top, right, bottom);
-                    break;
-                case TOP:
+                case ARROW_DIRECTION_TOP:
                     top += mSharpSize;
-                    length = Math.max(mRelativePosition * bounds.width() + bounds.top, mSharpSize + mCornerRadius);
-                    length = Math.min(length, bounds.width() - mSharpSize - mCornerRadius);
+                    length = mRelativePosition * bounds.width();
                     mPointFs[0].set(bounds.left + length, bounds.top);
-                    mPointFs[1].set(mPointFs[0].x - mSharpSize, top);
+                    mPointFs[1].set(mPointFs[0].x, top);
                     mPointFs[2].set(mPointFs[0].x + mSharpSize, top);
                     mRect.set(left, top, right, bottom);
                     break;
-                case RIGHT:
-                    right -= mSharpSize;
-                    length = Math.max(mRelativePosition * bounds.height() + bounds.top, mSharpSize + mCornerRadius);
-                    length = Math.min(length, bounds.height() - mSharpSize - mCornerRadius);
-                    mPointFs[0].set(bounds.right, length + bounds.top);
-                    mPointFs[1].set(right, mPointFs[0].y - mSharpSize);
-                    mPointFs[2].set(right, mPointFs[0].y + mSharpSize);
-                    mRect.set(left, top, right, bottom);
-                    break;
-                case BOTTOM:
+                case ARROW_DIRECTION_BOTTOM:
                     bottom -= mSharpSize;
-                    length = Math.max(mRelativePosition * bounds.width() + bounds.top, mSharpSize + mCornerRadius);
-                    length = Math.min(length, bounds.width() - mSharpSize - mCornerRadius);
-                    mPointFs[0].set(bounds.left + length, bounds.bottom);
-                    mPointFs[1].set(mPointFs[0].x - mSharpSize, bottom);
+                    length = mRelativePosition * bounds.width();
+                    mPointFs[0].set(bounds.left + length, bounds.bottom - mSharpSize * 0.3f);
+                    mPointFs[1].set(mPointFs[0].x, bottom);
                     mPointFs[2].set(mPointFs[0].x + mSharpSize, bottom);
                     mRect.set(left, top, right, bottom);
                     break;
@@ -153,6 +127,7 @@ public class SharpDrawable extends GradientDrawable {
             mPath.lineTo(mPointFs[2].x, mPointFs[2].y);
             mPath.lineTo(mPointFs[0].x, mPointFs[0].y);
             mPaint.setColor(mBgColor);
+            mPaint.setStrokeCap(Paint.Cap.ROUND);
             canvas.drawPath(mPath, mPaint);
         }
     }

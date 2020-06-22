@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="whiteboard_pen_frame">#1A63B2</color>
-    <color name="whiteboard_erase_circle">#FF0000FF</color>
-    <color name="whiteboard_choose_unpressed">#000000</color>
-    <color name="whiteboard_choose_pressed">#FF0000FF</color>
-    <color name="whiteboard_color_size_round">#CCCCCC</color>
-    <color name="whiteboard_color_size_line">#CCCCCC</color>
+    <!-- 画笔大小旋转圆圈颜色和连线颜色 -->
+    <color name="whiteboard_size_round_color">#CCCCCC</color>
+    <color name="whiteboard_size_line_color">#CCCCCC</color>
 
-    <color name="whiteboard_color_popup_window_divider">#F8F8F8</color>
-    <color name="whiteboard_color_popup_window_background">#802B292A</color>
+    <!-- PopupWindow背景色 -->
+    <color name="whiteboard_popup_window_background">#CC000000</color>
 
-    <color name="whiteboard_pen_color_background_pressed">#FFFFFF</color>
+    <!-- 选中的边框与背景色 -->
+    <color name="whiteboard_item_pressed_frame">#0F7BEE</color>
+    <color name="whiteboard_item_pressed_background">#FFFFFF</color>
+
+    <!-- 菜单背景色 -->
+    <color name="whiteboard_sketch_menu_background">#CC000000</color>
+
     <!-- 选色板的可选颜色 -->
-    <color name="whiteboard_000000">#000000</color>
-    <color name="whiteboard_929699">#929699</color>
-    <color name="whiteboard_e62223">#e62223</color>
-    <color name="whiteboard_ff6a0c">#ff6a0c</color>
-    <color name="whiteboard_f7b500">#f7b500</color>
-    <color name="whiteboard_00be50">#00be50</color>
-    <color name="whiteboard_43d7b5">#43d7b5</color>
-    <color name="whiteboard_006fff">#006fff</color>
-    <color name="whiteboard_6236ff">#6236ff</color>
-
+    <color name="whiteboard_ff3434">#ff3434</color>
+    <color name="whiteboard_ff6b1b">#ff6b1b</color>
+    <color name="whiteboard_f0bc08">#f0bc08</color>
+    <color name="whiteboard_56af2a">#56af2a</color>
+    <color name="whiteboard_1fa4ff">#1fa4ff</color>
 
 </resources>

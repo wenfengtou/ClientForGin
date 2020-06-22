@@ -18,7 +18,7 @@
         android:layout_height="wrap_content">
         <ImageButton
             android:id="@+id/bt_undo_write"
-            android:src="@drawable/whiteboard_ic_undo"
+            android:src="@mipmap/whiteboard_ic_undo_unpressed"
             android:layout_marginRight="20dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -28,7 +28,7 @@
             android:id="@+id/bt_redo_write"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/whiteboard_ic_redo"
+            android:src="@mipmap/whiteboard_ic_redo_unpressed"
             android:text="@string/whiteboard_resume_write"/>
     </LinearLayout>
 

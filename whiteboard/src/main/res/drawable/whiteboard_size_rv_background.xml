@@ -5,5 +5,5 @@
     <!--android:width的值必须要小于用它做背景的View的height-->
     <stroke
         android:width="@dimen/sw_1dp"
-        android:color="@color/whiteboard_color_size_round" />
+        android:color="@color/whiteboard_size_round_color" />
 </shape>

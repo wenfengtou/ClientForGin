@@ -45,7 +45,7 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
             View lastChildren = parent.getLayoutManager().getChildAt(parent.getAdapter().getItemCount() -1);
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(parent.getContext().getResources().getColor(R.color.whiteboard_color_size_line));
+            paint.setColor(parent.getContext().getResources().getColor(R.color.whiteboard_size_line_color));
             paint.setStrokeWidth(parent.getContext().getResources().getDimension(R.dimen.sw_1dp));
             float startX = firstChildren.getX() + firstChildren.getMeasuredWidth()/2;
             float endX = lastChildren.getX() + lastChildren.getMeasuredWidth()/2;

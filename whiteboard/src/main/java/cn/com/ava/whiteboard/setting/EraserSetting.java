@@ -30,7 +30,7 @@ public class EraserSetting extends PaintSetting {
         mColor = Color.TRANSPARENT;
         mCirclePaint = new Paint();
         mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mCirclePaint.setColor(mContext.getResources().getColor(R.color.whiteboard_choose_pressed));
+        mCirclePaint.setColor(mContext.getResources().getColor(R.color.whiteboard_size_round_color));
         //mCirclePaint.setStrokeCap(Paint.Cap.ROUND);
     }
 

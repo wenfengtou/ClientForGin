@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Path;
 import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Process;
 import android.util.AttributeSet;
@@ -41,7 +38,6 @@ import cn.com.ava.whiteboard.adapter.SpacesItemDecoration;
 import cn.com.ava.whiteboard.adapter.StrokeWidthBean;
 import cn.com.ava.whiteboard.adapter.StrokeWidthSelectAdapter;
 import cn.com.ava.whiteboard.drawable.SharpDrawable;
-import cn.com.ava.whiteboard.drawable.SharpView;
 import cn.com.ava.whiteboard.painttool.PaintTool;
 
 public class SketchMenuView extends LinearLayout implements View.OnClickListener {
@@ -50,13 +46,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private ImageView mExitSketchIv;
     private LinearLayout mPenLl;
     private ImageView mPenIv;
-    private ImageView mPenUpTriangleIv;
-    private ImageView mPenDownTriangleIv;
 
     private LinearLayout mEraserLl;
     private ImageView mEraserIv;
-    private ImageView mEraserUpTriangleIv;
-    private ImageView mEraserDownTriangleIv;
 
     private ImageView mClearSketchIv;
     private ImageView mSaveSketchIv;
@@ -116,12 +108,8 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mExitSketchIv = findViewById(R.id.iv_exit_sketch);
         mPenLl = findViewById(R.id.ll_pen);
         mPenIv = findViewById(R.id.iv_pen);
-        mPenUpTriangleIv = findViewById(R.id.iv_pen_up_triangle);
-        mPenDownTriangleIv = findViewById(R.id.iv_pen_down_triangle);
         mEraserLl = findViewById(R.id.ll_eraser);
         mEraserIv = findViewById(R.id.iv_eraser);
-        mEraserUpTriangleIv = findViewById(R.id.iv_eraser_up_triangle);
-        mEraserDownTriangleIv =findViewById(R.id.iv_eraser_down_triangle);
         mSaveSketchIv = findViewById(R.id.iv_save_sketch);
         mClearSketchIv = findViewById(R.id.iv_clear_sketch);
         mUndoIv = findViewById(R.id.iv_undo);
@@ -155,15 +143,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         //penColorRv.setLayoutManager(new GridLayoutManager(mContext, 8));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_000000), R.drawable.whiteboard_pen_color_000000));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_929699), R.drawable.whiteboard_pen_color_929699));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_e62223), R.drawable.whiteboard_pen_color_e62223));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_ff6a0c), R.drawable.whiteboard_pen_color_ff6a0c));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_f7b500), R.drawable.whiteboard_pen_color_f7b500));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_00be50), R.drawable.whiteboard_pen_color_00be50));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_43d7b5), R.drawable.whiteboard_pen_color_43d7b5));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_006fff), R.drawable.whiteboard_pen_color_006fff));
-        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_6236ff), R.drawable.whiteboard_pen_color_6236ff));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_ff3434), R.drawable.whiteboard_pen_color_ff3434));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_ff6b1b), R.drawable.whiteboard_pen_color_ff6b1b));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_f0bc08), R.drawable.whiteboard_pen_color_f0bc08));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_56af2a), R.drawable.whiteboard_pen_color_56af2a));
+        penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_1fa4ff), R.drawable.whiteboard_pen_color_1fa4ff));
         colorSelectAdapter.setCurrentColor(mSketchView.getPaintToolColor(paintToolType));
         colorSelectAdapter.setPenColorBeanList(penColorBeans);
         colorSelectAdapter.setOnItemClickListener(new PenColorSelectAdapter.OnItemClickListener() {
@@ -190,11 +174,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size3), R.drawable.whiteboard_paint_tool_size3));
         strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size4), R.drawable.whiteboard_paint_tool_size4));
         strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size5), R.drawable.whiteboard_paint_tool_size5));
-       // strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_pen_size1_pressed, R.drawable.whiteboard_pen_size1_unpressed, getResources().getDimensionPixelSize(R.dimen.pen_size1)));
-       // strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_pen_size2_pressed, R.drawable.whiteboard_pen_size2_unpressed, getResources().getDimensionPixelSize(R.dimen.pen_size2)));
-       // strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_pen_size3_pressed, R.drawable.whiteboard_pen_size3_unpressed, getResources().getDimensionPixelSize(R.dimen.pen_size3)));
-       // strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_pen_size4_pressed, R.drawable.whiteboard_pen_size4_unpressed, getResources().getDimensionPixelSize(R.dimen.pen_size4)));
-       // strokeWidthBeans.add(new StrokeWidthBean(R.drawable.whiteboard_pen_size5_pressed, R.drawable.whiteboard_pen_size5_unpressed, getResources().getDimensionPixelSize(R.dimen.pen_size5)));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {
@@ -330,23 +309,23 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
         int[] penLocation = new int[2];
         mPenLl.getLocationInWindow(penLocation);
-        SharpView.ArrowDirection direction;
+        int arrDirection;
         if (penLocation[1] < mPenPopupWindowHeight) {
             mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] + mPenLl.getHeight());
-            direction = SharpView.ArrowDirection.TOP;
+            arrDirection = SharpDrawable.ARROW_DIRECTION_TOP;
             //mPenDownTriangleIv.setVisibility(VISIBLE);
         } else {
             mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] - mPenPopupWindowHeight);
-            direction = SharpView.ArrowDirection.BOTTOM;
+            arrDirection = SharpDrawable.ARROW_DIRECTION_BOTTOM;
             //mPenUpTriangleIv.setVisibility(VISIBLE);
         }
 
         int penLlHalfwidth = mPenLl.getMeasuredWidth()/2;
 
-        SharpDrawable bd = new SharpDrawable(GradientDrawable.Orientation.LEFT_RIGHT, null);
+        SharpDrawable bd = new SharpDrawable();
         bd.setSharpSize(20);
-        bd.setBgColor(Color.WHITE);
-        bd.setArrowDirection(direction);
+        bd.setBgColor(getResources().getColor(R.color.whiteboard_popup_window_background));
+        bd.setArrowDirection(arrDirection);
         bd.setCornerRadius(10);
         bd.setRelativePosition((float)penLlHalfwidth/(float)(mPenPopupWindowWidth));
         if (penLocation[0] + mPenPopupWindowWidth > mMaxRight) {
@@ -447,26 +426,26 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mLastMenuStatus = mMenuStatus;
         mMenuStatus = status;
         if (status == MENU_STATUS_INIT) {
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
+            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
             mExitSketchIv.setVisibility(GONE);
             mExpandIv.setVisibility(GONE);
             mExpandCl.setVisibility(GONE);
         } else if (status == MENU_STATUS_EXPANDED) {
             mExpandCl.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_unexpand));
+            mExpandIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
         } else if (status == MENU_STATUS_UNEXPANDED) {
             mExitSketchIv.setVisibility(VISIBLE);
             mExpandCl.setVisibility(GONE);
             mExpandIv.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_expand));
+            mExpandIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
         }
 
         if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_pressed));
-            mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_unpressed));
+            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
         } else if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
-            mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_pressed));
-            mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
+            mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_pressed));
+            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
         }
     }
 
@@ -483,16 +462,16 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 if (mMenuStatus == MENU_STATUS_INIT) {
                     setMenuStatus(MENU_STATUS_UNEXPANDED);
                 }
-                mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_pressed));
-                mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_unpressed));
+                mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
+                mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
             } else if (id == R.id.iv_eraser) {
                 dismissPenPopupWindow();
                 if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
                     toggleEraserPopupWindow();
                 }
-                mEraserIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_eraser_pressed));
-                mPenIv.setBackground(getResources().getDrawable(R.drawable.whiteboard_ic_pen_unpressed));
+                mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_pressed));
+                mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
             }
         } else {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <stroke android:color="@color/whiteboard_pen_frame" android:width="@dimen/sw_2dp"/>
-    <solid android:color="@color/whiteboard_pen_color_background_pressed" />
+    <stroke android:color="@color/whiteboard_item_pressed_frame" android:width="@dimen/sw_2dp"/>
+    <solid android:color="@color/whiteboard_item_pressed_background" />
     <corners android:radius="@dimen/sw_3dp"/>
     <size android:height="@dimen/sw_34dp"
         android:width= "@dimen/sw_34dp"/>

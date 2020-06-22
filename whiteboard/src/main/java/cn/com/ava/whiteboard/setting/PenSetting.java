@@ -23,7 +23,7 @@ public class PenSetting extends PaintSetting {
     public void reset() {
         mPorterDuffMode = null;
         mStrokeWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.pen_size3);
-        mColor = mContext.getResources().getColor(R.color.whiteboard_000000);
+        mColor = mContext.getResources().getColor(R.color.whiteboard_ff3434);
     }
 }
 

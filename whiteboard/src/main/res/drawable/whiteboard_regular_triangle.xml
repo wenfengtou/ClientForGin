@@ -8,7 +8,7 @@
                 <size
                     android:width="@dimen/sw_6dp"
                     android:height="@dimen/sw_6dp"/>
-                <solid android:color="@color/whiteboard_color_popup_window_background"/>
+                <solid android:color="@color/whiteboard_popup_window_background"/>
             </shape>
         </rotate>
     </item>

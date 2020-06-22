@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="@color/whiteboard_color_size_round"/>
+    <solid android:color="@color/whiteboard_size_round_color"/>
     <size android:height="@dimen/sw_22dp"
         android:width= "@dimen/sw_22dp"/>
 </shape>
