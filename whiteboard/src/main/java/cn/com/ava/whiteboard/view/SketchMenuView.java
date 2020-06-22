@@ -22,12 +22,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-//import com.wenfengtou.commonutil.FileUtil;
-
 
 import java.util.ArrayList;
 
@@ -44,31 +40,21 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     private static final String TAG = "SketchMenuView";
     private ImageView mExitSketchIv;
-    private LinearLayout mPenLl;
     private ImageView mPenIv;
 
-    private LinearLayout mEraserLl;
     private ImageView mEraserIv;
 
     private ImageView mClearSketchIv;
     private ImageView mSaveSketchIv;
     private ImageView mUndoIv;
     private ImageView mRedoIv;
-    private ImageView mExpandIv;
-    private ConstraintLayout mExpandCl;
     private SketchView mSketchView;
     private Context mContext;
 
     private ViewGroup mViewRoot;
 
-    private static int MENU_STATUS_INIT = 0;
-    private static int MENU_STATUS_UNEXPANDED = 1;
-    private static int MENU_STATUS_EXPANDED = 2;
 
     private int mDefaultPaintTool = PaintTool.PAINT_TOOL_PEN;
-    private int mDefaultMenuStatus = MENU_STATUS_UNEXPANDED;
-    private int mMenuStatus = MENU_STATUS_UNEXPANDED; //第一个状态为收缩状态
-    private int mLastMenuStatus = MENU_STATUS_UNEXPANDED;
 
     private int mRotation = -1;
     private WindowManager mWindowManager;
@@ -78,6 +64,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private int mPenPopupWindowWidth;
     private PopupWindow mEraserPopupWindow;
     private int mEraserPopupWindowHeight;
+
 
     public SketchMenuView(Context context) {
         this(context, null);
@@ -95,28 +82,22 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     public void setSketchView(SketchView sketchView) {
         mSketchView = sketchView;
-        onSketchViewBind(mSketchView, mDefaultPaintTool, mDefaultMenuStatus);
+        onSketchViewBind(mSketchView, mDefaultPaintTool);
     }
 
-    private void onSketchViewBind(SketchView sketchView, int defaultPaintTool, int defaultMenuStatus) {
+    private void onSketchViewBind(SketchView sketchView, int defaultPaintTool) {
         sketchView.choosePaintTool(defaultPaintTool);
-        setMenuStatus(defaultMenuStatus);
     }
 
     private void initView(Context context) {
         mViewRoot = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.whiteboard_sketch_menu, this, true);
         mExitSketchIv = findViewById(R.id.iv_exit_sketch);
-        mPenLl = findViewById(R.id.ll_pen);
         mPenIv = findViewById(R.id.iv_pen);
-        mEraserLl = findViewById(R.id.ll_eraser);
         mEraserIv = findViewById(R.id.iv_eraser);
         mSaveSketchIv = findViewById(R.id.iv_save_sketch);
         mClearSketchIv = findViewById(R.id.iv_clear_sketch);
         mUndoIv = findViewById(R.id.iv_undo);
         mRedoIv = findViewById(R.id.iv_redo);
-        mExpandIv = findViewById(R.id.iv_expand);
-        mExpandCl = findViewById(R.id.cl_expand);
-
         mExitSketchIv.setOnClickListener(this);
         mPenIv.setOnClickListener(this);
         mEraserIv.setOnClickListener(this);
@@ -124,7 +105,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mSaveSketchIv.setOnClickListener(this);
         mUndoIv.setOnClickListener(this);
         mRedoIv.setOnClickListener(this);
-        mExpandIv.setOnClickListener(this);
+
         initDialog(context);
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -140,7 +121,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         //颜色选择
         final RecyclerView penColorRv = penToolView.findViewById(R.id.rv_pen_color);
         penColorRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
-        //penColorRv.setLayoutManager(new GridLayoutManager(mContext, 8));
         final PenColorSelectAdapter colorSelectAdapter = new PenColorSelectAdapter();
         final ArrayList<PenColorBean> penColorBeans = new ArrayList<>();
         penColorBeans.add(new PenColorBean(getResources().getColor(R.color.whiteboard_ff3434), R.drawable.whiteboard_pen_color_ff3434));
@@ -189,13 +169,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         mPenPopupWindowHeight = penToolView.getMeasuredHeight();
         mPenPopupWindowWidth = penToolView.getMeasuredWidth();
 
-        /*
-        //测量完之后，设置画笔大小RecyclerView的间距，使其均匀分布
-        int penSizeRvItemWidth = getResources().getDimensionPixelSize(R.dimen.sw_35dp);
-        int penSizeRvItemWidthSum = penSizeRvItemWidth * sizeSelectAdapter.getItemCount();
-        int space = (mPenPopupWindowWidth - penSizeRvItemWidthSum - 2 * leftRightMargin)/(sizeSelectAdapter.getItemCount() - 1);
-        penSizeRv.addItemDecoration(new SpacesItemDecoration(space, leftRightMargin, true));
-         */
         penSizeRv.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelOffset(R.dimen.sw_5dp), getResources().getDimensionPixelOffset(R.dimen.sw_5dp), true));
         //显示popupWindow
         mPenPopupWindow = new PopupWindow(penToolView, mPenPopupWindowWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -308,10 +281,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         }
 
         int[] penLocation = new int[2];
-        mPenLl.getLocationInWindow(penLocation);
+        mPenIv.getLocationInWindow(penLocation);
         int arrDirection;
         if (penLocation[1] < mPenPopupWindowHeight) {
-            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] + mPenLl.getHeight());
+            mPenPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, penLocation[0] ,penLocation[1] + mPenIv.getHeight());
             arrDirection = SharpDrawable.ARROW_DIRECTION_TOP;
             //mPenDownTriangleIv.setVisibility(VISIBLE);
         } else {
@@ -320,7 +293,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             //mPenUpTriangleIv.setVisibility(VISIBLE);
         }
 
-        int penLlHalfwidth = mPenLl.getMeasuredWidth()/2;
+        int penLlHalfwidth = mPenIv.getMeasuredWidth()/2;
 
         SharpDrawable bd = new SharpDrawable();
         bd.setSharpSize(20);
@@ -345,8 +318,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         if (mPenPopupWindow != null && mPenPopupWindow.isShowing()) {
             mPenPopupWindow.dismiss();
         }
-        //mPenUpTriangleIv.setVisibility(INVISIBLE);
-        //mPenDownTriangleIv.setVisibility(INVISIBLE);
     }
 
     /**
@@ -372,13 +343,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             initEraserPopupWindow();
         }
         int[] location = new int[2];
-        mEraserLl.getLocationInWindow(location);
+        mEraserIv.getLocationInWindow(location);
         if (location[1] < mEraserPopupWindowHeight) {
-            mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mEraserLl.getHeight());
-            //mEraserDownTriangleIv.setVisibility(VISIBLE);
+            mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] + mEraserIv.getHeight());
         } else {
             mEraserPopupWindow.showAtLocation(this, Gravity.NO_GRAVITY, location[0] ,location[1] - mEraserPopupWindowHeight);
-           // mEraserUpTriangleIv.setVisibility(VISIBLE);
         }
     }
 
@@ -388,8 +357,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     private void dismissEraserPopupWindow() {
         if (mEraserPopupWindow != null && mEraserPopupWindow.isShowing()) {
             mEraserPopupWindow.dismiss();
-           // mEraserUpTriangleIv.setVisibility(INVISIBLE);
-           // mEraserDownTriangleIv.setVisibility(INVISIBLE);
         }
     }
 
@@ -412,42 +379,9 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.i(TAG, "menu onConfigurationChanged");
-        /*
-        if (mClearAlertDialog.isShowing()) {
-            mClearAlertDialog.dismiss();
-        }
-        dismissAllPopupWindow();
-        mCurrentRect.setEmpty();
-         */
     }
 
 
-    public void setMenuStatus(int status) {
-        mLastMenuStatus = mMenuStatus;
-        mMenuStatus = status;
-        if (status == MENU_STATUS_INIT) {
-            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
-            mExitSketchIv.setVisibility(GONE);
-            mExpandIv.setVisibility(GONE);
-            mExpandCl.setVisibility(GONE);
-        } else if (status == MENU_STATUS_EXPANDED) {
-            mExpandCl.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
-        } else if (status == MENU_STATUS_UNEXPANDED) {
-            mExitSketchIv.setVisibility(VISIBLE);
-            mExpandCl.setVisibility(GONE);
-            mExpandIv.setVisibility(VISIBLE);
-            mExpandIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
-        }
-
-        if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
-            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
-            mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
-        } else if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
-            mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_pressed));
-            mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -458,9 +392,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_PEN) {
                     togglePenPopupWindow();
                     return;
-                }
-                if (mMenuStatus == MENU_STATUS_INIT) {
-                    setMenuStatus(MENU_STATUS_UNEXPANDED);
                 }
                 mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
                 mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
@@ -478,7 +409,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             dismissAllPopupWindow();
             if (id == R.id.iv_exit_sketch) {
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_NONE);
-                setMenuStatus(MENU_STATUS_INIT);
                 Process.killProcess(Process.myPid());
             } else if (id == R.id.iv_clear_sketch) {
                 mClearAlertDialog.show();
@@ -490,12 +420,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                 mSketchView.undo();
             } else if (id == R.id.iv_redo) {
                 mSketchView.redo();
-            } else if (id == R.id.iv_expand) {
-                if (mMenuStatus == MENU_STATUS_EXPANDED) {
-                    setMenuStatus(MENU_STATUS_UNEXPANDED);
-                } else {
-                    setMenuStatus(MENU_STATUS_EXPANDED);
-                }
             }
         }
     }
@@ -524,40 +448,6 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             dismissAllPopupWindow();
             mCurrentRect.setEmpty();
         }
-
-        //setVisibility会重新跑onMeasure，不同状态切换时，位置适配，确保不超过边界
-        if (mMenuStatus == MENU_STATUS_INIT) {
-
-        } else if (mMenuStatus == MENU_STATUS_UNEXPANDED) {
-            if (mLastMenuStatus == MENU_STATUS_INIT) { //由INIT状态转换为未展开状态
-                int exitSketchIvWidth = mExitSketchIv.getMeasuredWidth();
-                int expandIvWidth = mExpandIv.getMeasuredWidth();
-                int left = mCurrentRect.left - exitSketchIvWidth;
-                int right = mCurrentRect.right + expandIvWidth;
-                if (left < mMinLeft) {  //向左边展开按钮时，小于边界
-                    mCurrentRect.left = mMinLeft;
-                    mCurrentRect.right = mMinLeft + mWidth;
-                } else if (right > mMaxRight) {
-                    mCurrentRect.left = mMaxRight - mWidth;
-                    mCurrentRect.right = mMaxRight;
-                } else {
-                    mCurrentRect.left = left;
-                    mCurrentRect.right = right;
-                }
-            } else if (mLastMenuStatus == MENU_STATUS_EXPANDED) { //由展开状态变成未展开状态
-                mCurrentRect.right = mCurrentRect.left + mWidth;
-            }
-        } else if (mMenuStatus == MENU_STATUS_EXPANDED) {
-            int right = mCurrentRect.left + mWidth;
-            if (right > mMaxRight) {  //向右边展开按钮时，小于边界
-                mCurrentRect.left = mMaxRight - mWidth;
-                mCurrentRect.right = mMaxRight;
-            } else {
-                mCurrentRect.right = right;
-            }
-        }
-        //修改状态
-        //mMenuStatus = mNextMenuStatus;
     }
 
 
