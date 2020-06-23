@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         cmd[0] = 0x34;
         Log.i("wenfengtou", "onResume abc = " + getResources().getConfiguration());
 
-        float bb = getResources().getDimension(R.dimen.sw_34dp);
+        float bb = getResources().getDimension(R.dimen.whiteboard_34dp);
         bb++;
         /*
         SizeUtil.getAreaScreen(this);

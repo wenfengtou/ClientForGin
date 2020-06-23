@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <solid android:color="@color/whiteboard_size_round_color"/>
-    <size android:height="@dimen/sw_19dp"
-        android:width= "@dimen/sw_19dp"/>
+    <size android:height="@dimen/whiteboard_19dp"
+        android:width= "@dimen/whiteboard_19dp"/>
 </shape>

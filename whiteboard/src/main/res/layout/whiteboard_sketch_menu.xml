@@ -7,51 +7,51 @@
 
     <ImageView
         android:id="@+id/iv_pen"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
         android:src="@mipmap/whiteboard_ic_pen_unpressed"/>
 
 
     <ImageView
         android:id="@+id/iv_eraser"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
         android:src="@mipmap/whiteboard_ic_eraser_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_clear_sketch"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/whiteboard_ic_trash_unpressed"/>
+        android:src="@drawable/whiteboard_trash_bt_ground"/>
 
     <ImageView
         android:id="@+id/iv_save_sketch"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/whiteboard_ic_save_unpressed"/>
+        android:src="@drawable/whiteboard_save_bt_ground"/>
 
     <ImageView
         android:id="@+id/iv_undo"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/whiteboard_ic_undo_unpressed"/>
+        android:src="@drawable/whiteboard_undo_bt_background"/>
 
     <ImageView
         android:id="@+id/iv_redo"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/whiteboard_ic_redo_unpressed"/>
+        android:src="@drawable/whiteboard_redo_bt_background"/>
 
     <ImageView
         android:id="@+id/iv_exit_sketch"
-        android:layout_width="@dimen/sw_48dp"
-        android:layout_height="@dimen/sw_40dp"
+        android:layout_width="@dimen/whiteboard_48dp"
+        android:layout_height="@dimen/whiteboard_40dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/whiteboard_ic_exit_unpressed"/>
+        android:src="@drawable/whiteboard_exit_bt_background"/>
 </LinearLayout>

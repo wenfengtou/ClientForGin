@@ -26,7 +26,7 @@ public class EraserSetting extends PaintSetting {
 
     public void reset() {
         mPorterDuffMode = PorterDuff.Mode.CLEAR;
-        mStrokeWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.sw_5dp);
+        mStrokeWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.whiteboard_5dp);
         mColor = Color.TRANSPARENT;
         mCirclePaint = new Paint();
         mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
