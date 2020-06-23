@@ -3,6 +3,6 @@
     android:shape="rectangle">
     <solid android:color="@color/whiteboard_1fa4ff"/>
     <corners android:radius="@dimen/whiteboard_3dp"/>
-    <size android:height="@dimen/whiteboard_20dp"
-        android:width= "@dimen/whiteboard_20dp"/>
+    <size android:height="@dimen/whiteboard_14dp"
+    android:width= "@dimen/whiteboard_14dp"/>
 </shape>

@@ -10,7 +10,8 @@ import cn.com.ava.whiteboard.R;
 public class EraserSetting extends PaintSetting {
 
     private static EraserSetting mInstance;
-    private Paint mCirclePaint;
+    private Paint mOutsideCirclePaint;
+    private Paint mInsideCirclePaint;
 
     private EraserSetting(Context context) {
         super(context);
@@ -28,14 +29,22 @@ public class EraserSetting extends PaintSetting {
         mPorterDuffMode = PorterDuff.Mode.CLEAR;
         mStrokeWidth = mContext.getResources().getDimensionPixelOffset(R.dimen.whiteboard_5dp);
         mColor = Color.TRANSPARENT;
-        mCirclePaint = new Paint();
-        mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mCirclePaint.setColor(mContext.getResources().getColor(R.color.whiteboard_size_round_color));
-        //mCirclePaint.setStrokeCap(Paint.Cap.ROUND);
+        mOutsideCirclePaint = new Paint();
+        mOutsideCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mOutsideCirclePaint.setColor(mContext.getResources().getColor(R.color.whiteboard_eraser_ball_outside));
+        mInsideCirclePaint = new Paint();
+        mInsideCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mInsideCirclePaint.setColor(mContext.getResources().getColor(R.color.whiteboard_eraser_ball_inside));
+        //mOutsideCirclePaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
-    public Paint getCirclePaint() {
-        //mCirclePaint.setStrokeWidth(mStrokeWidth);
-        return mCirclePaint;
+    public Paint getOutsideCirclePaint() {
+        //mOutsideCirclePaint.setStrokeWidth(mStrokeWidth);
+        return mOutsideCirclePaint;
+    }
+
+    public Paint getInsideCirclePaint() {
+        //mOutsideCirclePaint.setStrokeWidth(mStrokeWidth);
+        return mInsideCirclePaint;
     }
 }

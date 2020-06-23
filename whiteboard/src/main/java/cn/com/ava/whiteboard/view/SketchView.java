@@ -230,7 +230,8 @@ public class SketchView extends View implements View.OnTouchListener {
         }
         if (mPaintToolType == PaintTool.PAINT_TOOL_ERASER) {
             if (mShape.getState() != Shape.STATE_UP) {
-                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), EraserSetting.getInstance(getContext()).getStrokeWidth()/2, EraserSetting.getInstance(getContext()).getCirclePaint());
+                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), EraserSetting.getInstance(getContext()).getStrokeWidth()/2, EraserSetting.getInstance(getContext()).getOutsideCirclePaint());
+                canvas.drawCircle(mShape.getLastX(), mShape.getLastY(), EraserSetting.getInstance(getContext()).getStrokeWidth()/2 - 5, EraserSetting.getInstance(getContext()).getInsideCirclePaint());
             }
         }
         /*

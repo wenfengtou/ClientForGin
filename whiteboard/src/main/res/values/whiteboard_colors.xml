@@ -22,4 +22,6 @@
     <color name="whiteboard_56af2a">#56af2a</color>
     <color name="whiteboard_1fa4ff">#1fa4ff</color>
 
+    <color name="whiteboard_eraser_ball_outside">#ffffff</color>
+    <color name="whiteboard_eraser_ball_inside">#cccccc</color>
 </resources>

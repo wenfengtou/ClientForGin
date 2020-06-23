@@ -9,7 +9,7 @@
         android:id="@+id/rv_eraser_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/whiteboard_5dp"
-        android:layout_marginTop="@dimen/whiteboard_5dp"/>
+        android:layout_marginBottom="@dimen/whiteboard_10dp"
+        android:layout_marginTop="@dimen/whiteboard_10dp"/>
 
 </LinearLayout>
