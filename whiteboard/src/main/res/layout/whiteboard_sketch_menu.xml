@@ -7,44 +7,51 @@
 
     <ImageView
         android:id="@+id/iv_pen"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_pen_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_pen_unpressed"/>
 
 
     <ImageView
         android:id="@+id/iv_eraser"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_eraser_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_eraser_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_clear_sketch"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_trash_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_trash_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_save_sketch"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_save_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_save_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_undo"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_undo_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_undo_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_redo"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_redo_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_redo_unpressed"/>
 
     <ImageView
         android:id="@+id/iv_exit_sketch"
-        android:layout_width="@dimen/sw_22dp"
-        android:layout_height="@dimen/sw_22dp"
-        android:background="@mipmap/whiteboard_ic_exit_unpressed"/>
+        android:layout_width="@dimen/sw_48dp"
+        android:layout_height="@dimen/sw_40dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/whiteboard_ic_exit_unpressed"/>
 </LinearLayout>

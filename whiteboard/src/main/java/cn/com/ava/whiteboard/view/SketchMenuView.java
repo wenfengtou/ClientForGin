@@ -149,11 +149,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         //penSizeRv.setLayoutManager(new GridLayoutManager(mContext, 4));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size1), R.drawable.whiteboard_paint_tool_size1));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size2), R.drawable.whiteboard_paint_tool_size2));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size3), R.drawable.whiteboard_paint_tool_size3));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size4), R.drawable.whiteboard_paint_tool_size4));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.pen_size5), R.drawable.whiteboard_paint_tool_size5));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size1));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size2));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size3));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size4));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size5));
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
         sizeSelectAdapter.setOnItemClickListener(new StrokeWidthSelectAdapter.OnItemClickListener() {
@@ -195,11 +195,11 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
         eraserSizeRv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false));
         final StrokeWidthSelectAdapter sizeSelectAdapter = new StrokeWidthSelectAdapter();
         final ArrayList<StrokeWidthBean> strokeWidthBeans = new ArrayList<>();
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.eraser_size1), R.drawable.whiteboard_paint_tool_size1));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.eraser_size2), R.drawable.whiteboard_paint_tool_size2));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.eraser_size3), R.drawable.whiteboard_paint_tool_size3));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.eraser_size4), R.drawable.whiteboard_paint_tool_size4));
-        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.eraser_size5), R.drawable.whiteboard_paint_tool_size5));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size1));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size2));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size3));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size4));
+        strokeWidthBeans.add(new StrokeWidthBean(getResources().getDimensionPixelSize(R.dimen.sw_5dp), R.drawable.whiteboard_paint_tool_size5));
 
         sizeSelectAdapter.setCurrentStrokeWidth(mSketchView.getPaintToolStrokeWidth(paintToolType));
         sizeSelectAdapter.setPenStrokeWidthBeanList(strokeWidthBeans);
@@ -393,16 +393,16 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
                     togglePenPopupWindow();
                     return;
                 }
-                mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
-                mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
+                mPenIv.setImageDrawable(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_pressed));
+                mEraserIv.setImageDrawable(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_PEN);
             } else if (id == R.id.iv_eraser) {
                 dismissPenPopupWindow();
                 if (mSketchView.getPaintToolType() == PaintTool.PAINT_TOOL_ERASER) {
                     toggleEraserPopupWindow();
                 }
-                mEraserIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_pressed));
-                mPenIv.setBackground(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
+                mEraserIv.setImageDrawable(getResources().getDrawable(R.mipmap.whiteboard_ic_eraser_pressed));
+                mPenIv.setImageDrawable(getResources().getDrawable(R.mipmap.whiteboard_ic_pen_unpressed));
                 mSketchView.choosePaintTool(PaintTool.PAINT_TOOL_ERASER);
             }
         } else {

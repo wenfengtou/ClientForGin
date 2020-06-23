@@ -6,7 +6,7 @@
         <activity android:name=".MovableWhiteBoardActivity"></activity>
         <activity
             android:name="cn.com.ava.whiteboard.WhiteBoardActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.FloatingService" />
     </application>
