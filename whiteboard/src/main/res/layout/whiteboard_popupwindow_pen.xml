@@ -10,13 +10,13 @@
         android:id="@+id/rv_pen_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/whiteboard_5dp"
-        android:layout_marginTop="@dimen/whiteboard_10dp"/>
+        android:layout_marginBottom="@dimen/whiteboard_6dp"
+        android:layout_marginTop="@dimen/whiteboard_27dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_pen_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/whiteboard_5dp"
-        android:layout_marginBottom="@dimen/whiteboard_10dp"/>
+        android:layout_marginTop="@dimen/whiteboard_6dp"
+        android:layout_marginBottom="@dimen/whiteboard_27dp"/>
 </LinearLayout>

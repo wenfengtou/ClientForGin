@@ -308,10 +308,10 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
         //生成背景
         SharpDrawable popupWindowBackground = new SharpDrawable();
-        popupWindowBackground.setSharpSize(getResources().getDimensionPixelSize(R.dimen.whiteboard_5dp));
+        popupWindowBackground.setSharpSize(getResources().getDimensionPixelSize(R.dimen.whiteboard_9dp));
         popupWindowBackground.setBgColor(getResources().getColor(R.color.whiteboard_popup_window_background));
         popupWindowBackground.setArrowDirection(arrDirection);
-        popupWindowBackground.setCornerRadius(getResources().getDimensionPixelSize(R.dimen.whiteboard_5dp));
+        popupWindowBackground.setCornerRadius(getResources().getDimensionPixelSize(R.dimen.whiteboard_3dp));
         int anchorViewHalfWidth = anchorView.getMeasuredWidth()/2;
         //设置三角形位置
         if (anchorLocation[0] + popupWindowWidth > maxRight) { //超出右边界限，进行调整
@@ -429,7 +429,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
             } else if (id == R.id.iv_save_sketch) {
                 Bitmap bitmap = mSketchView.getBitmap();
                 //FileUtil.saveBitmap("sdcard/sket.png", bitmap);
-                Toast.makeText(mContext, R.string.whiteboard_save_sketch_success, Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, R.string.whiteboard_save_sketch_success, Toast.LENGTH_LONG).show();
             } else if (id == R.id.iv_undo) {
                 mSketchView.undo();
             } else if (id == R.id.iv_redo) {

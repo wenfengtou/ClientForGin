@@ -141,7 +141,7 @@ public class SketchView extends View implements View.OnTouchListener {
 
     //撤销
     public void undo() {
-        Toast.makeText(getContext(), R.string.whiteboard_cancel_write, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), R.string.whiteboard_cancel_write, Toast.LENGTH_LONG).show();
         if (mShowingList.size() > 0) {
             DrawInfoItem removeDrawInfoItem = mShowingList.remove(mShowingList.size() -1);
             mResumeList.add(removeDrawInfoItem);
@@ -152,7 +152,7 @@ public class SketchView extends View implements View.OnTouchListener {
 
     //重做
     public void redo() {
-        Toast.makeText(getContext(), R.string.whiteboard_resume_write, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), R.string.whiteboard_resume_write, Toast.LENGTH_LONG).show();
         if (mResumeList.size() > 0) {
             DrawInfoItem resumeDrawInfoItem = mResumeList.remove(mResumeList.size() -1);
             mShowingList.add(resumeDrawInfoItem);

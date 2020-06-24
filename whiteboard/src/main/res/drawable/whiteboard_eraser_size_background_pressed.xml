@@ -3,7 +3,6 @@
     android:shape="oval">
     <stroke android:color="@color/whiteboard_item_pressed_frame" android:width="@dimen/whiteboard_2dp"/>
     <solid android:color="@color/whiteboard_item_pressed_background" />
-    <corners android:radius="@dimen/whiteboard_3dp"/>
     <size android:height="@dimen/whiteboard_23dp"
         android:width= "@dimen/whiteboard_23dp"/>
 </shape>

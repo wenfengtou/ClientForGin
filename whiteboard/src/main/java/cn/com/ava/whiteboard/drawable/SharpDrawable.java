@@ -104,6 +104,7 @@ public class SharpDrawable extends GradientDrawable {
             float length;
             switch (mArrowDirection) {
                 case ARROW_DIRECTION_TOP:
+                    bottom -= mSharpSize;
                     top += mSharpSize;
                     length = mRelativePosition * bounds.width();
                     mPointFs[0].set(bounds.left + length, bounds.top + mSharpSize * 0.3f);
@@ -113,6 +114,7 @@ public class SharpDrawable extends GradientDrawable {
                     break;
                 case ARROW_DIRECTION_BOTTOM:
                     bottom -= mSharpSize;
+                    top += mSharpSize;
                     length = mRelativePosition * bounds.width();
                     mPointFs[0].set(bounds.left + length, bounds.bottom - mSharpSize * 0.3f);
                     mPointFs[1].set(mPointFs[0].x, bottom);
