@@ -8,9 +8,9 @@
     <string name="whiteboard_save_sketch">保存</string>
     <string name="whiteboard_exit_sketch">退出</string>
     <string name="whiteboard_save_sketch_success">保存成功</string>
-    <string name="whiteboard_clear_sketch_alert">清空画板？</string>
+    <string name="whiteboard_clear_sketch_alert">确认清空画板？</string>
     <string name="whiteboard_sure">确定</string>
     <string name="whiteboard_cancel">取消</string>
-    <string name="whiteboard_rotate_alert">开启了自动转屏，转屏后笔迹会清空！</string>
+    <string name="whiteboard_rotate_alert">开启了自动转屏，转屏后笔迹会清空。</string>
     <string name="whiteboard_no_ask_again">不再提醒</string>
 </resources>

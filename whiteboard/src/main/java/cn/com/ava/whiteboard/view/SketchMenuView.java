@@ -34,6 +34,7 @@ import cn.com.ava.whiteboard.adapter.PenColorSelectAdapter;
 import cn.com.ava.whiteboard.adapter.SpacesItemDecoration;
 import cn.com.ava.whiteboard.adapter.StrokeWidthBean;
 import cn.com.ava.whiteboard.adapter.StrokeWidthSelectAdapter;
+import cn.com.ava.whiteboard.dialog.BaseDialog;
 import cn.com.ava.whiteboard.drawable.SharpDrawable;
 import cn.com.ava.whiteboard.painttool.PaintTool;
 
@@ -59,7 +60,7 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
 
     private int mRotation = -1;
     private WindowManager mWindowManager;
-    private AlertDialog mClearAlertDialog;
+    private BaseDialog mClearAlertDialog;
     private PopupWindow mPenPopupWindow;
     private int mPenPopupWindowHeight;
     private int mPenPopupWindowWidth;
@@ -241,22 +242,27 @@ public class SketchMenuView extends LinearLayout implements View.OnClickListener
     }
 
     private void initDialog(Context context) {
-        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setMessage("清空画板？");
-        builder.setPositiveButton(R.string.whiteboard_sure, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mSketchView.clear();
-            }
-        });
-        builder.setNegativeButton(R.string.whiteboard_cancel, null);
-        mClearAlertDialog = builder.create();
+        mClearAlertDialog = new BaseDialog(context);
+        mClearAlertDialog.setLayoutId(R.layout.whiteboard_dialog_clear_sketch);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         } else {
             mClearAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         }
-        mClearAlertDialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
+        mClearAlertDialog.setOnSureClickListener(new BaseDialog.OnSureClickListener() {
+            @Override
+            public void onClick() {
+                mSketchView.clear();
+                mClearAlertDialog.dismiss();
+            }
+        });
+        mClearAlertDialog.setOnCancelClickListener(new BaseDialog.OnCancelClickListener() {
+            @Override
+            public void onClick() {
+                mClearAlertDialog.dismiss();
+            }
+        });
+
     }
 
     /**

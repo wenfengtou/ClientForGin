@@ -4,5 +4,5 @@
     <solid android:color="@color/whiteboard_1fa4ff"/>
     <corners  android:radius="@dimen/whiteboard_1dp"/>
     <size android:height="@dimen/whiteboard_14dp"
-    android:width= "@dimen/whiteboard_14dp"/>
+        android:width= "@dimen/whiteboard_14dp"/>
 </shape>

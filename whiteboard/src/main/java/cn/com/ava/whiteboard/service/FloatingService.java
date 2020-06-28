@@ -1,12 +1,9 @@
 package cn.com.ava.whiteboard.service;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -18,14 +15,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
 
 import cn.com.ava.whiteboard.R;
+import cn.com.ava.whiteboard.dialog.CheckBoxDialog;
 
 
 public class FloatingService extends Service {
@@ -77,40 +71,33 @@ public class FloatingService extends Service {
     }
 
     private void showAutoRotateDialog() {
-        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View contentView = inflater.inflate(R.layout.whiteboard_dialog_autorotate, null, false);
+        final CheckBoxDialog checkBoxDialog = new CheckBoxDialog(this);
+        checkBoxDialog.setLayoutId(R.layout.whiteboard_dialog_autorotate);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            checkBoxDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        } else {
+            checkBoxDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
 
-        final AlertDialog dialog = builder.create();
-        Button sureButton = contentView.findViewById(R.id.sure_bt);
-        sureButton.setOnClickListener(new View.OnClickListener() {
+        checkBoxDialog.setNoAskAgainCheckChangeListener(new CheckBoxDialog.NoAskAgainCheckChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckChange(boolean isChecked) {
+                mIsShowAgain = (!isChecked);
+            }
+        });
+
+        checkBoxDialog.setOnSureClickListener(new CheckBoxDialog.OnSureClickListener() {
+            @Override
+            public void onClick() {
                 SharedPreferences preferences = getSharedPreferences(SKETCH_AUTO_ROTATE, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean(KEY_SHOW_AGAIN, mIsShowAgain);
                 editor.apply();
                 showSketch();
-                dialog.dismiss();
+                checkBoxDialog.dismiss();
             }
         });
-
-        CheckBox noAskAgainCheckBox = contentView.findViewById(R.id.no_ask_again_checkBox);
-        noAskAgainCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mIsShowAgain = (!isChecked);
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        } else {
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        }
-        dialog.setCanceledOnTouchOutside(false);//点击外面区域不会让dialog消失
-        dialog.show();
-        dialog.setContentView(contentView);
+        checkBoxDialog.show();
     }
 
     private void showSketch() {
