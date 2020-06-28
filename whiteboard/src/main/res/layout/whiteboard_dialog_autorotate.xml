@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/whiteboard_320dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <TextView
@@ -11,33 +11,37 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/whiteboard_17dp"
         android:layout_marginTop="@dimen/whiteboard_16dp"
+        android:layout_marginEnd="@dimen/whiteboard_17dp"
         android:text="@string/whiteboard_rotate_alert"
         android:textSize="@dimen/whiteboard_12sp"
         android:textColor="#2B2B2B"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/no_ask_again_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/whiteboard_12dp"
+        android:paddingTop="@dimen/whiteboard_12dp"
+        android:paddingStart="@dimen/whiteboard_17dp"
         android:text="@string/whiteboard_no_ask_again"
         android:textSize="@dimen/whiteboard_10sp"
         android:textColor="#707070"
         android:drawablePadding="@dimen/whiteboard_3dp"
         android:drawableLeft="@drawable/whiteboard_checkbox_icon"
         android:button="@null"
-        app:layout_constraintStart_toStartOf="@+id/rotate_tv"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rotate_tv" />
 
     <TextView
         android:id="@+id/sure_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/whiteboard_10dp"
-        android:layout_marginBottom="@dimen/whiteboard_12dp"
-        android:layout_marginEnd="@dimen/whiteboard_12dp"
+        android:paddingTop="@dimen/whiteboard_10dp"
+        android:paddingStart="@dimen/whiteboard_17dp"
+        android:paddingEnd="@dimen/whiteboard_17dp"
+        android:paddingBottom="@dimen/whiteboard_12dp"
         android:text="@string/whiteboard_sure"
         android:textColor="#03A9F4"
         android:textSize="@dimen/whiteboard_12sp"
