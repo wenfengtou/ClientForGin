@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/whiteboard_230dp"
-    android:layout_height="@dimen/whiteboard_100dp">
+    android:layout_width="@dimen/whiteboard_320dp"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/rotate_tv"
@@ -36,10 +36,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/whiteboard_10dp"
+        android:layout_marginBottom="@dimen/whiteboard_12dp"
         android:layout_marginEnd="@dimen/whiteboard_12dp"
         android:text="@string/whiteboard_sure"
         android:textColor="#03A9F4"
         android:textSize="@dimen/whiteboard_12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/no_ask_again_checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/no_ask_again_checkBox"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="@dimen/whiteboard_205dp"
-    android:layout_height="@dimen/whiteboard_70dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/content_tv"
@@ -26,7 +26,6 @@
         android:text="@string/whiteboard_cancel"
         android:textColor="#707070"
         android:textSize="@dimen/whiteboard_12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/sure_tv"
         app:layout_constraintEnd_toStartOf="@+id/sure_tv"
         app:layout_constraintTop_toTopOf="@+id/sure_tv" />
 
@@ -36,9 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/whiteboard_12dp"
         android:layout_marginEnd="@dimen/whiteboard_16dp"
+        android:layout_marginBottom="@dimen/whiteboard_16dp"
         android:text="@string/whiteboard_sure"
         android:textColor="#03A9F4"
         android:textSize="@dimen/whiteboard_12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/content_tv"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
